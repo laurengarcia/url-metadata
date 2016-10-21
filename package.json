@@ -1,0 +1,40 @@
+{
+  "name": "url-metadata",
+  "version": "1.0.0",
+  "description": "Request an http url and scrape its metadata.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "test": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LevelNewsOrg/url-metadata.git"
+  },
+  "author": "Lauren Garcia <lauren.garcia@gmail.com> (https://github.com/laurengarcia)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LevelNewsOrg/url-metadata/issues"
+  },
+  "homepage": "https://github.com/LevelNewsOrg/url-metadata#readme",
+  "keywords": [
+    "url",
+    "metadata",
+    "meta",
+    "tags",
+    "article",
+    "scrape",
+    "scraper",
+    "node",
+    "node.js",
+    "javascript",
+    "js"
+  ],
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "q": "^1.4.1",
+    "request": "^2.75.0",
+    "standard": "^8.4.0",
+    "underscore": "^1.8.3"
+  }
+}
