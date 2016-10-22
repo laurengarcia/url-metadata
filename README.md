@@ -3,7 +3,7 @@ Request an http url and scrape its metadata. Many of the metadata fields returne
 
 ## Usage
 
-### Install via npm to use in a Node.js project
+Install via npm to use in a Node.js project
 `npm install url-metadata --save`
 
 Then in your project file:
