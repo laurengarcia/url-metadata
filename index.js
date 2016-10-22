@@ -4,7 +4,7 @@ const parser = require('./lib/parser')
 
 module.exports = function (url, options) {
   const dfd = q.defer()
-  var opts = options || {}
+  const opts = options || {}
   const requestOpts = {
     url: url,
     headers: {
