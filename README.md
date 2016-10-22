@@ -28,7 +28,7 @@ urlMetadata('http://bit.ly/2ePIrDy', options).then(function (metadata) {
 ```
 
 ### Returns
-Returns a promise that gets resolved with url metadata
+Returns a promise that gets resolved with url metadata.
 ```
 {
   'url'                  : '', // encoded final destination of url

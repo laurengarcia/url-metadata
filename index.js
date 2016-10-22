@@ -18,10 +18,10 @@ module.exports = function (url, options) {
 
   request.get(requestOpts, function (err, response, body) {
     if (err || !response) {
-      return dfd.reject({error: true}) // TODO: throw new error here
+      return dfd.reject(err)
     }
     if (!response.statusCode && response.statusCode !== 200) {
-      return dfd.reject({error: true}) // TODO: throw new error here
+      return dfd.reject({Error: 'response code ' + response.statusCode})
     }
     if (response.statusCode && response.statusCode === 200) {
       // rewrite url if our request had to follow redirects to resolve the
