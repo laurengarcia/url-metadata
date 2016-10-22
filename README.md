@@ -1,4 +1,4 @@
-# [wip] url-metadata
+# url-metadata
 Request an http url and scrape its metadata. Many of the metadata fields returned are [Open Graph Protocol (og:)](http://ogp.me/) so far.
 
 ## Usage
