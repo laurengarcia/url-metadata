@@ -29,7 +29,8 @@ Defaults are the values below that you may want to override:
   timeout: 10000, // 10 seconds
   descriptionLength: 750, // number of chars to truncate description to
   ensureSecureImageRequest: true,
-  encodeFields: false
+  encodeFields: false,
+  sourceMap: {} // see: https://github.com/LevelNewsOrg/source-map
 }
 ```
 
