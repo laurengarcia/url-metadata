@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
-    "test": "standard & node example/example.js"
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",
