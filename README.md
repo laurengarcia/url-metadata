@@ -8,7 +8,7 @@ Install via npm to use in a Node.js project:
 npm install url-metadata --save`
 ```
 
-Then in your project file:
+Then in your project file (from example/example.js):
 ```
 const urlMetadata = require('urlMetadata')
 urlMetadata('http://bit.ly/2ePIrDy', options).then(
@@ -45,6 +45,7 @@ Returns a promise that gets resolved with the following url metadata if the url 
   'image'                : '',
   'author'               : '',
   'description'          : '',
+  'keywords'             : '',
   'source'               : '',
   'og:url'               : '',
   'og:locale'            : '',
@@ -65,7 +66,7 @@ Returns a promise that gets resolved with the following url metadata if the url 
 
 Additional fields are also returned if the url has an `og:type` set to `article`. These fields are:
 ```
-'article' : {
+{
   'article:published_time'     : '',
   'article:modified_time'      : '',
   'article:expiration_time'    : '',

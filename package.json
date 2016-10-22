@@ -1,11 +1,11 @@
 {
   "name": "url-metadata",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Request an http url and scrape its metadata.",
   "main": "index.js",
   "scripts": {
     "lint": "standard",
-    "test": "npm run lint"
+    "test": "node example/example.js"
   },
   "repository": {
     "type": "git",
