@@ -4,15 +4,16 @@ const parser = require('./lib/parser')
 
 module.exports = function (url, options) {
   const dfd = q.defer()
+  var opts = options || {}
   const requestOpts = {
     url: url,
     headers: {
-      'User-Agent': 'LevelBot' || options.userAgent,
-      'From': 'vision@levelnews.org' || options.fromEmail
+      'User-Agent': opts.userAgent || 'LevelBot',
+      'From': opts.fromEmail || 'vision@levelnews.org'
     },
-    maxRedirects: 8 || options.maxRedirects,
-    encoding: 'utf8' || options.encoding,
-    timeout: 10000 || options.timeout
+    maxRedirects: opts.maxRedirects || 8,
+    encoding: opts.encoding || 'utf8',
+    timeout: opts.timeout || 10000
   }
 
   request.get(requestOpts, function (err, response, body) {
@@ -26,7 +27,7 @@ module.exports = function (url, options) {
       // rewrite url if our request had to follow redirects to resolve the
       // final link destination (for example: links shortened by bit.ly)
       if (response.request.uri.href) url = response.request.uri.href
-      return dfd.resolve(parser(url, body, options))
+      return dfd.resolve(parser(url, body, opts))
     }
   })
 
