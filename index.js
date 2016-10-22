@@ -8,8 +8,8 @@ module.exports = function (url, options) {
   const requestOpts = {
     url: url,
     headers: {
-      'User-Agent': opts.userAgent || 'LevelBot',
-      'From': opts.fromEmail || 'vision@levelnews.org'
+      'User-Agent': opts.userAgent || 'UrlMetadata',
+      'From': opts.fromEmail || 'example@example.com'
     },
     maxRedirects: opts.maxRedirects || 8,
     encoding: opts.encoding || 'utf8',

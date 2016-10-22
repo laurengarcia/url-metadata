@@ -3,8 +3,10 @@ Request an http url and scrape its metadata. Many of the metadata fields returne
 
 ## Usage
 
-Install via npm to use in a Node.js project
-`npm install url-metadata --save`
+Install via npm to use in a Node.js project:
+```
+npm install url-metadata --save`
+```
 
 Then in your project file:
 ```
@@ -22,15 +24,15 @@ urlMetadata('http://bit.ly/2ePIrDy', options).then(
 Defaults are the values below that you may want to override:
 ```
 {
-  userAgent: 'LevelBot', // name the bot that will make url request
-  fromEmail: 'vision@levelnews.org', // your email
+  userAgent: 'UrlMetadata', // name the bot that will make url request
+  fromEmail: 'example@example.com', // your email
   maxRedirects: 8,
   encoding: 'utf8',
   timeout: 10000, // 10 seconds
   descriptionLength: 750, // number of chars to truncate description to
   ensureSecureImageRequest: true,
   encodeFields: false,
-  sourceMap: {} // see: https://github.com/LevelNewsOrg/source-map
+  sourceMap: {} // example: https://github.com/LevelNewsOrg/source-map
 }
 ```
 
