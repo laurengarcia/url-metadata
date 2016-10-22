@@ -9,12 +9,17 @@ Request an http url and scrape its metadata.
 Then in your project:
 ```
 const urlMetadata = require('urlMetadata')
-urlMetadata('http://bit.ly/2ePIrDy', options).then(function (metadata) {
-  console.log(metadata) // <--
-})
+urlMetadata('http://bit.ly/2ePIrDy', options).then(
+  function (metadata) { // success handler
+    console.log(metadata)
+  },
+  function (error) { // failure handler
+    console.log(error)
+  })
 ```
 
 ### Options
+Defaults to values below:
 ```
 {
   userAgent: 'LevelBot', // name the bot that will make url request
@@ -23,7 +28,8 @@ urlMetadata('http://bit.ly/2ePIrDy', options).then(function (metadata) {
   encoding: 'utf8',
   timeout: 10000, // 10 seconds
   descriptionLength: 750, // number of chars to truncate description to
-  ensureSecureImageRequest: true
+  ensureSecureImageRequest: true,
+  encodeFields: false
 }
 ```
 
