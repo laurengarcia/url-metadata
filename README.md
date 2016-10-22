@@ -1,5 +1,5 @@
 # [wip] url-metadata
-Request an http url and scrape its metadata.
+Request an http url and scrape its metadata. Many of the metadata fields returned are [Open Graph Protocol (og:)](http://ogp.me/) so far.
 
 ## Usage
 
@@ -34,7 +34,7 @@ Defaults to values below:
 ```
 
 ### Returns
-Returns a promise that gets resolved with url metadata.
+Returns a promise that gets resolved with the following url metadata if the url request response returns successfully:
 ```
 {
   'url'                  : '',
@@ -63,15 +63,15 @@ Returns a promise that gets resolved with url metadata.
 Additional fields are also returned if the url has an `og:type` set to `article`. These fields are:
 ```
 'article' : {
-  'article:published_time'     : null,
-  'article:modified_time'      : null,
-  'article:expiration_time'    : null,
+  'article:published_time'     : '',
+  'article:modified_time'      : '',
+  'article:expiration_time'    : '',
   'article:author'             : '',
   'article:section'            : '',
   'article:tag'                : '',
-  'og:article:published_time'  : null, // datetime iso8601
-  'og:article:modified_time'   : null, // datetime iso8601
-  'og:article:expiration_time' : null, // datetime iso8601
+  'og:article:published_time'  : '',
+  'og:article:modified_time'   : '',
+  'og:article:expiration_time' : '',
   'og:article:author'          : '',
   'og:article:section'         : '',
   'og:article:tag'             : ''
