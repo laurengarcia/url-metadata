@@ -37,7 +37,7 @@ Defaults to values below:
 Returns a promise that gets resolved with url metadata.
 ```
 {
-  'url'                  : '', // encoded final destination of url
+  'url'                  : '',
   'title'                : '',
   'image'                : '',
   'author'               : '',
