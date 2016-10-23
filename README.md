@@ -24,9 +24,9 @@ urlMetadata('http://bit.ly/2ePIrDy', options).then(
 Defaults are the values below that you may want to override:
 ```
 {
-  userAgent: 'UrlMetadata', // name the bot that will make url request
+  userAgent: 'MetadataScraper', // name the bot that will make url request
   fromEmail: 'example@example.com', // your email
-  maxRedirects: 8,
+  maxRedirects: 10,
   timeout: 10000, // 10 seconds
   descriptionLength: 750, // number of chars to truncate description to
   ensureSecureImageRequest: true,

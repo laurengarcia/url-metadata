@@ -4,18 +4,28 @@ const parser = require('./lib/parser')
 
 module.exports = function (url, options) {
   const dfd = q.defer()
-  const opts = options || {}
+  if (!options || typeof options !== 'object') options = {}
+  const opts = {
+    userAgent: options.userAgent || 'MetaDataScraper',
+    fromEmail: options.fromEmail || 'example@example.com',
+    maxRedirects: options.maxRedirects || 10,
+    timeout: options.timeout || 10000,
+    descriptionLength: options.descriptionLength || 750,
+    ensureSecureImageRequest: options.ensureSecureImageRequest || true,
+    sourceMap: options.sourceMap || {},
+    encode: options.encode || undefined
+  }
+
   const requestOpts = {
     url: url,
     headers: {
-      'User-Agent': opts.userAgent || 'UrlMetadata',
-      'From': opts.fromEmail || 'example@example.com'
+      'User-Agent': opts.userAgent,
+      'From': opts.fromEmail
     },
-    maxRedirects: opts.maxRedirects || 8,
+    maxRedirects: opts.maxRedirects,
     encoding: 'utf8',
-    timeout: opts.timeout || 10000
+    timeout: opts.timeout
   }
-
   request.get(requestOpts, function (err, response, body) {
     if (err || !response) {
       return dfd.reject(err)
