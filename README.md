@@ -40,6 +40,7 @@ Returns a promise that gets resolved with the following url metadata if the url 
 ```
 {
   'url'                  : '',
+  'canonical'            : '',
   'title'                : '',
   'image'                : '',
   'author'               : '',
