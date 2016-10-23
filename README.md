@@ -8,10 +8,10 @@ Install via npm to use in a Node.js project:
 npm install url-metadata --save`
 ```
 
-Then in your project file (from example/example.js):
+Then in your project file (from example/basic.js):
 ```
 const urlMetadata = require('urlMetadata')
-urlMetadata('http://bit.ly/2ePIrDy', options).then(
+urlMetadata('http://bit.ly/2ePIrDy').then(
   function (metadata) { // success handler
     console.log(metadata)
   },

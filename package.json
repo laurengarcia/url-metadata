@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Request an http url and scrape its metadata.",
   "main": "index.js",
   "scripts": {
