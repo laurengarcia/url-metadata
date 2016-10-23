@@ -1,6 +1,6 @@
 const q = require('q')
 const request = require('request')
-const parser = require('./lib/parser')
+const parse = require('./lib/parse')
 
 module.exports = function (url, options) {
   const dfd = q.defer()
@@ -37,7 +37,7 @@ module.exports = function (url, options) {
       // rewrite url if our request had to follow redirects to resolve the
       // final link destination (for example: links shortened by bit.ly)
       if (response.request.uri.href) url = response.request.uri.href
-      return dfd.resolve(parser(url, body, opts))
+      return dfd.resolve(parse(url, body, opts))
     }
   })
 
