@@ -6,7 +6,7 @@ module.exports = function (url, options) {
   const dfd = q.defer()
   if (!options || typeof options !== 'object') options = {}
   const opts = {
-    userAgent: options.userAgent || 'MetaDataScraper',
+    userAgent: options.userAgent || 'MetadataScraper',
     fromEmail: options.fromEmail || 'example@example.com',
     maxRedirects: options.maxRedirects || 10,
     timeout: options.timeout || 10000,
