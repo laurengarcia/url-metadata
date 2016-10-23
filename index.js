@@ -12,7 +12,7 @@ module.exports = function (url, options) {
       'From': opts.fromEmail || 'example@example.com'
     },
     maxRedirects: opts.maxRedirects || 8,
-    encoding: opts.encoding || 'utf8',
+    encoding: 'utf8',
     timeout: opts.timeout || 10000
   }
 

@@ -27,7 +27,6 @@ Defaults are the values below that you may want to override:
   userAgent: 'UrlMetadata', // name the bot that will make url request
   fromEmail: 'example@example.com', // your email
   maxRedirects: 8,
-  encoding: 'utf8',
   timeout: 10000, // 10 seconds
   descriptionLength: 750, // number of chars to truncate description to
   ensureSecureImageRequest: true,
