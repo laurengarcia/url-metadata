@@ -19,6 +19,11 @@ urlMetadata('http://bit.ly/2ePIrDy').then(
     console.log(error)
   })
 ```
+If you'd like to override the default options (see below), pass in a second argument:
+```
+const urlMetadata = require('urlMetadata')
+urlMetadata('http://bit.ly/2ePIrDy', {fromEmail: 'me@myexample.com'}).then(...)
+```
 
 ### Options
 Defaults are the values below that you may want to override:
