@@ -10,7 +10,7 @@ npm install url-metadata --save`
 
 Then in your project file (from example/basic.js):
 ```
-const urlMetadata = require('urlMetadata')
+const urlMetadata = require('url-metadata')
 urlMetadata('http://bit.ly/2ePIrDy').then(
   function (metadata) { // success handler
     console.log(metadata)
