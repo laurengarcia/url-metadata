@@ -1,16 +1,18 @@
-# url-metadata
+# url-metadata2
 Request an http url and scrape its metadata. Many of the metadata fields returned are [Open Graph Protocol (og:)](http://ogp.me/) so far.
+
+### This is a fork of https://github.com/LevelNewsOrg/url-metadata
 
 ## Usage
 
 Install via npm to use in a Node.js project:
 ```
-npm install url-metadata --save`
+npm install url-metadata2 --save`
 ```
 
 Then in your project file (from example/basic.js):
 ```
-const urlMetadata = require('url-metadata')
+const urlMetadata = require('url-metadata2')
 urlMetadata('http://bit.ly/2ePIrDy').then(
   function (metadata) { // success handler
     console.log(metadata)
@@ -21,7 +23,7 @@ urlMetadata('http://bit.ly/2ePIrDy').then(
 ```
 If you'd like to override the default options (see below), pass in a second argument:
 ```
-const urlMetadata = require('urlMetadata')
+const urlMetadata = require('url-metadata2')
 urlMetadata('http://bit.ly/2ePIrDy', {fromEmail: 'me@myexample.com'}).then(...)
 ```
 

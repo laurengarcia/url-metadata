@@ -1,6 +1,6 @@
 {
-  "name": "url-metadata",
-  "version": "2.1.7",
+  "name": "url-metadata2",
+  "version": "2.1.8",
   "description": "Request an http url and scrape its metadata.",
   "main": "index.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LevelNewsOrg/url-metadata.git"
+    "url": "git+https://github.com/trszdev/url-metadata.git"
   },
   "author": "Lauren Garcia <lauren.garcia@gmail.com> (https://github.com/laurengarcia)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/LevelNewsOrg/url-metadata/issues"
+    "url": "https://github.com/trszdev/url-metadata/issues"
   },
-  "homepage": "https://github.com/LevelNewsOrg/url-metadata#readme",
+  "homepage": "https://github.com/trszdev/url-metadata#readme",
   "keywords": [
     "url",
     "metadata",
