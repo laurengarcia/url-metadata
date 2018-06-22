@@ -30,7 +30,7 @@ module.exports = function (url, options) {
     if (err || !response) {
       return dfd.reject(err)
     }
-    if (!response.statusCode && response.statusCode !== 200) {
+    if (!response.statusCode || response.statusCode !== 200) {
       return dfd.reject({Error: 'response code ' + response.statusCode})
     }
     if (response.statusCode && response.statusCode === 200) {
