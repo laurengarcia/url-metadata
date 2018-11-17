@@ -1,6 +1,6 @@
 {
-  "name": "url-metadata",
-  "version": "2.1.7",
+  "name": "url-metatags",
+  "version": "1.0.0",
   "description": "Request an http url and scrape its metadata.",
   "main": "index.js",
   "scripts": {
@@ -39,5 +39,9 @@
     "request": "^2.75.0",
     "standard": "^8.4.0",
     "underscore": "^1.8.3"
+  },
+  "directories": {
+    "example": "example",
+    "lib": "lib"
   }
 }
