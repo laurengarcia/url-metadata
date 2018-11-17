@@ -65,7 +65,10 @@ Returns a promise that gets resolved with the following url metadata if the url 
   'og:image:secure_url'  : '',
   'og:image:type'        : '',
   'og:image:width'       : '',
-  'og:image:height'      : ''
+  'og:image:height'      : '',
+  'price'                : '',
+  'priceCurrency'        : '',
+  'availability'         : ''
 }
 ```
 
