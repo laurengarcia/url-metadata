@@ -31,7 +31,7 @@ module.exports = function (url, options) {
       return dfd.reject(err)
     }
     if (response.statusCode && response.statusCode !== 200) {
-      return dfd.reject({Error: 'response code ' + response.statusCode})
+      return dfd.reject({ Error: 'response code ' + response.statusCode })
     }
     if (response.statusCode && response.statusCode === 200) {
       // rewrite url if our request had to follow redirects to resolve the

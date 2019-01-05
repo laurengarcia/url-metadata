@@ -1,7 +1,7 @@
 const urlMetadata = require('./../index')
 
 const options = {
-  sourceMap: {'boiling frogs post': 'boilingfrogspost.com'}
+  sourceMap: { 'boiling frogs post': 'boilingfrogspost.com' }
 }
 urlMetadata('https://www.youtube.com/watch?v=g4RkiiW-gtc', options).then(
   function (metadata) { // success callback
