@@ -2,7 +2,7 @@ const q = require('q')
 const request = require('request')
 const parse = require('./lib/parse')
 
-module.exports = function (url, options) {
+module.exports = function(url, options) {
   const dfd = q.defer()
   if (!options || typeof options !== 'object') options = {}
   const opts = {
@@ -13,20 +13,21 @@ module.exports = function (url, options) {
     descriptionLength: options.descriptionLength || 750,
     ensureSecureImageRequest: options.ensureSecureImageRequest || true,
     sourceMap: options.sourceMap || {},
-    encode: options.encode || undefined
+    encode: options.encode || undefined,
+    decoder: options.decoder || undefined,
   }
 
   const requestOpts = {
     url: url,
     headers: {
       'User-Agent': opts.userAgent,
-      'From': opts.fromEmail
+      From: opts.fromEmail,
     },
     maxRedirects: opts.maxRedirects,
-    encoding: 'utf8',
-    timeout: opts.timeout
+    encoding: opts.decoder ? null : 'utf8',
+    timeout: opts.timeout,
   }
-  request.get(requestOpts, function (err, response, body) {
+  request.get(requestOpts, function(err, response, body) {
     if (err || !response) {
       return dfd.reject(err)
     }
@@ -37,6 +38,9 @@ module.exports = function (url, options) {
       // rewrite url if our request had to follow redirects to resolve the
       // final link destination (for example: links shortened by bit.ly)
       if (response.request.uri.href) url = response.request.uri.href
+      if (opts.decoder) {
+        body = opts.decoder(body)
+      }
       return dfd.resolve(parse(url, body, opts))
     }
   })
