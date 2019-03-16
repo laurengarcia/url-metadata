@@ -36,7 +36,7 @@ Defaults are the values below that you may want to override:
   descriptionLength: 750, // number of chars to truncate description to
   ensureSecureImageRequest: true,
   sourceMap: {} // example: https://github.com/LevelNewsOrg/source-map
-  encode: undefined, // a function to encode metadata with, see example/encoding.js
+  encode: undefined, // a function to encode metadata, see example/encoded.js
 }
 ```
 
