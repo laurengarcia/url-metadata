@@ -1,7 +1,9 @@
 # CHANGELOG
 
 ## TODO
-- support streaming and callback interfaces (in addition to promises)
+- fix encoded.js example filename
+- support streaming interface
+- support callback interfaces (in addition to promises)
 
 
 2.2.1
