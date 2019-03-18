@@ -24,6 +24,7 @@ urlMetadata('http://bit.ly/2ePIrDy').then(
     console.log(error)
   })
 ```
+
 If you'd like to override the default options (see below), pass in a second argument:
 ```javascript
 const urlMetadata = require('urlMetadata')
@@ -31,7 +32,7 @@ urlMetadata('http://bit.ly/2ePIrDy', {fromEmail: 'me@myexample.com'}).then(...)
 ```
 
 ### Options
-Defaults are the values below that you may want to override:
+This package's request defaults are the values below that you may want to override:
 ```javascript
 {
   // custom name user agent that will make url request:
@@ -47,8 +48,16 @@ Defaults are the values below that you may want to override:
   ensureSecureImageRequest: true,
   // sourceMap example: https://github.com/LevelNewsOrg/source-map
   sourceMap: {},
-  // supply a custom function to encode the metadata fields
-  // before they are returned, see `example/encoded.js`:
+  // custom function to encode the metadata fields before they are returned
+  // defaults to undefined:
+  encode: undefined
+}
+```
+
+#### Option: Encode
+You can supply a custom function to encode the metadata fields before they are returned from this module, see `example/encoded.js`:
+```javascript
+const options = {
   encode: function (value) {
     return encodeURIComponent(value).replace(/['*]/g, escape)
   }
