@@ -39,12 +39,12 @@ This package's request defaults are the values below that you may want to overri
   userAgent: 'MetadataScraper',
   fromEmail: 'example@example.com',
   maxRedirects: 10,
-  // timeout in milliseconds, example below is 10 seconds:
+  // timeout in milliseconds, default below is 10 seconds:
   timeout: 10000,
   // number of characters to truncate description to:
   descriptionLength: 750,
   // force image urls in selected tags to https,
-  // valid for 'image', 'og:image'  'og:image:secure_url' tags:
+  // valid for 'image', 'og:image' and 'og:image:secure_url' tags:
   ensureSecureImageRequest: true,
   // sourceMap example: https://github.com/LevelNewsOrg/source-map
   sourceMap: {},
