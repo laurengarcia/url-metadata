@@ -48,14 +48,14 @@ This package's request defaults are the values below that you may want to overri
   ensureSecureImageRequest: true,
   // sourceMap example: https://github.com/LevelNewsOrg/source-map
   sourceMap: {},
-  // custom function to encode the metadata fields before they are returned
+  // custom function to encode the metadata fields before they are returned;
   // defaults to undefined:
   encode: undefined
 }
 ```
 
 #### Option: Encode
-You can supply a custom function to encode the metadata fields before they are returned from this module, see `example/encoded.js`:
+You can supply a custom function to encode the metadata fields before they are returned from this module, see `example/encode.js`:
 ```javascript
 const options = {
   encode: function (value) {

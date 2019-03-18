@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## TODO
-- fix encoded.js example filename
+- XX fix encoded.js example filename
+- better sourceMap example in README
 - support streaming interface
 - support callback interfaces (in addition to promises)
 
