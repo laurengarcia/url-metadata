@@ -1,9 +1,14 @@
 # url-metadata
 Request an http(s) url and scrape its metadata. Many of the metadata fields returned are [Open Graph Protocol (og:)](http://ogp.me/) so far.
 
+Under the hood, this package does some post-request processing on top of the [request](https://www.npmjs.com/package/request) module.
+
+If you want a new feature, please open an issue or pull request in [GitHub](https://github.com/LevelNewsOrg/url-metadata).
+
+
 ## Usage
 
-Install via npm from CLI to use in a Node.js project:
+To use in an npm/ Node.js project, install from your CLI:
 ```
 $ npm install url-metadata --save`
 ```
@@ -29,14 +34,24 @@ urlMetadata('http://bit.ly/2ePIrDy', {fromEmail: 'me@myexample.com'}).then(...)
 Defaults are the values below that you may want to override:
 ```javascript
 {
-  userAgent: 'MetadataScraper', // name the bot that will make url request
-  fromEmail: 'example@example.com', // your email
+  // custom name user agent that will make url request:
+  userAgent: 'MetadataScraper',
+  fromEmail: 'example@example.com',
   maxRedirects: 10,
-  timeout: 10000, // 10 seconds
-  descriptionLength: 750, // number of chars to truncate description to
+  // timeout in milliseconds, example below is 10 seconds:
+  timeout: 10000,
+  // number of characters to truncate description to:
+  descriptionLength: 750,
+  // force image urls in selected tags to https,
+  // valid for 'image', 'og:image'  'og:image:secure_url' tags:
   ensureSecureImageRequest: true,
-  sourceMap: {} // example: https://github.com/LevelNewsOrg/source-map
-  encode: undefined, // a function to encode metadata, see example/encoded.js
+  // sourceMap example: https://github.com/LevelNewsOrg/source-map
+  sourceMap: {},
+  // supply a custom function to encode the metadata fields
+  // before they are returned, see `example/encoded.js`:
+  encode: function (value) {
+    return encodeURIComponent(value).replace(/['*]/g, escape)
+  }
 }
 ```
 
