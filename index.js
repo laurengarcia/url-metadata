@@ -13,6 +13,7 @@ module.exports = function (url, options) {
     descriptionLength: options.descriptionLength || 750,
     ensureSecureImageRequest: options.ensureSecureImageRequest || true,
     sourceMap: options.sourceMap || {},
+    decode: options.decode || undefined,
     encode: options.encode || undefined
   }
 
@@ -23,7 +24,7 @@ module.exports = function (url, options) {
       'From': opts.fromEmail
     },
     maxRedirects: opts.maxRedirects,
-    encoding: 'utf8',
+    encoding: opts.decode ? null : 'utf8',
     timeout: opts.timeout
   }
   request.get(requestOpts, function (err, response, body) {
@@ -37,6 +38,9 @@ module.exports = function (url, options) {
       // rewrite url if our request had to follow redirects to resolve the
       // final link destination (for example: links shortened by bit.ly)
       if (response.request.uri.href) url = response.request.uri.href
+      if (opts.decode) {
+        body = opts.decode(body)
+      }
       return dfd.resolve(parse(url, body, opts))
     }
   })
