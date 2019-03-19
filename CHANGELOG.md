@@ -1,10 +1,14 @@
 # CHANGELOG
 
 ## TODO
-- support custom encoding
-- support domain overwrites in source field, not just YouTube
 - support callback interface (in addition to promises)
+- support custom encodings?
+  https://github.com/LevelNewsOrg/url-metadata/pull/14
+  need to decide if this is in scope?
+  if so, try returning a buffer from `request` module and parsing
+  via https://www.npmjs.com/package/iconv
 - support streaming interface
+- support domain overwrites in source field, not just YouTube
 
 2.2.3
 - handle mixed case in options.sourceMap keys
