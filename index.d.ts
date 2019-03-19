@@ -1,6 +1,4 @@
-// Type definitions for url-metadata 2.1
-// Project: https://github.com/LevelNewsOrg/url-metadata
-// Definitions by: Kevin Gravier <https://github.com/mrkmg>
+// Type definitions for url-metadata
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 export = urlMetadata
@@ -20,7 +18,7 @@ declare namespace urlMetadata {
     ensureSecureImageRequest?: boolean
     sourceMap?: { [key: string]: string }
     encode?: (v: string) => string
-    decoder?: (v: Buffer) => string
+    decode?: (v: Buffer) => string
   }
 
   interface Result {
@@ -45,6 +43,9 @@ declare namespace urlMetadata {
     'og:image:type': string
     'og:image:width': string
     'og:image:height': string
+    price: string
+    priceCurrency: string
+    availability: string
     'article:published_time'?: string
     'article:modified_time'?: string
     'article:expiration_time'?: string
