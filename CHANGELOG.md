@@ -2,9 +2,10 @@
 
 ## TODO
 - handle mixed case in source map keys
+- support custom encoding
 - support domain overwrites in source field, not just YouTube
+- support callback interface (in addition to promises)
 - support streaming interface
-- support callback interfaces (in addition to promises)
 
 2.2.2
 - fix YouTube source mapping by updating the DOM selector it is derived from
