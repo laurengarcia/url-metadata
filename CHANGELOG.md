@@ -3,6 +3,8 @@
 ## TODO
 - support domain overwrites in source field, not just YouTube
 
+2.4
+- Typescript definitions index.d.ts
 
 2.3
 - options.decode() to handle custom encodings:
