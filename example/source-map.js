@@ -1,14 +1,14 @@
 const urlMetadata = require('./../index')
 
 const options = {
-  sourceMap: { 'boiling frogs post': 'boilingfrogspost.com' }
+  sourceMap: { 'the guardian': 'theguardian.com' }
 }
-urlMetadata('https://www.youtube.com/watch?v=g4RkiiW-gtc', options).then(
+urlMetadata('https://www.youtube.com/watch?v=qVg0iruZUGs', options).then(
   function (metadata) { // success callback
     // result:
     // notice the metadata's source field --
-    // the youtube username `boiling frogs post` is mapped into the source
-    // field as `boilingfrogspost.com`
+    // the youtube username `The Guardian` is mapped into
+    // the `source` metadata field as 'theguardian.com'
     console.log(metadata)
   },
   function (error) { // failure callback

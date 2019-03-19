@@ -1,11 +1,14 @@
 # CHANGELOG
 
 ## TODO
-- XX fix encoded.js example filename
-- better sourceMap example in README
+- handle mixed case in source map keys
+- support domain overwrites in source field, not just YouTube
 - support streaming interface
 - support callback interfaces (in addition to promises)
 
+2.2.2
+- fix YouTube source mapping by updating the DOM selector it is derived from
+- better sourceMap example in README
 
 2.2.1
 - update to linter to [standard](https://www.npmjs.com/package/standard) 12.0.1
