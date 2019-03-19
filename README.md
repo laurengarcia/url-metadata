@@ -32,7 +32,7 @@ urlMetadata('http://bit.ly/2ePIrDy', {fromEmail: 'me@myexample.com'}).then(...)
 ```
 
 ### Options
-This package's request defaults are the values below that you may want to override:
+This package's default options are the values below that you may want to override:
 ```javascript
 {
   // custom name for the user agent and email that will make url request:
@@ -56,6 +56,10 @@ This package's request defaults are the values below that you may want to overri
   // defaults to empty object, see usage details below:
   sourceMap: {},
 
+  // custom function to decode special-case encodings;
+  // defaults to undefined:
+  decode: undefined,
+
   // custom function to encode the metadata fields before they are returned;
   // defaults to undefined:
   encode: undefined
@@ -75,6 +79,11 @@ const options = {
 ```
 
 If you'd like to extend this functionality beyond YouTube attribution, create an issue or pull request in [GitHub](https://github.com/LevelNewsOrg/url-metadata).
+
+#### Option: Decode
+You can supply a custom function to decode the metadata scraped from the url. Example decoding of EUC-JP (Japanese) metadata can be found in `example/decode.js`.
+
+If you pass in an options.decode() function, this module will force the [request](https://www.npmjs.com/package/request) module to return the scraped metadata as a buffer to decode(). This module is not opinionated about what you do in the decode() function, only that it accepts a buffer as its argument and returns a string.
 
 #### Option: Encode
 You can supply a custom function to encode the metadata fields before they are returned from this module, see `example/encode.js`:
