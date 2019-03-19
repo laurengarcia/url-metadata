@@ -39,6 +39,7 @@ This package's request defaults are the values below that you may want to overri
   userAgent: 'MetadataScraper',
   fromEmail: 'example@example.com',
 
+  // module will follow a maximum of 10 redirects
   maxRedirects: 10,
 
   // timeout in milliseconds, default below is 10 seconds:
