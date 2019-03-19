@@ -1,7 +1,7 @@
 const urlMetadata = require('./../index')
 
 // Example decode() option you can implement to handle custom encodings.
-// Here we are decoding Japanese EIC-JP encoded metadata.
+// Here we are decoding Japanese EUC-JP encoded metadata.
 // This module is not opinionated about what you do in the decode() function,
 // only that it takes a buffer as its argument and returns a string:
 //
