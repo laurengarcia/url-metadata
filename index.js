@@ -14,14 +14,16 @@ module.exports = function (url, options) {
     ensureSecureImageRequest: options.ensureSecureImageRequest || true,
     sourceMap: options.sourceMap || {},
     decode: options.decode || undefined,
-    encode: options.encode || undefined
+    encode: options.encode || undefined,
+    headers: options.headers || {}
   }
 
   const requestOpts = {
     url: url,
     headers: {
       'User-Agent': opts.userAgent,
-      'From': opts.fromEmail
+      'From': opts.fromEmail,
+      ...opts.headers
     },
     maxRedirects: opts.maxRedirects,
     encoding: opts.decode ? null : 'utf8',
