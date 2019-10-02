@@ -62,7 +62,11 @@ This package's default options are the values below that you may want to overrid
 
   // custom function to encode the metadata fields before they are returned;
   // defaults to undefined:
-  encode: undefined
+  encode: undefined,
+  
+  // object containing custom headers
+  // defaults to empty object
+  headers: {}
 }
 ```
 
