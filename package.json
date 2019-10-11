@@ -1,6 +1,6 @@
 {
   "name": "metadata-finder",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Request an http(s) url and scrape its metadata.",
   "main": "index.js",
   "scripts": {
