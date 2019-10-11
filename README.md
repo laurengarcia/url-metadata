@@ -3,14 +3,14 @@ Request an http(s) url and scrape its metadata. Many of the metadata fields retu
 
 Under the hood, this package does some post-request processing on top of the [request](https://www.npmjs.com/package/request) module.
 
-If you want a new feature, please open an issue or pull request in [GitHub](https://github.com/LevelNewsOrg/url-metadata).
+If you want a new feature, please open an issue or pull request in [GitHub](https://github.com/patrickdemers6/metadata-finder).
 
 
 ## Usage
 
 To use in an npm/ Node.js project, install from your CLI:
 ```
-$ npm install url-metadata --save`
+$ npm install @demerstech/metadata-finder
 ```
 
 Then in your project file (from example/basic.js):
