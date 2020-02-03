@@ -11,7 +11,7 @@ module.exports = function (url, options) {
     maxRedirects: options.maxRedirects || 10,
     timeout: options.timeout || 10000,
     descriptionLength: options.descriptionLength || 750,
-    ensureSecureImageRequest: options.ensureSecureImageRequest || true,
+    ensureSecureImageRequest: options.ensureSecureImageRequest && true,
     sourceMap: options.sourceMap || {},
     decode: options.decode || undefined,
     encode: options.encode || undefined
