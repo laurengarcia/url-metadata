@@ -30,6 +30,11 @@ declare namespace urlMetadata {
     description: string
     keywords: string
     source: string
+    price: string
+    priceCurrency: string
+    availability: string
+    robots: string
+
     'og:url': string
     'og:locale': string
     'og:locale:alternate': string
@@ -43,9 +48,21 @@ declare namespace urlMetadata {
     'og:image:type': string
     'og:image:width': string
     'og:image:height': string
-    price: string
-    priceCurrency: string
-    availability: string
+
+    'twitter:title': string
+    'twitter:image': string
+    'twitter:image:alt': string
+    'twitter:card': string
+    'twitter:site': string
+    'twitter:site:id': string
+    'twitter:account_id': string
+    'twitter:creator': string
+    'twitter:creator:id': string
+    'twitter:player': string
+    'twitter:player:width': string
+    'twitter:player:height': string
+    'twitter:player:stream':string
+
     'article:published_time'?: string
     'article:modified_time'?: string
     'article:expiration_time'?: string
