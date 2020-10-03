@@ -5,17 +5,22 @@ const parse = require('./lib/parse')
 module.exports = function (url, options) {
   const dfd = q.defer()
   if (!options || typeof options !== 'object') options = {}
-  const opts = {
-    userAgent: options.userAgent || 'MetadataScraper',
-    fromEmail: options.fromEmail || 'example@example.com',
-    maxRedirects: options.maxRedirects || 10,
-    timeout: options.timeout || 10000,
-    descriptionLength: options.descriptionLength || 750,
-    ensureSecureImageRequest: options.ensureSecureImageRequest || true,
-    sourceMap: options.sourceMap || {},
-    decode: options.decode || undefined,
-    encode: options.encode || undefined
-  }
+  const opts = Object.assign(
+    // defaults
+    {
+      userAgent: 'MetadataScraper',
+      fromEmail: 'example@example.com',
+      maxRedirects: 10,
+      timeout: 10000,
+      descriptionLength: 750,
+      ensureSecureImageRequest: true,
+      sourceMap: {},
+      decode: undefined,
+      encode: undefined
+    },
+    // options passed in override defaults
+    options
+  )
 
   const requestOpts = {
     url: url,

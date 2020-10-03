@@ -32,7 +32,7 @@ const urlMetadata = require('urlMetadata')
 urlMetadata('http://bit.ly/2ePIrDy', {fromEmail: 'me@myexample.com'}).then(...)
 ```
 
-### Options
+### Options & Defaults
 This package's default options are the values below that you may want to override:
 ```javascript
 {
