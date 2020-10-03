@@ -4,7 +4,7 @@ Request an http(s) url and scrape its metadata. Many of the metadata fields retu
 
 Under the hood, this package does some post-request processing on top of the [request](https://www.npmjs.com/package/request) module.
 
-If you want a new feature, please open an issue or pull request in [GitHub](https://github.com/LevelNewsOrg/url-metadata).
+If you want a new feature, please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata).
 
 
 ## Usage
