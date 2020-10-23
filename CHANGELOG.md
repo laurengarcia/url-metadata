@@ -1,7 +1,7 @@
 # CHANGELOG
 
-## TODO
-- support domain overwrites in source field, not just YouTube
+2.5
+- add support for JSON-LD https://moz.com/blog/json-ld-for-beginners
 
 2.4
 - Typescript definitions index.d.ts

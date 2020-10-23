@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "2.4.5",
+  "version": "2.5.0",
   "description": "Request an http(s) url and scrape its metadata.",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,8 @@
     "js",
     "og",
     "open graph",
-    "og tags"
+    "og tags",
+    "jsonld"
   ],
   "dependencies": {
     "cheerio": "^0.22.0",

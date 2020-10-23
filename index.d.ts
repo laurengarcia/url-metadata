@@ -34,6 +34,7 @@ declare namespace urlMetadata {
     priceCurrency: string
     availability: string
     robots: string
+    jsonld: any
 
     'og:url': string
     'og:locale': string

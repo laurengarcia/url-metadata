@@ -2,6 +2,8 @@
 
 Request an http(s) url and scrape its metadata. Many of the metadata fields returned are [Open Graph Protocol (og:)](http://ogp.me/) so far.
 
+Support also added for [JSON-LD](https://moz.com/blog/json-ld-for-beginners).
+
 Under the hood, this package does some post-request processing on top of the [request](https://www.npmjs.com/package/request) module.
 
 If you want a new feature, please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata).
@@ -137,7 +139,8 @@ Returns a promise that gets resolved with the following url metadata if the url 
     'twitter:player': '',
     'twitter:player:width': '',
     'twitter:player:height': '',
-    'twitter:player:stream': ''
+    'twitter:player:stream': '',
+    'jsonld': {}
 }
 ```
 
