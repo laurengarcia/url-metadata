@@ -65,7 +65,10 @@ This package's default options are the values below that you may want to overrid
 
   // custom function to encode the metadata fields before they are returned;
   // defaults to undefined:
-  encode: undefined
+  encode: undefined,
+
+  // custom headers
+  customHeaders: {}
 }
 ```
 
@@ -94,6 +97,17 @@ You can supply a custom function to encode the metadata fields before they are r
 const options = {
   encode: function (value) {
     return encodeURIComponent(value).replace(/['*]/g, escape)
+  }
+}
+```
+
+#### Option: Custom Headers
+You can specify any custom headers such as `cookie`, `accept-language`, `accept-encoding`, `cache-control` etc:
+```javascript
+const options = {
+  customHeaders: {
+    'cookie': 'over18=1;',
+    'accept-language': 'zh-TW,zh;q=0.9,en-NL;q=0.8,en;q=0.7,en-US;q=0.6'
   }
 }
 ```

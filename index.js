@@ -16,18 +16,24 @@ module.exports = function (url, options) {
       ensureSecureImageRequest: true,
       sourceMap: {},
       decode: undefined,
-      encode: undefined
+      encode: undefined,
+      customHeaders: {}
     },
     // options passed in override defaults
     options
   )
 
+  const headers = {
+    'User-Agent': opts.userAgent,
+    'From': opts.fromEmail
+  };
+  Object.keys(opts.customHeaders).forEach(function (key) {
+    headers[key] = opts.customHeaders[key];
+  });
+
   const requestOpts = {
     url: url,
-    headers: {
-      'User-Agent': opts.userAgent,
-      'From': opts.fromEmail
-    },
+    headers: headers,
     maxRedirects: opts.maxRedirects,
     encoding: opts.decode ? null : 'utf8',
     timeout: opts.timeout
