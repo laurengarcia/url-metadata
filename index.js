@@ -39,25 +39,24 @@ module.exports = function (url, options) {
     timeout: opts.timeout
   }
   request.get(requestOpts, function (err, response, body) {
-    if (err || !response) {
-      return dfd.reject(err)
-    }
-    if (response.statusCode && response.statusCode !== 200) {
-      return dfd.reject({ Error: 'response code ' + response.statusCode })
-    }
-    if (response.statusCode && response.statusCode === 200) {
-      if (!(response.headers && response.headers['content-type'] && response.headers['content-type'].match(/^text\//))) {
-        return dfd.reject({ Error: 'not a text file', Type: (response.headers && response.headers['content-type']) })
+    if (!err && response && response.statusCode) {
+      if (response.statusCode === 200) {
+        if (response.headers && response.headers['content-type'] && response.headers['content-type'].match(/^text\//)) {
+          // rewrite url if our request had to follow redirects to resolve the
+          // final link destination (for example: links shortened by bit.ly)
+          if (response.request.uri.href) url = response.request.uri.href
+          if (opts.decode) {
+            body = opts.decode(body)
+          }
+          return dfd.resolve(parse(url, body, opts))
+        } else {
+          return dfd.reject({ type: 'NOT_TEXT', detail: (response.headers && response.headers['content-type']) })
+        }
+      } else {
+        return dfd.reject({ type: 'NOT_200', detail: response.statusCode })
       }
-      // rewrite url if our request had to follow redirects to resolve the
-      // final link destination (for example: links shortened by bit.ly)
-      if (response.request.uri.href) url = response.request.uri.href
-      if (opts.decode) {
-        body = opts.decode(body)
-      }
-      return dfd.resolve(parse(url, body, opts))
     } else {
-      return dfd.reject(err);
+      return dfd.reject({ type: 'UNKNOWN', detail: err })
     }
   })
 
