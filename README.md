@@ -13,7 +13,7 @@ If you want a new feature, please open an issue or pull request in [GitHub](http
 
 To use in an npm/ Node.js project, install from your CLI:
 ```
-$ npm install url-metadata --save`
+$ npm install url-metadata --save
 ```
 
 Then in your project file (from example/basic.js):
