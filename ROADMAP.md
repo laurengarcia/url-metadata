@@ -10,7 +10,7 @@
 [ ] add option to return full dom tree that is scraped
 
 [ ] add test framework to test examples in cloud
-[ ] break out example/decode.js japanese decoding into own file
+[X] break out example/decode.js japanese decoding into own file
 [ ] examples cover both browser and node.js
 [ ] export new index.d.ts
 [ ] examples cover typescript
