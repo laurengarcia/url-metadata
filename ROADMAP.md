@@ -1,8 +1,6 @@
 3.0 Roadmap
 
-[ ] update from standard to (new linter?) + prettier
-
-[ ] remove package-lock.json
+[X] remove package-lock.json
 [ ] audit deps for licensing issues
 [ ] update all deps
 [ ] remove deps: `request`, `q`, `underscore` libs
