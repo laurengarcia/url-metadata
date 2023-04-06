@@ -16,25 +16,23 @@ declare namespace urlMetadata {
     timeout?: number
     descriptionLength?: number
     ensureSecureImageRequest?: boolean
-    sourceMap?: { [key: string]: string }
     encode?: (v: string) => string
     decode?: (v: Buffer) => string
   }
 
   interface Result {
-    url: string
-    canonical: string
-    title: string
-    image: string
-    author: string
-    description: string
-    keywords: string
-    source: string
-    price: string
-    priceCurrency: string
-    availability: string
-    robots: string
-    jsonld: any
+    'url': string
+    'canonical': string
+    'title': string
+    'image': string
+    'author': string
+    'description': string
+    'keywords': string
+    'price': string
+    'priceCurrency': string
+    'availability': string
+    'robots': string
+    'jsonld': any
 
     'og:url': string
     'og:locale': string

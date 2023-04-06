@@ -14,7 +14,6 @@ module.exports = function (url, options) {
       timeout: 10000,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
-      sourceMap: {},
       decode: undefined,
       encode: undefined
     },

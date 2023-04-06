@@ -1,6 +1,7 @@
 3.0 Roadmap
 
 [X] remove package-lock.json
+[X] remove deprecated sourceMap option
 [ ] audit deps for licensing issues
 [ ] update all deps
 [ ] remove deps: `request`, `q`, `underscore` libs
@@ -9,6 +10,7 @@
 [ ] add option to return full dom tree that is scraped
 
 [ ] add test framework to test examples in cloud
+[ ] break out example/decode.js japanese decoding into own file
 [ ] examples cover both browser and node.js
 [ ] export new index.d.ts
 [ ] examples cover typescript
