@@ -16,30 +16,29 @@ To use in an npm/ Node.js project, install from your CLI:
 $ npm install url-metadata --save`
 ```
 
-Then in your project file (from example/basic.js):
+Then in your project file:
 ```javascript
 const urlMetadata = require('url-metadata')
-urlMetadata('http://bit.ly/2ePIrDy').then(
-  function (metadata) { // success handler
-    console.log(metadata)
-  },
-  function (error) { // failure handler
-    console.log(error)
-  })
+try {
+  const metadata = await urlMetadata(url)
+  // do stuff with metadata
+} catch(err) {
+  console.log(err)
+}
 ```
 
-If you'd like to override the default options (see below), pass in a second argument:
+To override the default options (see below), pass in a second argument:
 ```javascript
 const urlMetadata = require('urlMetadata')
-urlMetadata('http://bit.ly/2ePIrDy', {fromEmail: 'me@myexample.com'}).then(...)
+const metadata = urlMetadata('http://bit.ly/2ePIrDy', { fromEmail: 'me@myexample.com' })
 ```
 
 ### Options & Defaults
-This package's default options are the values below that you may want to override:
+This module's default options are the values below that you can override:
 ```javascript
 {
   // custom name for the user agent and email that will make url request:
-  userAgent: 'MetadataScraper',
+  userAgent: 'url-metadata/3.0 (npm module)',
   fromEmail: 'example@example.com',
 
   // module will follow a maximum of 10 redirects
@@ -66,12 +65,12 @@ This package's default options are the values below that you may want to overrid
 ```
 
 #### Option: Decode
-You can supply a custom function to decode the metadata scraped from the url. Example decoding of EUC-JP (Japanese) metadata can be found in `example/decode.js`.
+Supply a custom function to decode the metadata scraped from the url. Example decoding of EUC-JP (Japanese) can be found in `test/decode-EUC-JP.test.js`.
 
-If you pass in an options.decode() function, this module will force the [request](https://www.npmjs.com/package/request) module to return the scraped metadata as a buffer to decode(). This module is not opinionated about what you do in the decode() function, only that it accepts a buffer as its argument and returns a string.
+This module is not opinionated about what you do in the decode() function. It simply receives a buffer as argument and must return a string.
 
 #### Option: Encode
-You can supply a custom function to encode the metadata fields before they are returned from this module, see `example/encode.js`:
+Supply a custom function to encode the metadata fields before they are returned from this module, see `test/encode.test.js`:
 ```javascript
 const options = {
   encode: function (value) {

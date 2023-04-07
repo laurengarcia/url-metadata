@@ -45,7 +45,7 @@ module.exports = function (url, options) {
       if (response.request.uri.href) url = response.request.uri.href;
 
       // this module is not opinionated re: what you do in the decode() fn
-      // `options.decode` simply receives a buffer as argument, returns a string
+      // it simply receives a buffer as argument, must return a string
       let body = response.body
       if (opts.decode) {
         body = opts.decode(body)
