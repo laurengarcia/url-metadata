@@ -9,3 +9,23 @@ test('basic example', async () => {
     expect(err).toBe(undefined)
   }
 })
+
+test('option to `includeBody` is true', async () => {
+  const url = 'https://www.npmjs.com/package/url-metadata'
+  try {
+    const metadata = await urlMetadata(url, { includeBody: true })
+    expect(metadata.body).toContain('<!doctype html>')
+  } catch(err) {
+    expect(err).toBe(undefined)
+  }
+})
+
+test('redirect on link shortener', async () => {
+  const url = 'https://bit.ly/3Bg19uM'
+  try {
+    const metadata = await urlMetadata(url)
+    expect(metadata.url).not.toBe(url)
+  } catch(err) {
+    expect(err).toBe(undefined)
+  }
+})

@@ -16,9 +16,11 @@ declare namespace urlMetadata {
     timeout?: number
     descriptionLength?: number
     ensureSecureImageRequest?: boolean
+    includeBody?: boolean
   }
 
   interface Result {
+    'body'?: string
     'url': string
     'canonical': string
     'title': string
