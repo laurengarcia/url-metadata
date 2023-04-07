@@ -1,11 +1,11 @@
-// Here we are decoding Japanese EUC-JP encoded metadata.
+// Test dedoding Japanese EUC-JP encoded metadata.
 
 const urlMetadata = require('./../index')
 const detectCharacterEncoding = require('detect-character-encoding')
 const iconv = require('iconv-lite')
 
 
-test('decode option: handle EUC-JP encoding', () => {
+test('decode option: handle EUC-JP encoding', async () => {
 
   const url = 'http://charset.7jp.net/euc.html';
 
@@ -32,13 +32,11 @@ test('decode option: handle EUC-JP encoding', () => {
     }
   }
 
-  return urlMetadata(url, options).then(
-    function (metadata) {
-      expect(metadata.url).toBe(url)
-    },
-    function (error) {
-      expect(error).toBe(undefined)
-    }
-  )
+  try {
+    const metadata = await urlMetadata(url, options)
+    expect(metadata.url).toBe(url)
+  } catch(err) {
+    expect(error).toBe(undefined)
+  }
 })
 

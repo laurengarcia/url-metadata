@@ -1,13 +1,11 @@
 const urlMetadata = require('./../index')
 
-test('retrieves robots meta directives', () => {
-
-  return urlMetadata('https://moz.com/learn/seo/robots-meta-directives').then(
-    function (metadata) {
-      expect(metadata.robots).toBe('all');
-    },
-    function (error) {
-      expect(error).toBe(undefined)
-    }
-  )
+test('retrieves robots meta directives', async () => {
+  const url = 'https://moz.com/learn/seo/robots-meta-directives'
+  try {
+    const metadata = await urlMetadata(url)
+    expect(metadata.robots).toBe('all');
+  } catch(err) {
+    expect(err).toBe(undefined)
+  }
 })

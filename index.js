@@ -34,22 +34,24 @@ module.exports = function (url, options) {
   return new Promise((resolve, reject) => {
     request.get(requestOpts, (err, response) => {
       if (err || !response) {
-        return reject(err);
+        return reject(err)
       }
       if (response.statusCode && response.statusCode !== 200) {
-        return reject({ Error: 'response code ' + response.statusCode });
+        return reject({ Error: 'response code ' + response.statusCode })
       }
 
       // rewrite url if our request had to follow redirects to resolve the
       // final link destination (for example: links shortened by bit.ly)
       if (response.request.uri.href) url = response.request.uri.href;
 
-      let body = response.body;
+      // this module is not opinionated re: what you do in the decode() fn
+      // `options.decode` simply receives a buffer as argument, returns a string
+      let body = response.body
       if (opts.decode) {
-        body = opts.decode(body);
+        body = opts.decode(body)
       }
 
-      resolve(parse(url, body, opts));
+      resolve(parse(url, body, opts))
     });
   });
 }

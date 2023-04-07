@@ -1,6 +1,6 @@
 const urlMetadata = require('./../index')
 
-test('basic encode option', () => {
+test('basic encode option', async () => {
 
   const url = 'https://www.npmjs.com/package/url-metadata';
 
@@ -11,12 +11,10 @@ test('basic encode option', () => {
     }
   }
 
-  return urlMetadata(url, options).then(
-    function (metadata) {
-      expect(metadata.url).toBe('https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Furl-metadata')
-    },
-    function (error) {
-      console.log(error)
-    }
-  )
+  try {
+    const metadata = await urlMetadata(url, options)
+    expect(metadata.url).toBe('https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Furl-metadata')
+  } catch(err) {
+    expect(err).toBe(undefined)
+  }
 })

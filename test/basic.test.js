@@ -1,8 +1,11 @@
 const urlMetadata = require('./../index')
 
-test('basic example', () => {
-  const url = 'https://www.npmjs.com/package/url-metadata';
-  return urlMetadata(url).then(metadata => {
-    expect(metadata.url).toBe(url);
-  })
+test('basic example', async () => {
+  const url = 'https://www.npmjs.com/package/url-metadata'
+  try {
+    const metadata = await urlMetadata(url)
+    expect(metadata.url).toBe(url)
+  } catch(err) {
+    expect(err).toBe(undefined)
+  }
 })

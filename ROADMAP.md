@@ -5,8 +5,8 @@
 [ ] audit deps for licensing issues
 [ ] update all deps
 [ ] remove deps: `request`, `q`, `underscore` libs
-      - ensure native fetch is used with correct version of node(18? 16.15.0?)
-      - convert to async/ await syntax
+      - [ ] ensure native fetch is used with correct version of node(18? 16.15.0?)
+      - [X] convert to async/ await syntax
       ex: https://github.com/jonbern/fetch-retry/blob/master/index.js
 [ ] review all open issues, fix & add /example where appropriate
 [ ] add option to return full dom tree that is scraped
