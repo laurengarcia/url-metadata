@@ -20,5 +20,4 @@
 
 [ ] add template for issues that includes steps to reproduce bugs
 [ ] add github actions that test library automatically
-[ ] add github actions that auto-publish npm updates from merged PRs
 [ ] add github actions that auto-publish changelog from merged PRs

@@ -44,7 +44,7 @@ This module's default options are the values below that you can override:
   userAgent: 'url-metadata/3.0 (npm module)',
   fromEmail: 'example@example.com',
 
-  // how to handle a `redirect` response
+  // how `fetch` API handles caching
   cache: 'no-cache',
 
   // timeout in milliseconds, default is 10 seconds:
