@@ -22,7 +22,7 @@ module.exports = function (url, options) {
     method: 'GET',
     headers: {
       'User-Agent': opts.userAgent,
-      'From': opts.fromEmail
+      From: opts.fromEmail
     },
     cache: opts.cache,
     timeout: opts.timeout,
@@ -30,26 +30,26 @@ module.exports = function (url, options) {
   }
 
   return fetch(url, requestOpts)
-     .then((response) => {
-       if (!response.ok) {
-         throw new Error(`response code ${response.status}`)
-       }
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`response code ${response.status}`)
+      }
 
-       // rewrite url if our request had to follow redirects to resolve the
-       // final link destination (for example: links shortened by bit.ly)
-       if (response.url) url = response.url
+      // rewrite url if our request had to follow redirects to resolve the
+      // final link destination (for example: links shortened by bit.ly)
+      if (response.url) url = response.url
 
-       let contentType = response.headers.get('content-type')
-       let isText = contentType && contentType.startsWith('text')
-       let isHTML = contentType && contentType.includes('html')
+      const contentType = response.headers.get('content-type')
+      const isText = contentType && contentType.startsWith('text')
+      const isHTML = contentType && contentType.includes('html')
 
-       if (!isText || !isHTML) {
-         throw new Error(`unsupported content type: ${contentType}`)
-       }
+      if (!isText || !isHTML) {
+        throw new Error(`unsupported content type: ${contentType}`)
+      }
 
-       return response.text();
-     })
-     .then((body) => {
-       return parse(url, body, opts);
-     });
+      return response.text()
+    })
+    .then((body) => {
+      return parse(url, body, opts)
+    })
 }

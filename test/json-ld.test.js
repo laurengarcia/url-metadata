@@ -7,7 +7,7 @@ test('retrieves json-ld if url has it', async () => {
     expect(typeof metadata.jsonld).toBe('object')
     expect(typeof metadata.jsonld.headline).toBe('string')
     expect(typeof metadata.jsonld.datePublished).toBe('string')
-  } catch(err) {
+  } catch (err) {
     expect(err).toBe(undefined)
   }
 })

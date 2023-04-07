@@ -5,7 +5,7 @@ test('basic example', async () => {
   try {
     const metadata = await urlMetadata(url)
     expect(metadata.url).toBe(url)
-  } catch(err) {
+  } catch (err) {
     expect(err).toBe(undefined)
   }
 })
@@ -15,7 +15,7 @@ test('option to `includeBody` is true', async () => {
   try {
     const metadata = await urlMetadata(url, { includeBody: true })
     expect(metadata.body).toContain('<!doctype html>')
-  } catch(err) {
+  } catch (err) {
     expect(err).toBe(undefined)
   }
 })
@@ -25,7 +25,7 @@ test('redirect on link shortener', async () => {
   try {
     const metadata = await urlMetadata(url)
     expect(metadata.url).not.toBe(url)
-  } catch(err) {
+  } catch (err) {
     expect(err).toBe(undefined)
   }
 })
