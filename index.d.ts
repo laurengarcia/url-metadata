@@ -12,12 +12,10 @@ declare namespace urlMetadata {
   interface Options {
     userAgent?: string
     fromEmail?: string
-    maxRedirects?: number
+    cache?: string
     timeout?: number
     descriptionLength?: number
     ensureSecureImageRequest?: boolean
-    encode?: (v: string) => string
-    decode?: (v: Buffer) => string
   }
 
   interface Result {

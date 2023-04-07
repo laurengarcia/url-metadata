@@ -4,24 +4,27 @@ Request an http(s) url and scrape its metadata. Many of the metadata fields retu
 
 Support also added for [JSON-LD](https://moz.com/blog/json-ld-for-beginners).
 
-Under the hood, this package does some post-request processing on top of the [request](https://www.npmjs.com/package/request) module.
+Under the hood, this package does some post-request processing on top of the javascript native `fetch` API.
 
-If you want a new feature, please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata).
+To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata).
 
 
 ## Usage
+Works with Node.js version `>=18.0.0` or in the browser when bundled (with browserify or webpack for example).
 
-To use in an npm/ Node.js project, install from your CLI:
+Use previous version `2.5.0` which uses the (now-deprecated) `request` module instead if you don't have access to javascript-native `fetch` API in your target environment.
+
+Install:
 ```
 $ npm install url-metadata --save`
 ```
 
-Then in your project file:
+In your project file:
 ```javascript
 const urlMetadata = require('url-metadata')
 try {
   const metadata = await urlMetadata(url)
-  // do stuff with metadata
+  // do stuff with the metadata
 } catch(err) {
   console.log(err)
 }
@@ -37,14 +40,14 @@ const metadata = urlMetadata('http://bit.ly/2ePIrDy', { fromEmail: 'me@myexample
 This module's default options are the values below that you can override:
 ```javascript
 {
-  // custom name for the user agent and email that will make url request:
+  // custom name for the user agent + email that make url request:
   userAgent: 'url-metadata/3.0 (npm module)',
   fromEmail: 'example@example.com',
 
-  // module will follow a maximum of 10 redirects
-  maxRedirects: 10,
+  // how to handle a `redirect` response
+  cache: 'no-cache',
 
-  // timeout in milliseconds, default below is 10 seconds:
+  // timeout in milliseconds, default is 10 seconds:
   timeout: 10000,
 
   // number of characters to truncate description to:
@@ -52,30 +55,7 @@ This module's default options are the values below that you can override:
 
   // force image urls in selected tags to use https,
   // valid for 'image', 'og:image' and 'og:image:secure_url' tags:
-  ensureSecureImageRequest: true,
-
-  // custom function to decode special-case encodings;
-  // defaults to undefined:
-  decode: undefined,
-
-  // custom function to encode the metadata fields before they are returned;
-  // defaults to undefined:
-  encode: undefined
-}
-```
-
-#### Option: Decode
-Supply a custom function to decode the metadata scraped from the url. Example decoding of EUC-JP (Japanese) can be found in `test/decode-EUC-JP.test.js`.
-
-This module is not opinionated about what you do in the decode() function. It simply receives a buffer as argument and must return a string.
-
-#### Option: Encode
-Supply a custom function to encode the metadata fields before they are returned from this module, see `test/encode.test.js`:
-```javascript
-const options = {
-  encode: function (value) {
-    return encodeURIComponent(value).replace(/['*]/g, escape)
-  }
+  ensureSecureImageRequest: true
 }
 ```
 

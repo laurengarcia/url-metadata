@@ -1,4 +1,3 @@
-const request = require('request')
 const parse = require('./lib/parse')
 
 module.exports = function (url, options) {
@@ -9,49 +8,47 @@ module.exports = function (url, options) {
     {
       userAgent: 'url-metadata/3.0 (npm module)',
       fromEmail: 'example@example.com',
-      maxRedirects: 10,
+      cache: 'no-cache',
       timeout: 10000,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
-      decode: undefined,
-      encode: undefined
     },
     // options passed in override defaults
     options
   )
 
   const requestOpts = {
-    url: url,
+    method: 'GET',
     headers: {
       'User-Agent': opts.userAgent,
       'From': opts.fromEmail
     },
-    maxRedirects: opts.maxRedirects,
-    encoding: opts.decode ? null : 'utf8',
-    timeout: opts.timeout
+    cache: opts.cache,
+    timeout: opts.timeout,
+    redirect: 'follow'
   }
 
-  return new Promise((resolve, reject) => {
-    request.get(requestOpts, (err, response) => {
-      if (err || !response) {
-        return reject(err)
-      }
-      if (response.statusCode && response.statusCode !== 200) {
-        return reject({ Error: 'response code ' + response.statusCode })
-      }
+  return fetch(url, requestOpts)
+     .then((response) => {
+       if (!response.ok) {
+         throw new Error(`response code ${response.status}`)
+       }
 
-      // rewrite url if our request had to follow redirects to resolve the
-      // final link destination (for example: links shortened by bit.ly)
-      if (response.request.uri.href) url = response.request.uri.href;
+       // rewrite url if our request had to follow redirects to resolve the
+       // final link destination (for example: links shortened by bit.ly)
+       if (response.url) url = response.url
 
-      // this module is not opinionated re: what you do in the decode() fn
-      // it simply receives a buffer as argument, must return a string
-      let body = response.body
-      if (opts.decode) {
-        body = opts.decode(body)
-      }
+       let contentType = response.headers.get('content-type')
+       let isText = contentType && contentType.startsWith('text')
+       let isHTML = contentType && contentType.includes('html')
 
-      resolve(parse(url, body, opts))
-    });
-  });
+       if (!isText || !isHTML) {
+         throw new Error(`unsupported content type: ${contentType}`)
+       }
+
+       return response.text();
+     })
+     .then((body) => {
+       return parse(url, body, opts);
+     });
 }
