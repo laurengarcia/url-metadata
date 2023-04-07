@@ -39,7 +39,6 @@
   ],
   "dependencies": {
     "cheerio": "^0.22.0",
-    "q": "^1.4.1",
     "request": "^2.88.0",
     "underscore": "^1.8.3"
   },
