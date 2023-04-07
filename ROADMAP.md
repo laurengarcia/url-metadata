@@ -5,15 +5,18 @@
 [ ] audit deps for licensing issues
 [ ] update all deps
 [ ] remove deps: `request`, `q`, `underscore` libs
-
-[ ] review all issues, fix & add /example where appropriate
+      - ensure native fetch is used with correct version of node(18? 16.15.0?)
+      - convert to async/ await syntax
+      ex: https://github.com/jonbern/fetch-retry/blob/master/index.js
+[ ] review all open issues, fix & add /example where appropriate
 [ ] add option to return full dom tree that is scraped
 
-[ ] add test framework to test examples in cloud
+[X] add test framework to examples
 [X] break out example/decode.js japanese decoding into own file
 [ ] examples cover both browser and node.js
-[ ] export new index.d.ts
+[ ] export new index.d.ts using `rollup -c`
 [ ] examples cover typescript
+[ ] set package.json `types` prop to `index.d.ts`
 [ ] husky pre-commit hook runs linter, tests example code
 
 [ ] add template for issues that includes steps to reproduce bugs
