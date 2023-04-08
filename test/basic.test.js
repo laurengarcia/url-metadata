@@ -10,10 +10,16 @@ test('basic example', async () => {
   }
 })
 
-test('option to `includeResponseBody` is true', async () => {
+test('option to `includeResponseBody`, custom `headers`', async () => {
   const url = 'https://www.npmjs.com/package/url-metadata'
   try {
-    const metadata = await urlMetadata(url, { includeResponseBody: true })
+    const metadata = await urlMetadata(url, {
+      includeResponseBody: true,
+      requestHeaders: {
+        'User-Agent': 'foo',
+        From: 'bar@bar.com'
+      }
+    })
     expect(metadata.responseBody).toContain('<!doctype html>')
   } catch (err) {
     expect(err).toBe(undefined)

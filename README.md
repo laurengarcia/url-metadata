@@ -22,39 +22,55 @@ $ npm install url-metadata --save`
 In your project file:
 ```javascript
 const urlMetadata = require('url-metadata')
-try {
-  const metadata = await urlMetadata(url)
+
+urlMetadata('https://www.npmjs.com/package/url-metadata')
+.then((metadata) => {
+  console.log(metadata)
   // do stuff with the metadata
-} catch(err) {
+},
+(err) => {
   console.log(err)
-}
+})
 ```
 
 To override the default options (see below), pass in a second argument:
 ```javascript
-const urlMetadata = require('urlMetadata')
-const metadata = urlMetadata('http://bit.ly/2ePIrDy', { fromEmail: 'me@myexample.com' })
+const urlMetadata = require('url-metadata')
+
+urlMetadata('https://www.npmjs.com/package/url-metadata', {
+  requestHeaders: {
+    'User-Agent': 'foo',
+    'From': 'bar@bar.com'
+  }
+}).then((metadata) => {
+  console.log(metadata)
+  // do stuff with the metadata
+}).catch((err) => {
+  console.log(err)
+})
 ```
 
 ### Options & Defaults
 This module's default options are the values below that you can override:
 ```javascript
 {
-  // custom name for the user agent + email that make url request:
-  userAgent: 'url-metadata/3.0 (npm module)',
-  fromEmail: 'example@example.com',
+  // custom request headers
+  requestHeaders: {
+    'User-Agent': 'url-metadata/3.0 (npm module)',
+    'From': 'example@example.com',
+  }
 
   // how `fetch` API handles caching
   cache: 'no-cache',
 
-  // timeout in milliseconds, default is 10 seconds:
+  // timeout in milliseconds, default is 10 seconds
   timeout: 10000,
 
-  // number of characters to truncate description to:
+  // number of characters to truncate description to
   descriptionLength: 750,
 
   // force image urls in selected tags to use https,
-  // valid for 'image', 'og:image' and 'og:image:secure_url' tags:
+  // valid for 'image', 'og:image' and 'og:image:secure_url' tags
   ensureSecureImageRequest: true,
 
   // return raw response body as string

@@ -6,8 +6,10 @@ module.exports = function (url, options) {
   const opts = Object.assign(
     // defaults
     {
-      userAgent: 'url-metadata/3.0 (npm module)',
-      fromEmail: 'example@example.com',
+      requestHeaders: {
+        'User-Agent': 'url-metadata/3.0 (npm module)',
+        From: 'example@example.com'
+      },
       cache: 'no-cache',
       timeout: 10000,
       descriptionLength: 750,
@@ -20,10 +22,7 @@ module.exports = function (url, options) {
 
   const requestOpts = {
     method: 'GET',
-    headers: {
-      'User-Agent': opts.userAgent,
-      From: opts.fromEmail
-    },
+    headers: opts.requestHeaders,
     cache: opts.cache,
     timeout: opts.timeout,
     redirect: 'follow'

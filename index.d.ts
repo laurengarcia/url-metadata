@@ -10,8 +10,7 @@ declare function urlMetadata(
 
 declare namespace urlMetadata {
   interface Options {
-    userAgent?: string
-    fromEmail?: string
+    requestHeaders?: Record<string, string>
     cache?: string
     timeout?: number
     descriptionLength?: number
