@@ -10,8 +10,9 @@
       - [X] convert to async/ await syntax
 [ ] review all open issues, fix & add /test where appropriate
     - [X] add option to return url body that is scraped
-    - [ ] add customHeaders option
-[ ] return language field
+    - [X] add customHeaders option
+    - [ ] `twitter:description`, `twitter:url` missing from metadata-fields.js
+[ ] return og: music, audio, video tags
 
 [X] add test framework to examples
 [X] break out example/decode.js japanese decoding into own file
