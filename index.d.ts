@@ -16,11 +16,10 @@ declare namespace urlMetadata {
     timeout?: number
     descriptionLength?: number
     ensureSecureImageRequest?: boolean
-    includeBody?: boolean
+    includeResponseBody?: boolean
   }
 
   interface Result {
-    'body'?: string
     'url': string
     'canonical': string
     'title': string
@@ -33,6 +32,7 @@ declare namespace urlMetadata {
     'availability': string
     'robots': string
     'jsonld': any
+    'responseBody': string
 
     'og:url': string
     'og:locale': string

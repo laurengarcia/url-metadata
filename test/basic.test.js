@@ -10,11 +10,11 @@ test('basic example', async () => {
   }
 })
 
-test('option to `includeBody` is true', async () => {
+test('option to `includeResponseBody` is true', async () => {
   const url = 'https://www.npmjs.com/package/url-metadata'
   try {
-    const metadata = await urlMetadata(url, { includeBody: true })
-    expect(metadata.body).toContain('<!doctype html>')
+    const metadata = await urlMetadata(url, { includeResponseBody: true })
+    expect(metadata.responseBody).toContain('<!doctype html>')
   } catch (err) {
     expect(err).toBe(undefined)
   }

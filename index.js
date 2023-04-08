@@ -12,7 +12,7 @@ module.exports = function (url, options) {
       timeout: 10000,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
-      includeBody: false
+      includeResponseBody: false
     },
     // options passed in override defaults
     options
