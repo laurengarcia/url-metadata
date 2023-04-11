@@ -16,6 +16,7 @@
     "node": ">=18.0.0"
   },
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "lint": "standard",
     "format": "standard --fix",

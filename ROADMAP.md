@@ -16,7 +16,8 @@
 
 [X] add test framework to examples
 [X] break out example/decode.js japanese decoding into own file
-[ ] set package.json `types` prop to `index.d.ts`
+[X] set package.json `types` prop to `index.d.ts`
+[X] simplify index.d.ts
 [ ] husky pre-commit hook runs linter, tests example code
 
 [ ] add template for issues that includes steps to reproduce bugs
