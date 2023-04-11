@@ -93,6 +93,7 @@ Returns a promise that gets resolved with the following metadata if the request 
     'priceCurrency': '',
     'availability': '',
     'robots': '',
+    'jsonld': {},
     'og:url': '',
     'og:locale': '',
     'og:locale:alternate': '',
@@ -107,9 +108,11 @@ Returns a promise that gets resolved with the following metadata if the request 
     'og:image:width': '',
     'og:image:height': '',
     'twitter:title': '',
+    'twitter:description': '',
     'twitter:image': '',
     'twitter:image:alt': '',
     'twitter:card': '',
+    'twitter:url': '',
     'twitter:site': '',
     'twitter:site:id': '',
     'twitter:account_id': '',
@@ -119,7 +122,6 @@ Returns a promise that gets resolved with the following metadata if the request 
     'twitter:player:width': '',
     'twitter:player:height': '',
     'twitter:player:stream': '',
-    'jsonld': {},
     'responseBody': ''
 }
 ```

@@ -11,7 +11,7 @@
 [ ] review all open issues, fix & add /test where appropriate
     - [X] add option to return url body that is scraped
     - [X] add customHeaders option
-    - [ ] `twitter:description`, `twitter:url` missing from metadata-fields.js
+    - [X] `twitter:description`, `twitter:url` missing
 [ ] return og: music, audio, video tags
 
 [X] add test framework to examples

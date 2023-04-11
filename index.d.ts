@@ -31,7 +31,6 @@ declare namespace urlMetadata {
     'availability': string
     'robots': string
     'jsonld': any
-    'responseBody': string
 
     'og:url': string
     'og:locale': string
@@ -48,11 +47,13 @@ declare namespace urlMetadata {
     'og:image:height': string
 
     'twitter:title': string
+    'twitter:description': string
     'twitter:image': string
     'twitter:image:alt': string
     'twitter:card': string
     'twitter:site': string
     'twitter:site:id': string
+    'twitter:url': string
     'twitter:account_id': string
     'twitter:creator': string
     'twitter:creator:id': string
@@ -73,5 +74,7 @@ declare namespace urlMetadata {
     'og:article:author'?: string
     'og:article:section'?: string
     'og:article:tag'?: string
+
+    'responseBody': string
   }
 }
