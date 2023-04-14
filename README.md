@@ -1,6 +1,6 @@
 # url-metadata
 
-Request an http(s) url and scrape its metadata. Many of the metadata fields returned are [Open Graph Protocol (og:)](http://ogp.me/) so far.
+Request an http(s) url and scrape its metadata. Includes [Open Graph Protocol (og:)](http://ogp.me/) and [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) meta tags.
 
 Support also added for [JSON-LD](https://moz.com/blog/json-ld-for-beginners).
 

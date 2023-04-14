@@ -5,6 +5,10 @@ test('basic example', async () => {
   try {
     const metadata = await urlMetadata(url)
     expect(metadata.url).toBe(url)
+    expect(metadata['og:url']).toBe(url)
+    expect(metadata['og:title']).toBe('url-metadata')
+    expect(metadata.description.length).toBeGreaterThan(10)
+    expect(metadata['twitter:description'].length).toBeGreaterThan(10)
   } catch (err) {
     expect(err).toBe(undefined)
   }
