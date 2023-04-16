@@ -11,6 +11,7 @@ module.exports = function (url, options) {
         From: 'example@example.com'
       },
       cache: 'no-cache',
+      mode: 'cors',
       timeout: 10000,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
@@ -22,6 +23,7 @@ module.exports = function (url, options) {
 
   const requestOpts = {
     method: 'GET',
+    mode: opts.mode,
     headers: opts.requestHeaders,
     cache: opts.cache,
     timeout: opts.timeout,

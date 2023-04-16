@@ -60,8 +60,11 @@ This module's default options are the values below that you can override:
     'From': 'example@example.com',
   }
 
-  // how `fetch` API handles caching
+  // `fetch` API cache setting for request
   cache: 'no-cache',
+
+  // `fetch` API mode (ex: `cors`, `no-cors`, `same-origin`, etc)
+  mode: 'cors',
 
   // timeout in milliseconds, default is 10 seconds
   timeout: 10000,
