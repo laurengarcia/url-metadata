@@ -12,6 +12,7 @@ declare namespace urlMetadata {
   interface Options {
     requestHeaders?: Record<string, string>
     cache?: string
+    mode?: string
     timeout?: number
     descriptionLength?: number
     ensureSecureImageRequest?: boolean
