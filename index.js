@@ -23,9 +23,9 @@ module.exports = function (url, options) {
 
   const requestOpts = {
     method: 'GET',
-    mode: opts.mode,
     headers: opts.requestHeaders,
     cache: opts.cache,
+    mode: opts.mode,
     timeout: opts.timeout,
     redirect: 'follow'
   }
