@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "browserify": "^17.0.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify index.js > bundle.js"
+  }
+}

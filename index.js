@@ -1,54 +1,56 @@
-const q = require('q')
-const request = require('request')
 const parse = require('./lib/parse')
 
 module.exports = function (url, options) {
-  const dfd = q.defer()
   if (!options || typeof options !== 'object') options = {}
+
   const opts = Object.assign(
     // defaults
     {
-      userAgent: 'MetadataScraper',
-      fromEmail: 'example@example.com',
-      maxRedirects: 10,
+      requestHeaders: {
+        'User-Agent': 'url-metadata/3.0 (npm module)',
+        From: 'example@example.com'
+      },
+      cache: 'no-cache',
+      mode: 'cors',
       timeout: 10000,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
-      sourceMap: {},
-      decode: undefined,
-      encode: undefined
+      includeResponseBody: false
     },
     // options passed in override defaults
     options
   )
 
   const requestOpts = {
-    url: url,
-    headers: {
-      'User-Agent': opts.userAgent,
-      'From': opts.fromEmail
-    },
-    maxRedirects: opts.maxRedirects,
-    encoding: opts.decode ? null : 'utf8',
-    timeout: opts.timeout
+    method: 'GET',
+    headers: opts.requestHeaders,
+    cache: opts.cache,
+    mode: opts.mode,
+    timeout: opts.timeout,
+    redirect: 'follow'
   }
-  request.get(requestOpts, function (err, response, body) {
-    if (err || !response) {
-      return dfd.reject(err)
-    }
-    if (response.statusCode && response.statusCode !== 200) {
-      return dfd.reject({ Error: 'response code ' + response.statusCode })
-    }
-    if (response.statusCode && response.statusCode === 200) {
+
+  return fetch(url, requestOpts)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`response code ${response.status}`)
+      }
+
       // rewrite url if our request had to follow redirects to resolve the
       // final link destination (for example: links shortened by bit.ly)
-      if (response.request.uri.href) url = response.request.uri.href
-      if (opts.decode) {
-        body = opts.decode(body)
-      }
-      return dfd.resolve(parse(url, body, opts))
-    }
-  })
+      if (response.url) url = response.url
 
-  return dfd.promise
+      const contentType = response.headers.get('content-type')
+      const isText = contentType && contentType.startsWith('text')
+      const isHTML = contentType && contentType.includes('html')
+
+      if (!isText || !isHTML) {
+        throw new Error(`unsupported content type: ${contentType}`)
+      }
+
+      return response.text()
+    })
+    .then((body) => {
+      return parse(url, body, opts)
+    })
 }
