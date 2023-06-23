@@ -16,7 +16,7 @@ Use previous version `2.5.0` which uses the (now-deprecated) `request` module in
 
 Install:
 ```
-$ npm install url-metadata --save`
+$ npm install url-metadata --save
 ```
 
 In your project file:
