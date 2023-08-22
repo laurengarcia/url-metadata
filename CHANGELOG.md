@@ -1,5 +1,16 @@
 # CHANGELOG
 
+3.0.3
+- test: add test for `descriptionLength` option
+
+3.0.1
+- bug: missing option from index.d.ts
+
+3.0
+- replace `request`, `q` modules with js-native `fetch` and async/await
+- update dependencies
+- add test suite
+
 2.5
 - add support for JSON-LD https://moz.com/blog/json-ld-for-beginners
 

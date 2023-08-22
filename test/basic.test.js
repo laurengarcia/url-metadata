@@ -14,7 +14,7 @@ test('basic example', async () => {
   }
 })
 
-test('option to `includeResponseBody`, custom `headers`', async () => {
+test('option to `includeResponseBody`, custom `headers`, truncate description', async () => {
   const url = 'https://www.npmjs.com/package/url-metadata'
   try {
     const metadata = await urlMetadata(url, {
@@ -22,9 +22,11 @@ test('option to `includeResponseBody`, custom `headers`', async () => {
       requestHeaders: {
         'User-Agent': 'foo',
         From: 'bar@bar.com'
-      }
+      },
+      descriptionLength: 20
     })
     expect(metadata.responseBody).toContain('<!doctype html>')
+    expect(metadata.description.length).toBe(20)
   } catch (err) {
     expect(err).toBe(undefined)
   }
