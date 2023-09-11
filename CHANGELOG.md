@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.1.1
+- update Typescript definitions index.d.ts to account for favicons
+
 3.1.0
 - scrape favicon(s) & add test
 
