@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.1.0
+- scrape favicon(s) & add test
+
 3.0.3
 - test: add test for `descriptionLength` option
 

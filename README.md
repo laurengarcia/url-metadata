@@ -73,7 +73,7 @@ This module's default options are the values below that you can override:
   descriptionLength: 750,
 
   // force image urls in selected tags to use https,
-  // valid for 'image', 'og:image' and 'og:image:secure_url' tags
+  // valid for 'image', 'og:image', 'og:image:secure_url' tags & favicons with full paths
   ensureSecureImageRequest: true,
 
   // return raw response body as string
