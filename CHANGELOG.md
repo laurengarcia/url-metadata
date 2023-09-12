@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.2.0
+- fix title bug
+
 3.1.1
 - update Typescript definitions index.d.ts to account for favicons
 
