@@ -2,8 +2,10 @@ const urlMetadata = require('./../index')
 
 test('basic example', async () => {
   const url = 'https://www.npmjs.com/package/url-metadata'
+  const title = 'url-metadata - npm'
   try {
     const metadata = await urlMetadata(url)
+    expect(metadata.title).toBe(title)
     expect(metadata.url).toBe(url)
     expect(metadata['og:url']).toBe(url)
     expect(metadata['og:title']).toBe('url-metadata')
