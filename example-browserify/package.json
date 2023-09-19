@@ -4,6 +4,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "browserify index.js > bundle.js"
+    "build": "browserify index.js > bundle.js",
+    "start": "python3 -m http.server 7000"
   }
 }

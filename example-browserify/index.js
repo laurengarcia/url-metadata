@@ -1,14 +1,13 @@
-var urlMetadata = require('./../index.js');
+const urlMetadata = require('./../index.js');
 
-urlMetadata('./metadata.html', {
-  mode: 'same-origin',
-  includeResponseBody: true
-})
-  .then((metadata) => {
-    console.log('fetched metadata:')
-    console.log(metadata)
-    // do stuff with the metadata
-  },
-  (err) => {
-    console.log(err)
-  })
+(async function () {
+  try {
+    const metadata = await urlMetadata('./metadata.html', {
+      mode: 'same-origin',
+      includeResponseBody: true
+    });
+    console.log('fetched metadata:', metadata)
+  } catch(err) {
+    console.log('fetch error:', err);
+  }
+})();

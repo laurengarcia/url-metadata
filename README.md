@@ -1,16 +1,12 @@
 # url-metadata
 
-Request an http(s) url and scrape its html metadata. Includes [Open Graph Protocol (og:)](http://ogp.me/) and [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) meta tags.
-
-Support also added for [JSON-LD](https://moz.com/blog/json-ld-for-beginners).
-
-Under the hood, this package does some post-request processing on top of the javascript native `fetch` API.
+Request a url and extract metadata from its html. Under the hood, this package does some post-request processing on top of the javascript native `fetch` API. Includes [Open Graph Protocol (og:)](http://ogp.me/) and [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) meta tags. Support also added for [JSON-LD](https://moz.com/blog/json-ld-for-beginners).
 
 To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata).
 
 
 ## Usage
-Works with Node.js version `>=18.0.0` or in the browser when bundled (with browserify or webpack for example).
+Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Browserify, etc.
 
 Use previous version `2.5.0` which uses the (now-deprecated) `request` module instead if you don't have access to javascript-native `fetch` API in your target environment.
 
@@ -21,39 +17,25 @@ $ npm install url-metadata --save
 
 In your project file:
 ```javascript
-const urlMetadata = require('url-metadata')
+const urlMetadata = require('./../index.js');
 
-urlMetadata('https://www.npmjs.com/package/url-metadata')
-.then((metadata) => {
-  console.log(metadata)
-  // do stuff with the metadata
-},
-(err) => {
-  console.log(err)
-})
-```
-
-To override the default options (see below), pass in a second argument:
-```javascript
-const urlMetadata = require('url-metadata')
-
-urlMetadata('https://www.npmjs.com/package/url-metadata', {
-  requestHeaders: {
-    'User-Agent': 'foo',
-    'From': 'bar@bar.com'
+(async function () {
+  try {
+    const metadata = await urlMetadata('./metadata.html', {
+      mode: 'same-origin',
+      includeResponseBody: true
+    });
+    console.log('fetched metadata:', metadata)
+  } catch(err) {
+    console.log('fetch error:', err);
   }
-}).then((metadata) => {
-  console.log(metadata)
-  // do stuff with the metadata
-}).catch((err) => {
-  console.log(err)
-})
+})();
 ```
 
 ### Options & Defaults
-This module's default options are the values below that you can override:
+The default options are the values below. To override the default options, pass in a second options argument.
 ```javascript
-{
+const options = {
   // custom request headers
   requestHeaders: {
     'User-Agent': 'url-metadata/3.0 (npm module)',
@@ -78,7 +60,9 @@ This module's default options are the values below that you can override:
 
   // return raw response body as string
   includeResponseBody: false
-}
+};
+
+const metadata = await urlMetadata('./metadata.html', options);
 ```
 
 ### Returns
