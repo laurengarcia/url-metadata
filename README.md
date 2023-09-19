@@ -21,7 +21,7 @@ const urlMetadata = require('./../index.js');
 
 (async function () {
   try {
-    const metadata = await urlMetadata('./metadata.html', {
+    const metadata = await urlMetadata('https://www.npmjs.com/package/url-metadata', {
       mode: 'same-origin',
       includeResponseBody: true
     });
@@ -62,7 +62,7 @@ const options = {
   includeResponseBody: false
 };
 
-const metadata = await urlMetadata('./metadata.html', options);
+const metadata = await urlMetadata('https://www.npmjs.com/package/url-metadata', options);
 ```
 
 ### Returns
