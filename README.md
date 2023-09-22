@@ -10,14 +10,14 @@ Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpac
 
 Use previous version `2.5.0` which uses the (now-deprecated) `request` module instead if you don't have access to javascript-native `fetch` API in your target environment.
 
-Install:
+Install in your project:
 ```
 $ npm install url-metadata --save
 ```
 
 In your project file:
 ```javascript
-const urlMetadata = require('./../index.js');
+const urlMetadata = require('url-metadata');
 
 (async function () {
   try {
