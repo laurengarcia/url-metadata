@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.3.0
+- citations handling & tests, explainer in README
+
 3.2.0
 - fix title bug
 
