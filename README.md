@@ -1,8 +1,10 @@
 # url-metadata
 
-Request a url and extract metadata from its html. Under the hood, this package does some post-request processing on top of the javascript native `fetch` API. Includes [Open Graph Protocol (og:)](http://ogp.me/) and [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) meta tags. Support also added for [JSON-LD](https://moz.com/blog/json-ld-for-beginners).
+Request a url and extract metadata from its html. Under the hood, this package does some post-request processing on top of the javascript native `fetch` API.
 
-To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata).
+Includes [Open Graph Protocol (og:)](http://ogp.me/) and [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) meta tags. Support also added for [JSON-LD](https://moz.com/blog/json-ld-for-beginners).
+
+To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troublehsooting` section below *before* filing a bug.
 
 
 ## Usage
@@ -81,3 +83,13 @@ The returned `metadata` object consists of key/value pairs that are all strings,
 ```
 'citation_author': ["Arlitsch, Kenning", "OBrien, Patrick"],
 ```
+
+#### Troubleshooting
+
+A response status code `0` is coming directly from the javascript-native `fetch` API used by this module. The request failed at either the network or protocol level.
+
+Possible causes of a status code `0`:
+
+- CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
+- A browser plugin such as an ad-blocker or privacy protector blocking the request.
+- Could also be caused by trying to access an `https` resource that has an invalid certificate, or trying to access an `http` resource from a page with an `https` origin.

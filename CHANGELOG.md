@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.3.1
+- add troubleshooting section to README
+
 3.3.0
 - citations handling & tests, explainer in README
 
