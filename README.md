@@ -50,6 +50,11 @@ const options = {
   // `fetch` API mode (ex: `cors`, `no-cors`, `same-origin`, etc)
   mode: 'cors',
 
+  // charset to decode response body with
+  // defaults to auto-detecting the charset based on `Content-Type` header or meta tag
+  // if none found, defaults to `utf-8`
+  decode: 'auto',
+
   // timeout in milliseconds, default is 10 seconds
   timeout: 10000,
 

@@ -12,6 +12,7 @@ module.exports = function (url, options) {
       },
       cache: 'no-cache',
       mode: 'cors',
+      decode: 'auto',
       timeout: 10000,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
@@ -26,6 +27,7 @@ module.exports = function (url, options) {
     headers: opts.requestHeaders,
     cache: opts.cache,
     mode: opts.mode,
+    decode: opts.decode,
     timeout: opts.timeout,
     redirect: 'follow'
   }
@@ -48,9 +50,15 @@ module.exports = function (url, options) {
         throw new Error(`unsupported content type: ${contentType}`)
       }
 
-      return response.text()
+      // return response.text() -- TODO remove this, it defaults to utf-8 decoding
+      return response.arrayBuffer()
     })
-    .then((body) => {
-      return parse(url, body, opts)
+    .then((responseBuffer) => {
+      // TODO: auto-detect charset & use instead of utf-8; default to utf-8
+      const decoder = new TextDecoder('utf-8')
+      return decoder.decode(responseBuffer)
+    })
+    .then((responseDecoded) => {
+      return parse(url, responseDecoded, opts)
     })
 }
