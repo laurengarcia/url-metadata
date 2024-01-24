@@ -52,8 +52,8 @@ const options = {
 
   // charset to decode response body with (ex: 'auto', 'utf-8', 'windows-1251')
   // defaults to auto-detect charset based on `Content-Type` header or meta tag
-  // if no charset is specified, the default `auto` option decodes with `utf-8`
-  // override this by passing in a different charset to decode with here (ex: 'windows-1251')
+  // if no charset is detected, the default `auto` option decodes with `utf-8`
+  // override by passing in charset to decode with (ex: 'windows-1251')
   decode: 'auto',
 
   // timeout in milliseconds, default is 10 seconds

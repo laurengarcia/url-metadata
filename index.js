@@ -32,6 +32,8 @@ module.exports = function (url, options) {
     redirect: 'follow'
   }
 
+  let contentType
+
   return fetch(url, requestOpts)
     .then((response) => {
       if (!response.ok) {
@@ -42,7 +44,7 @@ module.exports = function (url, options) {
       // final link destination (for example: links shortened by bit.ly)
       if (response.url) url = response.url
 
-      const contentType = response.headers.get('content-type')
+      contentType = response.headers.get('content-type')
       const isText = contentType && contentType.startsWith('text')
       const isHTML = contentType && contentType.includes('html')
 
@@ -50,12 +52,21 @@ module.exports = function (url, options) {
         throw new Error(`unsupported content type: ${contentType}`)
       }
 
-      // return response.text() -- TODO remove this, it defaults to utf-8 decoding
       return response.arrayBuffer()
     })
     .then((responseBuffer) => {
-      // TODO: auto-detect charset & use instead of utf-8; default to utf-8
-      const decoder = new TextDecoder('utf-8')
+      let charset
+
+      // handle optional user-specified charset
+      if (opts.decode !== 'auto') {
+        charset = opts.decode
+      // } else {
+        // extract charset in opts.decode='auto' mode
+        // assumes `utf-8` as default
+        // charset = extractCharset(contentType, responseBuffer)
+      }
+
+      const decoder = new TextDecoder(charset)
       return decoder.decode(responseBuffer)
     })
     .then((responseDecoded) => {
