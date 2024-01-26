@@ -1,3 +1,4 @@
+const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 
 module.exports = function (url, options) {
@@ -12,6 +13,7 @@ module.exports = function (url, options) {
       },
       cache: 'no-cache',
       mode: 'cors',
+      decode: 'auto',
       timeout: 10000,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
@@ -26,9 +28,12 @@ module.exports = function (url, options) {
     headers: opts.requestHeaders,
     cache: opts.cache,
     mode: opts.mode,
+    decode: opts.decode,
     timeout: opts.timeout,
     redirect: 'follow'
   }
+
+  let contentType
 
   return fetch(url, requestOpts)
     .then((response) => {
@@ -40,7 +45,7 @@ module.exports = function (url, options) {
       // final link destination (for example: links shortened by bit.ly)
       if (response.url) url = response.url
 
-      const contentType = response.headers.get('content-type')
+      contentType = response.headers.get('content-type')
       const isText = contentType && contentType.startsWith('text')
       const isHTML = contentType && contentType.includes('html')
 
@@ -48,9 +53,26 @@ module.exports = function (url, options) {
         throw new Error(`unsupported content type: ${contentType}`)
       }
 
-      return response.text()
+      return response.arrayBuffer()
     })
-    .then((body) => {
-      return parse(url, body, opts)
+    .then((responseBuffer) => {
+      let charset
+
+      // handle optional user-specified charset
+      if (opts.decode !== 'auto') {
+        charset = opts.decode
+      } else {
+        // extract charset in opts.decode='auto' mode
+        charset = extractCharset(contentType, responseBuffer)
+      }
+      try {
+        const decoder = new TextDecoder(charset)
+        return decoder.decode(responseBuffer)
+      } catch (e) {
+        throw new Error(`decoding with charset: ${charset}`)
+      }
+    })
+    .then((responseDecoded) => {
+      return parse(url, responseDecoded, opts)
     })
 }

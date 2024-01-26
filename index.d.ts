@@ -1,6 +1,3 @@
-// Type definitions for url-metadata
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 export = urlMetadata
 
 declare function urlMetadata(
@@ -13,6 +10,7 @@ declare namespace urlMetadata {
     requestHeaders?: Record<string, string>
     cache?: string
     mode?: string
+    decode?: string
     timeout?: number
     descriptionLength?: number
     ensureSecureImageRequest?: boolean

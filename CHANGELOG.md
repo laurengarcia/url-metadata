@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.4.0
+- opts.decode defaults to auto-detecting charset & supports user-specificed charset overrides
+
 3.3.1
 - add troubleshooting section to README
 
