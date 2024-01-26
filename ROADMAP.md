@@ -1,4 +1,4 @@
-3.0 Roadmap
+3.0+ Roadmap
 
 [X] remove package-lock.json
 [X] remove deprecated sourceMap option
@@ -15,10 +15,13 @@
     - [X] set package.json `types` prop to `index.d.ts`
 
 [X] add test framework to examples
-[X] break out example/decode.js japanese decoding into own file
 [X] simplify index.d.ts
 [X] husky pre-commit hook runs linter, tests example code
 [X] add template for issues that includes steps to reproduce bugs
 
+[X] decode japanese test
+[X] auto-decoding via rules in extract-charset.js
+
+[ ] return html tag lang="en-US" attribute
 [ ] return og: music, audio, video tags
 [ ] add github actions that run test library automatically

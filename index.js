@@ -1,3 +1,4 @@
+const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 
 module.exports = function (url, options) {
@@ -60,14 +61,16 @@ module.exports = function (url, options) {
       // handle optional user-specified charset
       if (opts.decode !== 'auto') {
         charset = opts.decode
-      // } else {
+      } else {
         // extract charset in opts.decode='auto' mode
-        // assumes `utf-8` as default
-        // charset = extractCharset(contentType, responseBuffer)
+        charset = extractCharset(contentType, responseBuffer)
       }
-
-      const decoder = new TextDecoder(charset)
-      return decoder.decode(responseBuffer)
+      try {
+        const decoder = new TextDecoder(charset)
+        return decoder.decode(responseBuffer)
+      } catch (e) {
+        throw new Error(`decoding with charset: ${charset}`)
+      }
     })
     .then((responseDecoded) => {
       return parse(url, responseDecoded, opts)
