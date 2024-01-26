@@ -40,3 +40,12 @@ test('charset=windows-1251 (Cyrillic) auto-detected in http-equiv meta tag', asy
     expect(err).toBe(undefined)
   }
 })
+
+test('throws error with bad opts.decode', async () => {
+  const url = 'https://www.npmjs.com/package/url-metadata'
+  try {
+    await urlMetadata(url, { decode: 'FOO-BAR' })
+  } catch (err) {
+    expect(err).toBeDefined()
+  }
+})
