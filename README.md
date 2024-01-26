@@ -1,6 +1,6 @@
 # url-metadata
 
-Request a url and scrape the metadata from its html using Node.js or the browser. Under the hood, this package does some post-request processing on top of the javascript-native `fetch` API.
+Request a url and scrape the metadata from its HTML using Node.js or the browser. Under the hood, this package does some post-request processing on top of the javascript-native `fetch` API.
 
 Includes:
 - <meta> tags

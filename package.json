@@ -1,7 +1,7 @@
 {
   "name": "url-metadata",
   "version": "3.3.1",
-  "description": "Request a url and scrape the metadata from its html using Node.js or the browser.",
+  "description": "Request a url and scrape the metadata from its HTML using Node.js or the browser.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/laurengarcia/url-metadata.git"
