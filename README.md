@@ -8,7 +8,7 @@ Includes:
 - [Open Graph Protocol (og:) Tags](http://ogp.me/)
 - [Twitter Card Tags](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup)
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
-- multiiple citations, per the Google Scholar spec
+- multiple citations, per the Google Scholar spec
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 

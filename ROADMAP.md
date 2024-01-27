@@ -22,6 +22,6 @@
 [X] decode japanese test
 [X] auto-decoding via rules in extract-charset.js
 
-[ ] return html tag lang="en-US" attribute
+[X] return html tag lang="en-US" attribute
 [ ] return og: music, audio, video tags
 [ ] add github actions that run test library automatically
