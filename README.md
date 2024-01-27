@@ -3,7 +3,7 @@
 Request a url and scrape the metadata from its HTML using Node.js or the browser. Under the hood, this package does some post-request processing on top of the javascript-native `fetch` API.
 
 Includes:
-- <meta> tags
+- meta tags
 - favicons
 - [Open Graph Protocol (og:) Tags](http://ogp.me/)
 - [Twitter Card Tags](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup)

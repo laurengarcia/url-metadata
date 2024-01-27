@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "Request a url and scrape the metadata from its HTML using Node.js or the browser.",
   "repository": {
     "type": "git",
@@ -33,24 +33,23 @@
     ]
   },
   "keywords": [
-    "http",
-    "https",
-    "url",
+    "html",
     "metadata",
-    "metatags",
-    "meta",
-    "tags",
-    "article",
+    "meta tags",
     "scrape",
     "scraper",
+    "parser",
+    "seo",
+    "url",
+    "article",
+    "citations",
     "node",
     "node.js",
-    "javascript",
-    "js",
     "og",
     "open graph",
-    "og tags",
-    "jsonld"
+    "og: tags",
+    "jsonld",
+    "twitter cards"
   ],
   "dependencies": {
     "cheerio": "^1.0.0-rc.12"
