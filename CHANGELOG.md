@@ -1,5 +1,14 @@
 # CHANGELOG
 
+3.4.3
+- tighten up regex in extract-charset.js
+
+3.4.2
+- return lang attribute
+
+3.4.1
+- README, keyword changes
+
 3.4.0
 - opts.decode defaults to auto-detecting charset & supports user-specificed charset overrides
 

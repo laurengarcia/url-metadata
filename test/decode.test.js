@@ -26,8 +26,8 @@ test('User-specified opts.decode=windows-1251 (Cyrillic)', async () => {
   }
 })
 
-// ex: <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
-test('charset=windows-1251 (Cyrillic) auto-detected in http-equiv meta tag', async () => {
+// ex: <meta charset="windows-1251"> (note: there are two charset meta tags on this page for some reason)
+test('charset=windows-1251 (Cyrillic) auto-detected in meta tag', async () => {
   const url = 'https://sattvinfo.net/'
   const title = 'спутниковое телевидение, установка и настройка спутникового телевидения '
   try {

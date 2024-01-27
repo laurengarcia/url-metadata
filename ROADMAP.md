@@ -19,7 +19,7 @@
 [X] husky pre-commit hook runs linter, tests example code
 [X] add template for issues that includes steps to reproduce bugs
 
-[X] decode japanese test
+[X] decode EUC-JP test
 [X] auto-decoding via rules in extract-charset.js
 
 [X] return html tag lang="en-US" attribute
