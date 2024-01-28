@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.4.4
+- h1-h6 headings
+
 3.4.3
 - tighten up regex in extract-charset.js
 

@@ -14,6 +14,9 @@ test('basic example', async () => {
     expect(metadata.description.length).toBeGreaterThan(10)
     expect(metadata['twitter:description'].length).toBeGreaterThan(10)
     expect(metadata.favicons.length).toBeGreaterThan(1)
+    expect(metadata.headings.length).toBeGreaterThan(3)
+    expect(metadata.headings[0].level).toBe('h1')
+    expect(metadata.headings[0].content).toBe('url-metadata')
   } catch (err) {
     expect(err).toBe(undefined)
   }

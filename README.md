@@ -9,6 +9,7 @@ Includes:
 - [Twitter Card Tags](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup)
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
 - multiple citations, per the Google Scholar spec
+- h1-h6 tags
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 

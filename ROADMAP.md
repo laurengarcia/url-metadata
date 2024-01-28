@@ -23,5 +23,6 @@
 [X] auto-decoding via rules in extract-charset.js
 
 [X] return html tag lang="en-US" attribute
+[X] return <h1> - <h6> tags
 [ ] return og: music, audio, video tags
 [ ] add github actions that run test library automatically

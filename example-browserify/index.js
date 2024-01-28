@@ -6,7 +6,7 @@ const urlMetadata = require('./../index.js');
       mode: 'same-origin',
       includeResponseBody: true
     });
-    console.log('fetched metadata:', metadata)
+    console.log('fetched ./metadata.html:', metadata)
   } catch(err) {
     console.log('fetch error:', err);
   }
