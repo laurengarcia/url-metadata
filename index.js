@@ -33,6 +33,8 @@ module.exports = function (url, options) {
     redirect: 'follow'
   }
 
+  let requestUrl
+  let destinationUrl
   let contentType
 
   return fetch(url, requestOpts)
@@ -41,9 +43,10 @@ module.exports = function (url, options) {
         throw new Error(`response code ${response.status}`)
       }
 
-      // rewrite url if our request had to follow redirects to resolve the
-      // final link destination (for example: links shortened by bit.ly)
-      if (response.url) url = response.url
+      // disambiguate `requestUrl` from final destination url
+      // (ex: links shortened by bit.ly)
+      requestUrl = url
+      if (response.url) destinationUrl = response.url
 
       contentType = response.headers.get('content-type')
       const isText = contentType && contentType.startsWith('text')
@@ -73,6 +76,6 @@ module.exports = function (url, options) {
       }
     })
     .then((responseDecoded) => {
-      return parse(url, responseDecoded, opts)
+      return parse(requestUrl, destinationUrl, responseDecoded, opts)
     })
 }

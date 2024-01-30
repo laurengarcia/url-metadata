@@ -19,9 +19,7 @@ To report a bug or request a feature please open an issue or pull request in [Gi
 
 
 ## Usage
-Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Browserify, etc.
-
-Use previous version `2.5.0` which uses the (now-deprecated) `request` module instead if you don't have access to javascript-native `fetch` API in your target environment.
+Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Browserify, etc. Use previous version `2.5.0` which uses the (now-deprecated) `request` module instead if you don't have access to javascript-native `fetch` API in your target environment.
 
 Install in your project:
 ```
@@ -32,18 +30,14 @@ In your project file:
 ```javascript
 const urlMetadata = require('url-metadata');
 
-(async function () {
-  try {
-    const metadata = await urlMetadata(
-      'https://www.npmjs.com/package/url-metadata', {
-      mode: 'same-origin',
-      includeResponseBody: true
-    });
-    console.log('fetched metadata:', metadata)
-  } catch(err) {
-    console.log('fetch error:', err);
+const metadata = await urlMetadata(
+  'https://www.npmjs.com/package/url-metadata',
+  {
+    includeResponseBody: true,
+    ensureSecureImageRequest: true
   }
-})();
+);
+console.log('fetched metadata:', metadata)
 ```
 
 ### Options & Defaults
@@ -76,8 +70,8 @@ const options = {
   descriptionLength: 750,
 
   // force image urls in selected tags to use https,
-  // valid for 'image', 'og:image', 'og:image:secure_url' tags & favicons
-  // with full paths
+  // valid for 'image', 'og:image', 'og:image:secure_url'
+  // tags & favicons with full paths
   ensureSecureImageRequest: true,
 
   // return raw response body as string
@@ -111,11 +105,11 @@ The returned `metadata` object consists of key/value pairs that are all strings,
 
 ### Troubleshooting
 
-*Issue* Response status code `0` and/ or `CORS` errors
+**Issue:** Response status code `0` and/ or `CORS` errors
 This is coming directly from the javascript-native `fetch` API used by this package. The request failed at either the network or protocol level. Possible causes:
 - CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
 - A browser plugin such as an ad-blocker or privacy protector blocking the request.
 - Could also be caused by trying to access an `https` resource that has an invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
 
-*Issue* `fetch is not defined`
+**Issue:** `fetch is not defined`
 You're either in a Node.js or browser environment that doesn't have javascript's `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).

@@ -1,4 +1,7 @@
 # CHANGELOG
+3.4.6
+- return `requestUrl` (the url the user passed in to this module) alongside `url`, the final hop in request chain
+
 3.4.5
 - handle multiple meta tags with same key, diff values by concatenating & comma-delimiting in one string
 - bug: fix meta tag charset

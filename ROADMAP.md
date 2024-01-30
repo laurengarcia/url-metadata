@@ -26,6 +26,7 @@
 [X] bug: fix meta tag charset
 [X] remove MetadataFields.configureType (unnecessary now)
 [X] headings: strip newlines and extra spaces
+[X] return requestUrl
 [ ] bug: fix jsonld in this example:
     https://moz.com/learn/seo/robots-meta-directives
       jsonld: {
