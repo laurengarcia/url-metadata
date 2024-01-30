@@ -1,7 +1,8 @@
 # CHANGELOG
 3.4.5
 - handle multiple meta tags with same key, diff values by concatenating & comma-delimiting in one string
-- bug: fix meta charset
+- bug: fix meta tag charset
+- headings: strip newlines and extra spaces
 
 3.4.4
 - h1-h6 headings

@@ -23,9 +23,9 @@
 [X] return html tag lang="en-US" attribute
 [X] return <h1> - <h6> tags
 [X] handle multiple meta tags with same key, diff values
-[X] bug: fix meta charset
+[X] bug: fix meta tag charset
 [X] remove MetadataFields.configureType (unnecessary now)
-[ ] clean.js strips newlines and spaces
+[X] headings: strip newlines and extra spaces
 [ ] bug: fix jsonld in this example:
     https://moz.com/learn/seo/robots-meta-directives
       jsonld: {
