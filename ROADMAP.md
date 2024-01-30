@@ -18,11 +18,19 @@
 [X] simplify index.d.ts
 [X] husky pre-commit hook runs linter, tests example code
 [X] add template for issues that includes steps to reproduce bugs
-
 [X] decode EUC-JP test
 [X] auto-decoding via rules in extract-charset.js
-
 [X] return html tag lang="en-US" attribute
 [X] return <h1> - <h6> tags
-[ ] return og: music, audio, video tags
+[X] handle multiple meta tags with same key, diff values
+[X] bug: fix meta charset
+[X] remove MetadataFields.configureType (unnecessary now)
+[ ] clean.js strips newlines and spaces
+[ ] bug: fix jsonld in this example:
+    https://moz.com/learn/seo/robots-meta-directives
+      jsonld: {
+          '@context': 'http://schema.org',
+          '@graph': [ [Object], [Object], [Object], [Object] ]
+        },
+[ ] return img urls on page (obey `ensureSecureImageRequest` opt)
 [ ] add github actions that run test library automatically

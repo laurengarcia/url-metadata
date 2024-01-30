@@ -8,7 +8,7 @@ Includes:
 - [Open Graph Protocol (og:) Tags](http://ogp.me/)
 - [Twitter Card Tags](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup)
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
-- multiple citations, per the Google Scholar spec
+- citations, per the Google Scholar spec
 - h1-h6 tags
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
@@ -109,12 +109,13 @@ The returned `metadata` object consists of key/value pairs that are all strings,
 'citation_author': ["Arlitsch, Kenning", "OBrien, Patrick"],
 ```
 
-#### Troubleshooting
+### Troubleshooting
 
-A response status code `0` is coming directly from the javascript-native `fetch` API used by this module. The request failed at either the network or protocol level.
-
-Possible causes of a status code `0`:
-
+*Issue* Response status code `0` and/ or `CORS` errors
+This is coming directly from the javascript-native `fetch` API used by this package. The request failed at either the network or protocol level. Possible causes:
 - CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
 - A browser plugin such as an ad-blocker or privacy protector blocking the request.
 - Could also be caused by trying to access an `https` resource that has an invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
+
+*Issue* `fetch is not defined`
+You're either in a Node.js or browser environment that doesn't have javascript's `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).
