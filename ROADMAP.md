@@ -27,6 +27,8 @@
 [X] remove MetadataFields.configureType (unnecessary now)
 [X] headings: strip newlines and extra spaces
 [X] return requestUrl
+[ ] add drips funding.json
+      https://twitter.com/wevm_dev/status/1752132002952741018
 [ ] bug: fix jsonld in this example:
     https://moz.com/learn/seo/robots-meta-directives
       jsonld: {
