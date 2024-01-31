@@ -16,5 +16,5 @@ declare namespace urlMetadata {
     ensureSecureImageRequest?: boolean
     includeResponseBody?: boolean
   }
-  type Result = Record<string, string | boolean | Record<string, string> | Array<Record<string, string>>>;
+  type Result = Record<string, string | boolean | undefined | any>;
 }

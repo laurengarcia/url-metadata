@@ -2,6 +2,8 @@
 
 3.4.7
 - return imgTags on page (obey `ensureSecureImageRequest` opt)
+- bug: update TS `Result` definition to fit complex/varied json-ld use-cases in wild
+- change: `heading.content` -> `heading.text`
 
 3.4.6
 - return `requestUrl` (the url the user passed in to this module) alongside `url`, the final hop in request chain

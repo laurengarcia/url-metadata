@@ -28,13 +28,8 @@
 [X] headings: strip newlines and extra spaces
 [X] return requestUrl
 [X] return imgTags on page (obey `ensureSecureImageRequest` opt)
+[X] bug: update TS `Result` definition to fit complex/varied json-ld use-case
 
 [ ] add drips funding.json
       https://twitter.com/wevm_dev/status/1752132002952741018
-[ ] bug: test (fix?) jsonld in this example & ensure it conforms to TS def:
-    https://moz.com/learn/seo/robots-meta-directives
-      jsonld: {
-          '@context': 'http://schema.org',
-          '@graph': [ [Object], [Object], [Object], [Object] ]
-        },
 [ ] add github actions that run test library automatically
