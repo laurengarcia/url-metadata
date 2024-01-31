@@ -17,12 +17,16 @@ test('basic example', async () => {
     expect(metadata.headings.length).toBeGreaterThan(3)
     expect(metadata.headings[0].level).toBe('h1')
     expect(metadata.headings[0].content).toBe('url-metadata')
+    expect(metadata.imgTags.length).toBeGreaterThan(1)
+    expect(metadata.imgTags[0].src).toBe('https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg')
+    expect(metadata.imgTags[0].alt).toBe('TypeScript icon, indicating that this package has built-in type declarations')
+    expect(metadata.imgTags[0].title).toBe('This package contains built-in TypeScript declarations')
   } catch (err) {
     expect(err).toBe(undefined)
   }
 })
 
-test('option to `includeResponseBody`, custom `headers`, truncate description', async () => {
+test('option to `includeResponseBody`, custom `headers`, truncate description, ensureSecureImageRequest', async () => {
   const url = 'https://www.npmjs.com/package/url-metadata'
   try {
     const metadata = await urlMetadata(url, {
@@ -31,10 +35,13 @@ test('option to `includeResponseBody`, custom `headers`, truncate description', 
         'User-Agent': 'foo',
         From: 'bar@bar.com'
       },
-      descriptionLength: 20
+      descriptionLength: 20,
+      ensureSecureImageRequest: true
     })
     expect(metadata.responseBody).toContain('<!doctype html>')
     expect(metadata.description.length).toBe(20)
+    expect(metadata.imgTags.length).toBeGreaterThan(1)
+    expect(metadata.imgTags[0].src).toBe('https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg')
   } catch (err) {
     expect(err).toBe(undefined)
   }

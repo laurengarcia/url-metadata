@@ -5,11 +5,12 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 Includes:
 - meta tags
 - favicons
+- citations, per the Google Scholar spec
 - [Open Graph Protocol (og:) Tags](http://ogp.me/)
 - [Twitter Card Tags](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup)
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
-- citations, per the Google Scholar spec
 - h1-h6 tags
+- img tags
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 

@@ -1,4 +1,8 @@
 # CHANGELOG
+
+3.4.7
+- return imgTags on page (obey `ensureSecureImageRequest` opt)
+
 3.4.6
 - return `requestUrl` (the url the user passed in to this module) alongside `url`, the final hop in request chain
 
