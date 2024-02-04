@@ -47,10 +47,11 @@
     "citations",
     "node",
     "node.js",
+    "browser",
     "og",
     "open graph",
     "og: tags",
-    "jsonld",
+    "json-ld",
     "twitter cards"
   ],
   "dependencies": {
