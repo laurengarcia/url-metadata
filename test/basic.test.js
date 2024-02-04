@@ -13,7 +13,9 @@ test('basic example', async () => {
     expect(metadata['og:title']).toBe('url-metadata')
     expect(metadata.description.length).toBeGreaterThan(10)
     expect(metadata['twitter:description'].length).toBeGreaterThan(10)
-    expect(metadata.favicons.length).toBeGreaterThan(1)
+    expect(metadata.favicons.length).toBe(10)
+    expect(metadata.favicons[0].rel).toBe('apple-touch-icon')
+    expect(metadata.favicons[9].rel).toBe('icon')
     expect(metadata.headings.length).toBeGreaterThan(3)
     expect(metadata.headings[0].level).toBe('h1')
     expect(metadata.headings[0].text).toBe('url-metadata')
@@ -63,6 +65,20 @@ test('no error when favicons missing from page', async () => {
   try {
     const metadata = await urlMetadata(url)
     expect(metadata.favicons.length).toBe(0)
+  } catch (err) {
+    expect(err).toBe(undefined)
+  }
+})
+
+test('favicons', async () => {
+  const url = 'https://www.bbc.com/news/uk-england-somerset-68179350'
+  try {
+    const metadata = await urlMetadata(url)
+    expect(metadata.favicons.length).toBe(5)
+    expect(metadata.favicons[0].rel).toBe('apple-touch-icon')
+    // Safari pinned tab 'mask-icons' can have 'color' attribute:
+    expect(metadata.favicons[4].rel).toBe('mask-icon')
+    expect(metadata.favicons[4].color).toBe('#000000')
   } catch (err) {
     expect(err).toBe(undefined)
   }

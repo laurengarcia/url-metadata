@@ -1,5 +1,8 @@
 # CHANGELOG
 
+3.4.8
+- improve favicon support & tests
+
 3.4.7
 - return imgTags on page (obey `ensureSecureImageRequest` opt)
 - bug: update TS `Result` definition to fit complex/varied json-ld use-cases in wild
