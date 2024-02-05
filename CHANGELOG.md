@@ -1,5 +1,9 @@
 # CHANGELOG
 
+3.4.9
+- bugs with `ensureSecureImageRequest` opt `true`
+  - favicons not obeying opt when scheme is missing ex: '//:'
+
 3.4.8
 - improve favicon support & tests
 

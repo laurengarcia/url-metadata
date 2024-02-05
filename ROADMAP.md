@@ -31,7 +31,7 @@
 [X] bug: update TS `Result` definition to fit complex/varied json-ld use-case
 [ ] bugs with `ensureSecureImageRequest` opt `true`
       const url = 'http://news.bbc.co.uk '
-      - [ ] favicons not obeying opt
+      - [X] favicons not obeying opt when scheme is missing ex: '//:'
       - [ ] upgraded `imgTags` look like `https:///yH5BAEAAAA...`
 
 [ ] add drips funding.json
