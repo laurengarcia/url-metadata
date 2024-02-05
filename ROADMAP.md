@@ -29,10 +29,10 @@
 [X] return requestUrl
 [X] return imgTags on page (obey `ensureSecureImageRequest` opt)
 [X] bug: update TS `Result` definition to fit complex/varied json-ld use-case
-[ ] bugs with `ensureSecureImageRequest` opt `true`
+[X] bugs with `ensureSecureImageRequest` opt `true`
       const url = 'http://news.bbc.co.uk '
       - [X] favicons not obeying opt when scheme is missing ex: '//:'
-      - [ ] upgraded `imgTags` look like `https:///yH5BAEAAAA...`
+      - [X] handle img tags w `data:` URIs
 
 [ ] add drips funding.json
       https://twitter.com/wevm_dev/status/1752132002952741018

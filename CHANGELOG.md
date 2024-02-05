@@ -3,6 +3,7 @@
 3.4.9
 - bugs with `ensureSecureImageRequest` opt `true`
   - favicons not obeying opt when scheme is missing ex: '//:'
+  - handle img tags w `data:` URIs
 
 3.4.8
 - improve favicon support & tests
