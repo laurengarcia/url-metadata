@@ -1,3 +1,15 @@
+4.0+ Roadmap
+
+[ ] break out parser as separate package to pass raw html into,
+    use as dependency here
+        https://github.com/laurengarcia/url-metadata/issues/71
+[ ] for non-html, return `response` obj instead of throwing
+        https://github.com/laurengarcia/url-metadata/issues/71
+[ ] add drips funding.json
+      https://twitter.com/wevm_dev/status/1752132002952741018
+[ ] add github actions that run test library automatically
+
+
 3.0+ Roadmap
 
 [X] remove package-lock.json
@@ -34,6 +46,5 @@
       - [X] favicons not obeying opt when scheme is missing ex: '//:'
       - [X] handle img tags w `data:` URIs
 
-[ ] add drips funding.json
-      https://twitter.com/wevm_dev/status/1752132002952741018
-[ ] add github actions that run test library automatically
+
+
