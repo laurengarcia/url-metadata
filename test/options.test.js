@@ -1,6 +1,6 @@
 const urlMetadata = require('./../index')
 
-test('options `includeResponseBody`, custom `headers`, truncate description, ensureSecureImageRequest', async () => {
+test('options: `includeResponseBody`, custom `headers`, `descriptionLength`, `ensureSecureImageRequest`', async () => {
   const url = 'https://www.npmjs.com/package/url-metadata'
   try {
     const metadata = await urlMetadata(url, {
@@ -21,7 +21,7 @@ test('options `includeResponseBody`, custom `headers`, truncate description, ens
   }
 })
 
-test('option ensureSecureImageRequest edge cases', async () => {
+test('option: `ensureSecureImageRequest` edge cases', async () => {
   const url = 'http://news.bbc.co.uk '
   try {
     const metadata = await urlMetadata(url, {
@@ -41,5 +41,20 @@ test('option ensureSecureImageRequest edge cases', async () => {
     })
   } catch (err) {
     expect(err).toBe(undefined)
+  }
+})
+
+test('option: `parseResponseObject`', async () => {
+  try {
+    const url = 'https://www.npmjs.com/package/url-metadata'
+    const response = await fetch(url)
+    // pass null `url` param & response object as option`
+    const metadata = await urlMetadata(null, { parseResponseObject: response })
+    expect(metadata.url).toBe(url)
+    expect(metadata.title).toBe('url-metadata - npm')
+    expect(metadata.lang).toBe('en')
+    expect(metadata.charset).toBe('utf-8')
+  } catch (e) {
+    expect(e).toBe(undefined)
   }
 })
