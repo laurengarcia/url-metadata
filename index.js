@@ -24,31 +24,33 @@ module.exports = function (url, options) {
     options
   )
 
-  if (!url && opts.parseResponseObject) {
-    // ignore opts.decode bc response.text() already has own encoding
-    return new Promise((resolve, reject) => {
-      const exec = async () => {
-        const text = await opts.parseResponseObject.text()
-        resolve(parse('', '', text, opts))
+  let requestUrl = ''
+  let destinationUrl = ''
+  let responseBuffer
+  let contentType
+  let charset
+
+  async function fetchData () {
+    if (!url && opts.parseResponseObject) {
+      return opts.parseResponseObject
+    } else if (url) {
+      requestUrl = url
+      const requestOpts = {
+        method: 'GET',
+        headers: opts.requestHeaders,
+        cache: opts.cache,
+        mode: opts.mode,
+        decode: opts.decode,
+        timeout: opts.timeout,
+        redirect: 'follow'
       }
-      exec().catch(reject)
-    })
-  } else {
-    const requestOpts = {
-      method: 'GET',
-      headers: opts.requestHeaders,
-      cache: opts.cache,
-      mode: opts.mode,
-      decode: opts.decode,
-      timeout: opts.timeout,
-      redirect: 'follow'
+
+      return await fetch(url, requestOpts)
     }
+  }
 
-    let requestUrl
-    let destinationUrl
-    let contentType
-
-    return fetch(url, requestOpts)
+  return new Promise((resolve, reject) => {
+    fetchData()
       .then((response) => {
         if (!response.ok) {
           throw new Error(`response code ${response.status}`)
@@ -56,21 +58,20 @@ module.exports = function (url, options) {
 
         // disambiguate `requestUrl` from final destination url
         // (ex: links shortened by bit.ly)
-        requestUrl = url
         if (response.url) destinationUrl = response.url
 
+        // validate response content type
         contentType = response.headers.get('content-type')
         const isText = contentType && contentType.startsWith('text')
         const isHTML = contentType && contentType.includes('html')
-
         if (!isText || !isHTML) {
           throw new Error(`unsupported content type: ${contentType}`)
         }
 
         return response.arrayBuffer()
       })
-      .then((responseBuffer) => {
-        let charset
+      .then(async (buffer) => {
+        responseBuffer = buffer
 
         // handle optional user-specified charset
         if (opts.decode !== 'auto') {
@@ -79,15 +80,15 @@ module.exports = function (url, options) {
           // extract charset in opts.decode='auto' mode
           charset = extractCharset(contentType, responseBuffer)
         }
+
         try {
           const decoder = new TextDecoder(charset)
-          return decoder.decode(responseBuffer)
+          const responseDecoded = decoder.decode(responseBuffer)
+          resolve(parse(requestUrl, destinationUrl, responseDecoded, opts))
         } catch (e) {
           throw new Error(`decoding with charset: ${charset}`)
         }
       })
-      .then((responseDecoded) => {
-        return parse(requestUrl, destinationUrl, responseDecoded, opts)
-      })
-  }
+      .catch(reject)
+  })
 }

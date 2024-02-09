@@ -1,6 +1,6 @@
 const urlMetadata = require('./../index')
 
-test('options `includeResponseBody`, custom `headers`, truncate description, ensureSecureImageRequest', async () => {
+test('options: `includeResponseBody`, custom `headers`, truncate description, ensureSecureImageRequest', async () => {
   const url = 'https://www.npmjs.com/package/url-metadata'
   try {
     const metadata = await urlMetadata(url, {
@@ -21,7 +21,7 @@ test('options `includeResponseBody`, custom `headers`, truncate description, ens
   }
 })
 
-test('option ensureSecureImageRequest edge cases', async () => {
+test('option: ensureSecureImageRequest edge cases', async () => {
   const url = 'http://news.bbc.co.uk '
   try {
     const metadata = await urlMetadata(url, {
@@ -44,7 +44,7 @@ test('option ensureSecureImageRequest edge cases', async () => {
   }
 })
 
-test('option parseResponseObject', async () => {
+test('option: parseResponseObject', async () => {
   try {
     const url = 'https://www.npmjs.com/package/url-metadata'
     const response = await fetch(url)
