@@ -1,6 +1,6 @@
 # url-metadata
 
-Request a url and scrape the metadata from its HTML using Node.js or the browser.
+Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an alternate mode that lets you pass in your own `Response` object as well (see `Options`).
 
 Includes:
 - meta tags
