@@ -43,15 +43,19 @@ module.exports = function (url, options) {
         timeout: opts.timeout,
         redirect: 'follow'
       }
-
       return await fetch(url, requestOpts)
+    } else if (!url) {
+      throw new Error('url parameter is missing')
     }
   }
 
   return new Promise((resolve, reject) => {
     fetchData()
       .then((response) => {
-        if (!response || !response.ok) {
+        if (!response) {
+          reject(new Error(`response is ${typeof response}`))
+        }
+        if (!response.ok) {
           reject(new Error(`response code ${response.status}`))
         }
 

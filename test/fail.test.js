@@ -1,12 +1,21 @@
 const urlMetadata = require('./../index')
 
-test('fails gracefully with malformed URL', async () => {
+test('fails gracefully with malformed url param', async () => {
   const url = 'XYZ'
   try {
     await urlMetadata(url)
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('Failed to parse')
+  }
+})
+
+test('fails gracefully when url param is missing', async () => {
+  try {
+    await urlMetadata(null)
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.message).toContain('url parameter is missing')
   }
 })
 
@@ -41,12 +50,21 @@ test('fails gracefully decoding with bad charset', async () => {
   }
 })
 
-test('option: `parseResponseObject` is empty', async () => {
+test('fails gracefully when option `parseResponseObject` is empty object', async () => {
   try {
     // pass null `url` param & empty response object
     await urlMetadata(null, { parseResponseObject: {} })
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('response code undefined')
+  }
+})
+
+test('fails gracefully when option: `parseResponseObject` is null AND url is null', async () => {
+  try {
+    await urlMetadata(null, { parseResponseObject: null })
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.message).toContain('url parameter is missing')
   }
 })
