@@ -34,7 +34,7 @@ const urlMetadata = require('url-metadata');
 const url = 'https://www.npmjs.com/package/url-metadata';
 try {
   const metadata = await urlMetadata(url, options);
-  console.log(metadata)
+  console.log(metadata);
 } catch (err) {
   console.log(err);
 }
@@ -81,22 +81,25 @@ const options = {
 };
 
 // Basic usage
-const url = 'https://www.npmjs.com/package/url-metadata';
 try {
+  const url = 'https://www.npmjs.com/package/url-metadata';
   const metadata = await urlMetadata(url, options);
-  console.log(metadata)
+  console.log(metadata);
 } catch (err) {
   console.log(err);
 }
 
 // Alternate use-case: parse a Response object instead
 try {
+  const url = 'https://www.npmjs.com/package/url-metadata';
   // fetch the url in your own code
-  const response = await fetch(url)
+  const response = await fetch(url);
   // ... do other stuff with it...
   // pass the `response` object to be parsed for its metadata
-  const metadata = await urlMetadata(null, { parseResponseObject: response })
-  console.log(metadata)
+  const metadata = await urlMetadata(null, { parseResponseObject: response });
+  console.log(metadata);
+} catch (err) {
+  console.log(err);
 }
 ```
 
