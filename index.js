@@ -18,7 +18,7 @@ module.exports = function (url, options) {
       descriptionLength: 750,
       ensureSecureImageRequest: true,
       includeResponseBody: false,
-      parseResponseObject: undefined
+      parseResponseObject: null
     },
     // options passed in override defaults
     options

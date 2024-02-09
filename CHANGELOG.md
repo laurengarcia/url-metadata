@@ -1,5 +1,9 @@
 # CHANGELOG
 
+3.5.0
+- new option: parseResponseObject
+- bug: 'unsupported content type' errors hang
+
 3.4.9
 - bugs with `ensureSecureImageRequest` opt `true`
   - favicons not obeying opt when scheme is missing ex: '//:'

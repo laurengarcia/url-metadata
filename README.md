@@ -31,14 +31,13 @@ In your project file:
 ```javascript
 const urlMetadata = require('url-metadata');
 
-const metadata = await urlMetadata(
-  'https://www.npmjs.com/package/url-metadata',
-  {
-    includeResponseBody: true,
-    ensureSecureImageRequest: true
-  }
-);
-console.log('fetched metadata:', metadata)
+const url = 'https://www.npmjs.com/package/url-metadata';
+try {
+  const metadata = await urlMetadata(url, options);
+  console.log(metadata)
+} catch (err) {
+  console.log(err);
+}
 ```
 
 ### Options & Defaults
@@ -74,17 +73,35 @@ const options = {
   ensureSecureImageRequest: true,
 
   // return raw response body as string
-  includeResponseBody: false
+  includeResponseBody: false,
+
+  // alternate use-case: pass in `Response` object here to be parsed
+  // see example below
+  parseResponseObject: null,
 };
 
-const metadata = await urlMetadata(
-  'https://www.npmjs.com/package/url-metadata',
-  options
-);
+// Basic usage
+const url = 'https://www.npmjs.com/package/url-metadata';
+try {
+  const metadata = await urlMetadata(url, options);
+  console.log(metadata)
+} catch (err) {
+  console.log(err);
+}
+
+// Alternate use-case: parse a Response object instead
+try {
+  // fetch the url in your own code
+  const response = await fetch(url)
+  // ... do other stuff with it...
+  // pass the `response` object to be parsed for its metadata
+  const metadata = await urlMetadata(null, { parseResponseObject: response })
+  console.log(metadata)
+}
 ```
 
 ### Returns
-Returns a promise that is resolved with an object if the response is successful. Note that the `url` field returned will be the last hop in the request chain. If you pass in a url from a url shortener you'll get back the final destination as the `url`.
+Returns a promise resolved with an object. Note that the `url` field returned will be the last hop in the request chain. If you pass in a url from a url shortener you'll get back the final destination as the `url`.
 
 The returned `metadata` object consists of key/value pairs that are all strings, with a few exceptions:
 - `favicons` returns an array of objects containing key/value pairs (strings)
@@ -101,11 +118,9 @@ The returned `metadata` object consists of key/value pairs that are all strings,
 
 ### Troubleshooting
 
-**Issue:** `Response status code 0` or `CORS errors`
-The `fetch` request failed at either the network or protocol level. Possible causes:
+**Issue:** `Response status code 0` or `CORS errors`. The `fetch` request failed at either the network or protocol level. Possible causes:
 - CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
 - A browser plugin such as an ad-blocker or privacy protector.
 
-**Issue:** `fetch is not defined`
-Error thrown in a Node.js or browser environment that doesn't have js `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).
+**Issue:** `fetch is not defined`. Error thrown in a Node.js or browser environment that doesn't have `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).
