@@ -43,3 +43,14 @@ test('option ensureSecureImageRequest edge cases', async () => {
     expect(err).toBe(undefined)
   }
 })
+
+test('option parseResponseObject', async () => {
+  try {
+    const url = 'https://www.npmjs.com/package/url-metadata'
+    const response = await fetch(url)
+    const metadata = await urlMetadata(null, { parseResponseObject: response })
+    expect(metadata.charset).toBe('utf-8')
+  } catch (e) {
+    expect(e).toBe(undefined)
+  }
+})
