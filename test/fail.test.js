@@ -11,6 +11,7 @@ test('fails gracefully with malformed URL', async () => {
 })
 
 test('fails gracefully on !response.ok', async () => {
+  // should 404
   const url = 'http://www.foo.com/imagesz/resized_and_crop/'
   try {
     await urlMetadata(url)
@@ -20,7 +21,6 @@ test('fails gracefully on !response.ok', async () => {
   }
 })
 
-// BUG: throws error but hangs
 test('fails gracefully when fetching non text/html', async () => {
   const url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png'
   try {
@@ -38,5 +38,15 @@ test('fails gracefully decoding with bad charset', async () => {
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('decoding with charset')
+  }
+})
+
+test('option: `parseResponseObject` is empty', async () => {
+  try {
+    // pass null `url` param & empty response object
+    await urlMetadata(null, { parseResponseObject: {} })
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.message).toContain('response code undefined')
   }
 })

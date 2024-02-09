@@ -26,7 +26,6 @@ module.exports = function (url, options) {
 
   let requestUrl = ''
   let destinationUrl = ''
-  let responseBuffer
   let contentType
   let charset
 
@@ -52,8 +51,8 @@ module.exports = function (url, options) {
   return new Promise((resolve, reject) => {
     fetchData()
       .then((response) => {
-        if (!response.ok) {
-          throw new Error(`response code ${response.status}`)
+        if (!response || !response.ok) {
+          reject(new Error(`response code ${response.status}`))
         }
 
         // disambiguate `requestUrl` from final destination url
@@ -65,28 +64,27 @@ module.exports = function (url, options) {
         const isText = contentType && contentType.startsWith('text')
         const isHTML = contentType && contentType.includes('html')
         if (!isText || !isHTML) {
-          throw new Error(`unsupported content type: ${contentType}`)
+          reject(new Error(`unsupported content type: ${contentType}`))
         }
 
         return response.arrayBuffer()
       })
-      .then(async (buffer) => {
-        responseBuffer = buffer
-
+      .then(async (responseBuffer) => {
         // handle optional user-specified charset
         if (opts.decode !== 'auto') {
           charset = opts.decode
+        // extract charset in opts.decode='auto' mode
         } else {
-          // extract charset in opts.decode='auto' mode
           charset = extractCharset(contentType, responseBuffer)
         }
 
+        // decode with charset
         try {
           const decoder = new TextDecoder(charset)
           const responseDecoded = decoder.decode(responseBuffer)
           resolve(parse(requestUrl, destinationUrl, responseDecoded, opts))
         } catch (e) {
-          throw new Error(`decoding with charset: ${charset}`)
+          reject(new Error(`decoding with charset: ${charset}`))
         }
       })
       .catch(reject)
