@@ -91,7 +91,6 @@ try {
 
 // Alternate use-case: parse a Response object instead
 try {
-  const url = ;
   // fetch the url in your own code
   const response = await fetch('https://www.npmjs.com/package/url-metadata');
   // ... do other stuff with it...
