@@ -31,9 +31,9 @@ In your project file:
 ```javascript
 const urlMetadata = require('url-metadata');
 
-const url = 'https://www.npmjs.com/package/url-metadata';
 try {
-  const metadata = await urlMetadata(url, options);
+  const url = 'https://www.npmjs.com/package/url-metadata';
+  const metadata = await urlMetadata(url);
   console.log(metadata);
 } catch (err) {
   console.log(err);
@@ -91,9 +91,9 @@ try {
 
 // Alternate use-case: parse a Response object instead
 try {
-  const url = 'https://www.npmjs.com/package/url-metadata';
+  const url = ;
   // fetch the url in your own code
-  const response = await fetch(url);
+  const response = await fetch('https://www.npmjs.com/package/url-metadata');
   // ... do other stuff with it...
   // pass the `response` object to be parsed for its metadata
   const metadata = await urlMetadata(null, { parseResponseObject: response });
