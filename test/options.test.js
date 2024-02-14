@@ -81,7 +81,7 @@ test('option: `parseResponseObject` from html string', async () => {
   })
 
   try {
-    // pass null `url` param & response object as option`
+    // pass null `url` param & response object as option
     const metadata = await urlMetadata(null, { parseResponseObject: response })
     expect(metadata.url).toBe('')
     expect(metadata.title).toBe('Metadata page')
