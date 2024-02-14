@@ -100,6 +100,7 @@ try {
 } catch (err) {
   console.log(err);
 }
+// ...If instead you need to parse a string of html you can create a response object and pass the html string into it. See example in test/options.test.js file.
 ```
 
 ### Returns

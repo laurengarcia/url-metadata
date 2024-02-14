@@ -1,5 +1,9 @@
 # CHANGELOG
 
+3.5.4
+- add new test for parsing from string to /test/options.test.js
+- add as new test as example to README
+
 3.5.3
 - bug: missing option `parseResponseObject` from Typescript definition
 - add Checklist to PR template so this doesn't happen again
