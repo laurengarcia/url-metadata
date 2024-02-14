@@ -15,6 +15,7 @@ declare namespace urlMetadata {
     descriptionLength?: number
     ensureSecureImageRequest?: boolean
     includeResponseBody?: boolean
+    parseResponseObject?: Response
   }
   type Result = Record<string, string | boolean | undefined | any>;
 }
