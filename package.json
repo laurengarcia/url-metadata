@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "3.5.2",
+  "version": "3.5.3",
   "description": "Request a url and scrape the metadata from its HTML using Node.js or the browser.",
   "repository": {
     "type": "git",
@@ -55,7 +55,8 @@
     "twitter cards"
   ],
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12"
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "husky": "^8.0.3",

@@ -8,4 +8,11 @@ Check one:
 
 ## Feature request:
 
-### Please attach screenshots if helpful
+### Please attach screenshots here if helpful
+
+### Checklist:
+- [ ] update README (if applicable)
+- [ ] update ROADMAP (if applicable)
+- [ ] update CHANGELOG
+- [ ] index.d.ts: ensure parameters, options & Result are still correct
+- [ ] package.json: bump version

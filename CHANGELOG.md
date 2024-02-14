@@ -1,5 +1,15 @@
 # CHANGELOG
 
+3.5.3
+- bug: missing option `parseResponseObject` from Typescript definition
+- add Checklist to PR template so this doesn't happen again
+
+3.5.2
+- README changes only
+
+3.5.1
+- README changes only
+
 3.5.0
 - new option: parseResponseObject
 - bug: 'unsupported content type' errors hang
