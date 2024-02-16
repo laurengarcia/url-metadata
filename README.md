@@ -20,7 +20,7 @@ To report a bug or request a feature please open an issue or pull request in [Gi
 
 
 ## Usage
-Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Browserify, etc. Under the hood, this package does some post-request processing on top of the js-native `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` API in your target environment.
+Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Parcel (see `/example-typescript`). Under the hood, this package does some post-request processing on top of the js-native `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` API in your target environment.
 
 Install in your project:
 ```

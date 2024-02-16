@@ -2,7 +2,6 @@
   "scripts": {
     "start": "npx parcel ./index.html"
   },
-  "source": "index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "targets": {
     "main": {

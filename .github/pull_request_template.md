@@ -12,9 +12,9 @@ Check one:
 
 ### Checklist:
 - [ ] update README (if applicable)
-- [ ] update ROADMAP (if applicable)
 - [ ] update CHANGELOG
+- [ ] update ROADMAP (if applicable)
 - [ ] index.d.ts: ensure parameters, options & Result are still correct
-- [ ] npm run test
-- [ ] try /example-typescript
+- [ ] `npm run test`
+- [ ] /example-typescript: `npm run start`
 - [ ] package.json: bump version

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+3.5.5
+- update example browser usage dir /example-typescript to use parcel instead of browserify
+- README changes
+
 3.5.4
 - add new test for parsing from string to /test/options.test.js
 - add as new test as example to README
