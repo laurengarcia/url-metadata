@@ -2,4 +2,10 @@
 package-lock.json
 node_modules
 test-debug
-example-browserify/bundle.js
+example-typescript/index.js
+example-typescript/dist
+example-typescript/dist/*
+example-typescript/.parcel-cache
+example-typescript/.parcel-cache/*
+
+

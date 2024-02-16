@@ -15,4 +15,6 @@ Check one:
 - [ ] update ROADMAP (if applicable)
 - [ ] update CHANGELOG
 - [ ] index.d.ts: ensure parameters, options & Result are still correct
+- [ ] npm run test
+- [ ] try /example-typescript
 - [ ] package.json: bump version
