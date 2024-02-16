@@ -1,5 +1,9 @@
 # CHANGELOG
 
+3.5.6
+- update typescript def so `url` param can be `null` when in `parseResponseObject` option mode
+- add this mode to /example-typescript
+
 3.5.5
 - update example browser usage dir /example-typescript to use parcel instead of browserify
 - README changes

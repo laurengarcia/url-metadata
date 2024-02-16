@@ -1,7 +1,7 @@
 export = urlMetadata
 
 declare function urlMetadata(
-  url: string,
+  url: string | null,
   options?: urlMetadata.Options,
 ): Promise<urlMetadata.Result>
 
