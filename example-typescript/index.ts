@@ -1,4 +1,4 @@
-const urlMetadata = require('./../index.js');
+import urlMetadata from 'url-metadata';
 
 (async function () {
   try {
@@ -6,8 +6,8 @@ const urlMetadata = require('./../index.js');
       mode: 'same-origin',
       includeResponseBody: true
     });
-    console.log('fetched ./metadata.html:', metadata)
+    console.log('fetched ./metadata.html:', metadata);
   } catch(err) {
-    console.log('fetch error:', err);
+    console.log(err);
   }
 })();

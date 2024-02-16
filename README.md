@@ -20,7 +20,7 @@ To report a bug or request a feature please open an issue or pull request in [Gi
 
 
 ## Usage
-Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Browserify, etc. Under the hood, this package does some post-request processing on top of the js-native `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` API in your target environment.
+Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Parcel (see `/example-typescript`). Under the hood, this package does some post-request processing on top of the js-native `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` API in your target environment.
 
 Install in your project:
 ```
@@ -127,3 +127,5 @@ The returned `metadata` object consists of key/value pairs that are all strings,
 - A browser plugin such as an ad-blocker or privacy protector.
 
 **Issue:** `fetch is not defined`. Error thrown in a Node.js or browser environment that doesn't have `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).
+
+**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block.

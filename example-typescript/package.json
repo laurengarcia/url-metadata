@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "start": "npx parcel ./index.html"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "targets": {
+    "main": {
+      "includeNodeModules": [
+        "url-metadata"
+      ]
+    }
+  },
+  "dependencies": {
+    "url-metadata": "^3.5.4"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.11.0",
+    "typescript": "^5.3.3"
+  }
+}
