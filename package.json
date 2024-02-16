@@ -30,7 +30,7 @@
       "test"
     ],
     "ignore": [
-      "/example-browserify",
+      "/example-typescript",
       "/test-debug"
     ]
   },
