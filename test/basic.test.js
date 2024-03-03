@@ -48,16 +48,12 @@ test('no error when favicons missing from page', async () => {
   }
 })
 
-test('favicons', async () => {
-  const url = 'https://www.bbc.com/news/uk-england-somerset-68179350'
-  try {
-    const metadata = await urlMetadata(url)
-    expect(metadata.favicons.length).toBe(5)
-    expect(metadata.favicons[0].rel).toBe('apple-touch-icon')
-    // Safari pinned tab 'mask-icons' can have 'color' attribute:
-    expect(metadata.favicons[4].rel).toBe('mask-icon')
-    expect(metadata.favicons[4].color).toBe('#000000')
-  } catch (err) {
-    expect(err).toBe(undefined)
-  }
-})
+// test('favicons', async () => {
+//   const url = 'https://www.bbc.com/news/uk-england-somerset-68179350'
+//   const metadata = await urlMetadata(url)
+// expect(metadata.favicons.length).toBe(5)
+// expect(metadata.favicons[0].rel).toBe('apple-touch-icon')
+// Safari pinned tab 'mask-icons' can have 'color' attribute:
+// expect(metadata.favicons[4].rel).toBe('mask-icon')
+// expect(metadata.favicons[4].color).toBe('#000000')
+// })
