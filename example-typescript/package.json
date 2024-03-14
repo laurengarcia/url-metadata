@@ -11,7 +11,7 @@
     }
   },
   "dependencies": {
-    "url-metadata": "^3.5.4"
+    "url-metadata": "^4.0.0"
   },
   "devDependencies": {
     "buffer": "^6.0.3",

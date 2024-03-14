@@ -15,6 +15,7 @@ test('basic example', async () => {
     expect(metadata.favicons.length).toBe(10)
     expect(metadata.favicons[0].rel).toBe('apple-touch-icon')
     expect(metadata.favicons[9].rel).toBe('icon')
+    expect(metadata.jsonld.length).toBe(0)
     expect(metadata.headings.length).toBeGreaterThan(3)
     expect(metadata.headings[0].level).toBe('h1')
     expect(metadata.headings[0].text).toBe('url-metadata')
