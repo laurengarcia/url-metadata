@@ -1,5 +1,8 @@
 # CHANGELOG
 
+4.0.0
+- bugfix: allow multiple json-ld objects. this is a breaking change, previous versions returned `jsonld` as a single object but is now an array of objects.
+
 3.5.6
 - update typescript def so `url` param can be `null` when in `parseResponseObject` option mode
 - add this mode to /example-typescript
