@@ -58,7 +58,7 @@ const options = {
 
   // charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
   // defaults to auto-detect in `Content-Type` header or meta tag
-  // the default `auto` option decodes with `utf-8`
+  // if none found, default `auto` option falls back to `utf-8`
   // override by passing in charset here (ex: 'windows-1251'):
   decode: 'auto',
 
@@ -108,7 +108,7 @@ Returns a promise resolved with an object. Note that the `url` field returned wi
 
 The returned `metadata` object consists of key/value pairs that are all strings, with a few exceptions:
 - `favicons` returns an array of objects containing key/value pairs (strings)
-- `jsonld` returns an object containing key/value pairs
+- `jsonld` returns an array of objects
 - all meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings to conform to the [Google Scholar spec](https://www.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values. So if the html contains:
 ```
 <meta name="citation_author" content="Arlitsch, Kenning">
@@ -118,6 +118,8 @@ The returned `metadata` object consists of key/value pairs that are all strings,
 ```
 'citation_author': ["Arlitsch, Kenning", "OBrien, Patrick"],
 ```
+
+A basic template for the returned metadata object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object.
 
 ### Troubleshooting
 

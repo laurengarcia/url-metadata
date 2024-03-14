@@ -17,5 +17,5 @@ declare namespace urlMetadata {
     includeResponseBody?: boolean
     parseResponseObject?: Response | import('node-fetch').Response;
   }
-  type Result = Record<string, string | boolean | undefined | any>;
+  type Result = Record<string, string | boolean | undefined | any | any[]>;
 }
