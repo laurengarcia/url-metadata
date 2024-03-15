@@ -1,5 +1,8 @@
 # CHANGELOG
 
+4.0.1
+- update `/example-typescript` to use version 4.0.0
+
 4.0.0
 - bugfix: allow multiple json-ld objects. this is a breaking change, previous versions returned `jsonld` as a single object but is now an array of objects.
 
