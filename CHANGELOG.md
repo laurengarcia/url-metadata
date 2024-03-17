@@ -1,5 +1,8 @@
 # CHANGELOG
 
+4.1.0
+- support json-ld `@graph` syntax
+
 4.0.1
 - update `/example-typescript` to use version 4.0.0
 
