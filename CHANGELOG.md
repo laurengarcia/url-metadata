@@ -1,5 +1,8 @@
 # CHANGELOG
 
+4.1.1
+- support favicons rel='shortcut icon'
+
 4.1.0
 - support json-ld `@graph` syntax
 

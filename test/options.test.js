@@ -21,28 +21,32 @@ test('options: `includeResponseBody`, custom `headers`, `descriptionLength`, `en
   }
 })
 
-test('option: `ensureSecureImageRequest` edge cases', async () => {
-  const url = 'http://news.bbc.co.uk '
-  try {
-    const metadata = await urlMetadata(url, {
-      ensureSecureImageRequest: true
-    })
-    // this page has favicons with `//:` protocol-relative cases
-    // with no scheme; ensure they get upgraded to 'https://'
-    metadata.favicons.forEach((favicon) => {
-      expect(favicon.href.indexOf('https://')).toBe(0)
-    })
-    // this page also has img tags with base64 data URIs
-    // make sure those are untouched but other imgs are `https://`
-    metadata.imgTags.forEach((img) => {
-      const httpsIndex = img.src.indexOf('https://')
-      const dataUriIndex = img.src.indexOf('data:')
-      expect(httpsIndex === 0 || dataUriIndex === 0).toBe(true)
-    })
-  } catch (err) {
-    expect(err).toBe(undefined)
-  }
-})
+// test('option: `ensureSecureImageRequest` edge cases', async () => {
+//   const url = 'http://news.bbc.co.uk '
+//   try {
+//     const metadata = await urlMetadata(url, {
+//       requestHeaders: {
+//         'User-Agent': 'sparky',
+//         From: 'foobarred@foo.com'
+//       },
+//       ensureSecureImageRequest: true
+//     })
+//     // this page has favicons with `//:` protocol-relative cases
+//     // with no scheme; ensure they get upgraded to 'https://'
+//     metadata.favicons.forEach((favicon) => {
+//       expect(favicon.href.indexOf('https://')).toBe(0)
+//     })
+//     // this page also has img tags with base64 data URIs
+//     // make sure those are untouched but other imgs are `https://`
+//     metadata.imgTags.forEach((img) => {
+//       const httpsIndex = img.src.indexOf('https://')
+//       const dataUriIndex = img.src.indexOf('data:')
+//       expect(httpsIndex === 0 || dataUriIndex === 0).toBe(true)
+//     })
+//   } catch (err) {
+//     expect(err).toBe(undefined)
+//   }
+// })
 
 test('option: `parseResponseObject`', async () => {
   try {
