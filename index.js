@@ -1,5 +1,7 @@
+const { useAgent } = require('request-filtering-agent')
 const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
+const fetch = require('node-fetch')
 
 module.exports = function (url, options) {
   if (!options || typeof options !== 'object') options = {}
@@ -41,8 +43,12 @@ module.exports = function (url, options) {
         mode: opts.mode,
         decode: opts.decode,
         timeout: opts.timeout,
-        redirect: 'follow'
+        redirect: opts.dangerouslyDisableRequestFiltering ? 'follow' : 'manual'
       }
+      if (!opts.dangerouslyDisableRequestFiltering) {
+        requestOpts.agent = useAgent(url, opts.requestFilterOptions)
+      }
+
       return await fetch(url, requestOpts)
     } else if (!url) {
       throw new Error('url parameter is missing')
@@ -77,7 +83,7 @@ module.exports = function (url, options) {
         // handle optional user-specified charset
         if (opts.decode !== 'auto') {
           charset = opts.decode
-        // extract charset in opts.decode='auto' mode
+          // extract charset in opts.decode='auto' mode
         } else {
           charset = extractCharset(contentType, responseBuffer)
         }
