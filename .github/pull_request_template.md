@@ -20,11 +20,13 @@ ___
 - [ ] ensure ts example works in /example-typescript: `npm run start`
 
 ### Maintainers checklist:
-- [ ] `npm run test`
+- [ ] `npm run test` on the new PR branch
 - [ ] ensure ts example works in /example-typescript: `npm run start`
-- [ ] package.json: bump version, push to branch
-- [ ] review & merge PR
-- [ ] git tag new version
+- [ ] package.json: bump semver version, push commit to new PR branch on origin
+- [ ] `squash and merge` PR to master
+- [ ] git tag new version of master
+        `$ git pull origin master`
+        `$ npm run test`
         `$ git tag 1.0`
         `$ git push origin 1.0`
 - [ ] `npm publish ./`
