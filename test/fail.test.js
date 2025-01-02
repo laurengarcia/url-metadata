@@ -6,7 +6,7 @@ test('fails gracefully with malformed url param', async () => {
     await urlMetadata(url)
   } catch (err) {
     expect(err).toBeDefined()
-    expect(err.message).toContain('Failed to parse')
+    expect(err.message).toContain('Only absolute URLs are supported')
   }
 })
 
@@ -21,7 +21,7 @@ test('fails gracefully when url param is missing', async () => {
 
 test('fails gracefully on !response.ok', async () => {
   // should 404
-  const url = 'http://www.foo.com/imagesz/resized_and_crop/'
+  const url = 'https://www.npmjs.com/fffffffpackage/node-fetch'
   try {
     await urlMetadata(url)
   } catch (err) {
@@ -31,7 +31,8 @@ test('fails gracefully on !response.ok', async () => {
 })
 
 test('fails gracefully when fetching non text/html', async () => {
-  const url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png'
+  const url =
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png'
   try {
     await urlMetadata(url)
   } catch (err) {

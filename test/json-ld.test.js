@@ -1,7 +1,8 @@
 const urlMetadata = require('./../index')
 
 test('retrieves json-ld if url has it', async () => {
-  const url = 'https://www.coindesk.com/twitter-systemically-important-financial-regulators'
+  const url =
+    'https://www.coindesk.com/policy/2020/10/23/what-it-means-if-companies-like-twitter-are-systemically-important-to-financial-regulators/'
   try {
     const metadata = await urlMetadata(url)
     expect(typeof metadata.jsonld[0]).toBe('object')

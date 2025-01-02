@@ -3,6 +3,7 @@
 Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an alternate mode that lets you pass in your own `Response` object as well (see `Options`).
 
 Includes:
+
 - meta tags
 - favicons
 - citations, per the Google Scholar spec
@@ -18,16 +19,18 @@ More details in the `Returns` section below.
 
 To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troublehsooting` section below *before* filing a bug.
 
-
 ## Usage
+
 Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Parcel (see `/example-typescript`). Under the hood, this package does some post-request processing on top of the js-native `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` API in your target environment.
 
 Install in your project:
+
 ```
-$ npm install url-metadata --save
+npm install url-metadata --save
 ```
 
 In your project file:
+
 ```javascript
 const urlMetadata = require('url-metadata');
 
@@ -41,7 +44,9 @@ try {
 ```
 
 ### Options & Defaults
+
 The default options are the values below. To override the default options, pass in a second options argument.
+
 ```javascript
 const options = {
   // custom request headers
@@ -78,6 +83,18 @@ const options = {
   // alternate use-case: pass in `Response` object here to be parsed
   // see example below
   parseResponseObject: null,
+
+    /**
+   * Options for filtering requests.
+   * https://www.npmjs.com/package/request-filtering-agent
+   */
+  requestFilterOptions?: RequestFilteringAgentOptions;
+
+  /**
+   * Disables request filtering.
+   * Use this option with caution as it can expose the application to SSRF (Server-Side Request Forgery) risks.
+   */
+  dangerouslyDisableRequestFiltering?: boolean;
 };
 
 // Basic usage
@@ -104,17 +121,22 @@ try {
 ```
 
 ### Returns
+
 Returns a promise resolved with an object. Note that the `url` field returned will be the last hop in the request chain. If you pass in a url from a url shortener you'll get back the final destination as the `url`.
 
 The returned `metadata` object consists of key/value pairs that are all strings, with a few exceptions:
+
 - `favicons` returns an array of objects containing key/value pairs (strings)
 - `jsonld` returns an array of objects
 - all meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings to conform to the [Google Scholar spec](https://www.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values. So if the html contains:
+
 ```
 <meta name="citation_author" content="Arlitsch, Kenning">
 <meta name="citation_author" content="OBrien, Patrick">
 ```
+
 ... this module will return:
+
 ```
 'citation_author': ["Arlitsch, Kenning", "OBrien, Patrick"],
 ```
@@ -124,6 +146,7 @@ A basic template for the returned metadata object can be found in `lib/metadata-
 ### Troubleshooting
 
 **Issue:** `Response status code 0` or `CORS errors`. The `fetch` request failed at either the network or protocol level. Possible causes:
+
 - CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
 - A browser plugin such as an ad-blocker or privacy protector.
