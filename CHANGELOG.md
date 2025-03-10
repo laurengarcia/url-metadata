@@ -1,5 +1,8 @@
 # CHANGELOG
 
+4.1.3
+- issue #90: temporarily remove support for itemprop meta
+
 4.1.2
 - update/fix failing tests
 
