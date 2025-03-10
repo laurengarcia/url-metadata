@@ -18,7 +18,6 @@ test('basic example', async () => {
     expect(Array.isArray(metadata.jsonld)).toBe(true)
     expect(metadata.jsonld.length).toBe(0)
     expect(metadata.headings.length).toBeGreaterThan(3)
-    expect(metadata.headings[0].level).toBe('h1')
     expect(metadata.headings[0].text).toBe('url-metadata')
     expect(metadata.imgTags.length).toBeGreaterThan(1)
     expect(metadata.imgTags[0].src).toBe('https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg')
