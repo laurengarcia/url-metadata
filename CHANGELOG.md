@@ -1,5 +1,8 @@
 # CHANGELOG
 
+4.1.2
+- update/fix failing tests
+
 4.1.1
 - support favicons rel='shortcut icon'
 
