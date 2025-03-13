@@ -1,5 +1,8 @@
 # CHANGELOG
 
+4.1.4
+- bugfix issue #90: ignore meta tags outside of <head> tag
+
 4.1.3
 - issue #90: temporarily remove support for itemprop meta
 
