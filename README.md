@@ -3,6 +3,7 @@
 Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an alternate mode that lets you pass in your own `Response` object as well (see `Options`).
 
 Includes:
+
 - meta tags
 - favicons
 - citations, per the Google Scholar spec
@@ -24,7 +25,7 @@ Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpac
 
 Install in your project:
 ```
-$ npm install url-metadata --save
+npm install url-metadata --save
 ```
 
 In your project file:
@@ -49,6 +50,10 @@ const options = {
     'User-Agent': 'url-metadata/3.0 (npm module)',
     'From': 'example@example.com'
   },
+
+  // custom options for filtering requests, preventing SSRF attacks
+  // https://www.npmjs.com/package/request-filtering-agent
+  requestFilteringAgentOptions: null,
 
   // `fetch` API cache setting for request
   cache: 'no-cache',
@@ -77,7 +82,7 @@ const options = {
 
   // alternate use-case: pass in `Response` object here to be parsed
   // see example below
-  parseResponseObject: null,
+  parseResponseObject: null
 };
 
 // Basic usage

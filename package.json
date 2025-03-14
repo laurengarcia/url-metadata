@@ -56,7 +56,8 @@
   ],
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "request-filtering-agent": "2.0.1"
   },
   "devDependencies": {
     "husky": "^8.0.3",
