@@ -17,6 +17,7 @@ module.exports = function (url, options) {
       mode: 'cors',
       decode: 'auto',
       timeout: 10000,
+      maxRedirects: 10,
       descriptionLength: 750,
       ensureSecureImageRequest: true,
       includeResponseBody: false,
@@ -31,10 +32,13 @@ module.exports = function (url, options) {
   let contentType
   let charset
 
-  async function fetchData () {
-    if (!url && opts.parseResponseObject) {
+  async function fetchData (_url, redirectCount = 0) {
+    if (redirectCount > opts.maxRedirects) {
+      throw new Error('too many redirects')
+    }
+    if (!_url && opts.parseResponseObject) {
       return opts.parseResponseObject
-    } else if (url) {
+    } else if (_url) {
       requestUrl = url
       const requestOpts = {
         method: 'GET',
@@ -44,16 +48,21 @@ module.exports = function (url, options) {
         mode: opts.mode,
         decode: opts.decode,
         timeout: opts.timeout,
-        redirect: 'follow'
+        redirect: 'manual'
       }
-      return await fetch(url, requestOpts)
-    } else if (!url) {
+      const response = await fetch(_url, requestOpts)
+      if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
+        const newUrl = new URL(response.headers.get('location'), url).href
+        return fetchData(newUrl, redirectCount + 1)
+      }
+      return response
+    } else if (!_url) {
       throw new Error('url parameter is missing')
     }
   }
 
   return new Promise((resolve, reject) => {
-    fetchData()
+    fetchData(url)
       .then((response) => {
         if (!response) {
           reject(new Error(`response is ${typeof response}`))

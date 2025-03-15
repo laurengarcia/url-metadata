@@ -15,9 +15,9 @@ Includes:
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 
-Protects against (v5.0.0+):
-- SSRF attacks via `request-filtering-agent` (with optional config)
+v5.0.0+ Protects against:
 - infinite redirect loops
+- SSRF attacks via `request-filtering-agent` (custom options available)
 
 More details in the `Returns` section below.
 
@@ -49,6 +49,7 @@ try {
 The default options are the values below. To override the default options, pass in a second options argument.
 ```javascript
 const options = {
+
   // custom request headers
   requestHeaders: {
     'User-Agent': 'url-metadata/3.0 (npm module)',
@@ -73,6 +74,9 @@ const options = {
 
   // timeout in milliseconds, default is 10 seconds
   timeout: 10000,
+
+  // maximum redirects in request chain, defaults to 10
+  maxRedirects: 10,
 
   // number of characters to truncate description to
   descriptionLength: 750,
