@@ -14,6 +14,7 @@ Includes:
 - img tags
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
+- default SSRF protection via `request-filtering-agent` (optional config)
 
 More details in the `Returns` section below.
 
@@ -53,7 +54,7 @@ const options = {
 
   // custom options for filtering requests, preventing SSRF attacks
   // https://www.npmjs.com/package/request-filtering-agent
-  requestFilteringAgentOptions: null,
+  requestFilteringAgentOptions: undefined,
 
   // `fetch` API cache setting for request
   cache: 'no-cache',
@@ -82,7 +83,7 @@ const options = {
 
   // alternate use-case: pass in `Response` object here to be parsed
   // see example below
-  parseResponseObject: null
+  parseResponseObject: undefined
 };
 
 // Basic usage
