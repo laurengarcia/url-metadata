@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.0.1
+- in `/example-typescript`: update `parcel` version in `devDependencies`
+
 5.0.0
 - issue #97: prevent SSRF attacks
 - issue #97: add `maxRedirects` option to prevent infinite redirect loops
