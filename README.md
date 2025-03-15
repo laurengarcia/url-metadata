@@ -15,7 +15,7 @@ Includes:
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 
-Protects against:
+Protects against (v5.0.0+):
 - SSRF attacks via `request-filtering-agent` (with optional config)
 - infinite redirect loops
 
@@ -133,8 +133,11 @@ A basic template for the returned metadata object can be found in `lib/metadata-
 ### Troubleshooting
 
 **Issue:** `Response status code 0` or `CORS errors`. The `fetch` request failed at either the network or protocol level. Possible causes:
+
 - CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
+
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
+
 - A browser plugin such as an ad-blocker or privacy protector.
 
 **Issue:** `fetch is not defined`. Error thrown in a Node.js or browser environment that doesn't have `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).
