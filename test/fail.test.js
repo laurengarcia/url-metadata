@@ -21,7 +21,7 @@ test('fails gracefully when url param is missing', async () => {
 
 test('fails gracefully on !response.ok', async () => {
   // should 404
-  const url = 'http://www.foo.com/imagesz/resized_and_crop/'
+  const url = 'https://www.npmjs.com/packageXXX/url-metadataXXX'
   try {
     await urlMetadata(url)
   } catch (err) {
