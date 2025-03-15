@@ -1,3 +1,4 @@
+const { useAgent } = require('request-filtering-agent')
 const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 
@@ -11,6 +12,7 @@ module.exports = function (url, options) {
         'User-Agent': 'url-metadata/3.0 (npm module)',
         From: 'example@example.com'
       },
+      requestFilteringAgentOptions: undefined,
       cache: 'no-cache',
       mode: 'cors',
       decode: 'auto',
@@ -18,7 +20,7 @@ module.exports = function (url, options) {
       descriptionLength: 750,
       ensureSecureImageRequest: true,
       includeResponseBody: false,
-      parseResponseObject: null
+      parseResponseObject: undefined
     },
     // options passed in override defaults
     options
@@ -37,6 +39,7 @@ module.exports = function (url, options) {
       const requestOpts = {
         method: 'GET',
         headers: opts.requestHeaders,
+        agent: useAgent(url, opts.requestFilteringAgentOptions),
         cache: opts.cache,
         mode: opts.mode,
         decode: opts.decode,

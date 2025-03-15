@@ -3,6 +3,7 @@
 Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an alternate mode that lets you pass in your own `Response` object as well (see `Options`).
 
 Includes:
+
 - meta tags
 - favicons
 - citations, per the Google Scholar spec
@@ -14,6 +15,10 @@ Includes:
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 
+Protects against (v5.0.0+):
+- SSRF attacks via `request-filtering-agent` (with optional config)
+- infinite redirect loops
+
 More details in the `Returns` section below.
 
 To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troublehsooting` section below *before* filing a bug.
@@ -24,7 +29,7 @@ Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpac
 
 Install in your project:
 ```
-$ npm install url-metadata --save
+npm install url-metadata --save
 ```
 
 In your project file:
@@ -49,6 +54,10 @@ const options = {
     'User-Agent': 'url-metadata/3.0 (npm module)',
     'From': 'example@example.com'
   },
+
+  // custom options for filtering requests, preventing SSRF attacks
+  // https://www.npmjs.com/package/request-filtering-agent
+  requestFilteringAgentOptions: undefined,
 
   // `fetch` API cache setting for request
   cache: 'no-cache',
@@ -77,7 +86,7 @@ const options = {
 
   // alternate use-case: pass in `Response` object here to be parsed
   // see example below
-  parseResponseObject: null,
+  parseResponseObject: undefined
 };
 
 // Basic usage
@@ -124,8 +133,11 @@ A basic template for the returned metadata object can be found in `lib/metadata-
 ### Troubleshooting
 
 **Issue:** `Response status code 0` or `CORS errors`. The `fetch` request failed at either the network or protocol level. Possible causes:
+
 - CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
+
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
+
 - A browser plugin such as an ad-blocker or privacy protector.
 
 **Issue:** `fetch is not defined`. Error thrown in a Node.js or browser environment that doesn't have `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).
