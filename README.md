@@ -14,7 +14,10 @@ Includes:
 - img tags
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
-- default SSRF protection via `request-filtering-agent` (optional config)
+
+Protects against:
+- SSRF attacks via `request-filtering-agent` (with optional config)
+- infinite redirect loops
 
 More details in the `Returns` section below.
 
