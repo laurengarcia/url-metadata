@@ -26,7 +26,7 @@ test('fails gracefully on !response.ok', async () => {
     await urlMetadata(url)
   } catch (err) {
     expect(err).toBeDefined()
-    expect(err.message).toContain('response code')
+    expect(err.message).toContain('response code 404')
   }
 })
 

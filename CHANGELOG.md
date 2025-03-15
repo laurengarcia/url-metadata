@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.0.0
+- issue #97: prevent SSRF attacks
+- issue #97: add `maxRedirects` option tp prevent infinite redirect loops
+
 4.1.4
 - bugfix issue #90: ignore meta tags outside of <head> tag
 
