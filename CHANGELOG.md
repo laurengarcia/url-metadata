@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.0.2
+- README: clarfiy support for SSRF prevention/ Node.js versioning
+- update default request headers `User-Agent` string
+
 5.0.1
 - in `/example-typescript`: update `parcel` version in `devDependencies`
 

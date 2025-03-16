@@ -17,7 +17,7 @@ Includes:
 
 v5.0.0+ Protects against:
 - infinite redirect loops
-- SSRF attacks via `request-filtering-agent` (custom options available)
+- SSRF attacks via `request-filtering-agent` in Node.js v20+ environments (custom options available)
 
 More details in the `Returns` section below.
 
@@ -25,7 +25,7 @@ To report a bug or request a feature please open an issue or pull request in [Gi
 
 
 ## Usage
-Works with Node.js version `>=18.0.0` or in the browser when bundled with Webpack or Parcel (see `/example-typescript`). Under the hood, this package does some post-request processing on top of the js-native `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` API in your target environment.
+Works with Node.js versions `>=18.0.0` or in the browser when bundled with Webpack or Parcel (see `/example-typescript`). Under the hood, this package does some post-request processing on top of the `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` in your target environment.
 
 Install in your project:
 ```
@@ -52,11 +52,13 @@ const options = {
 
   // custom request headers
   requestHeaders: {
-    'User-Agent': 'url-metadata/3.0 (npm module)',
+    'User-Agent': 'url-metadata',
     'From': 'example@example.com'
   },
 
-  // custom options for filtering requests, preventing SSRF attacks
+  // to prevent SSRF attacks
+  // blocks requests to private network & reserved IP addresses by default
+  // only supported in Node.js v20.0+; browser will ignore silently!
   // https://www.npmjs.com/package/request-filtering-agent
   requestFilteringAgentOptions: undefined,
 

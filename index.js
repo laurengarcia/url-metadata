@@ -9,7 +9,7 @@ module.exports = function (url, options) {
     // defaults
     {
       requestHeaders: {
-        'User-Agent': 'url-metadata/3.0 (npm module)',
+        'User-Agent': 'url-metadata',
         From: 'example@example.com'
       },
       requestFilteringAgentOptions: undefined,
