@@ -15,9 +15,9 @@ module.exports = function (url, options) {
       requestFilteringAgentOptions: undefined,
       cache: 'no-cache',
       mode: 'cors',
-      decode: 'auto',
       timeout: 10000,
       maxRedirects: 10,
+      decode: 'auto',
       descriptionLength: 750,
       ensureSecureImageRequest: true,
       includeResponseBody: false,
@@ -46,9 +46,9 @@ module.exports = function (url, options) {
         agent: useAgent(url, opts.requestFilteringAgentOptions),
         cache: opts.cache,
         mode: opts.mode,
-        decode: opts.decode,
         timeout: opts.timeout,
-        redirect: 'manual'
+        redirect: 'manual',
+        decode: opts.decode
       }
       const response = await fetch(_url, requestOpts)
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {

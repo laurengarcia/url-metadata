@@ -56,9 +56,9 @@ const options = {
     'From': 'example@example.com'
   },
 
-  // to prevent SSRF attacks
-  // blocks requests to private network & reserved IP addresses by default
-  // only supported in Node.js v20.0+; browser will ignore silently!
+  // to prevent SSRF attacks, this default option blocks requests
+  // to private network & reserved IP addresses
+  // supported in Node.js v20.0+; other envs ignore silently
   // https://www.npmjs.com/package/request-filtering-agent
   requestFilteringAgentOptions: undefined,
 
@@ -68,17 +68,17 @@ const options = {
   // `fetch` API mode (ex: 'cors', 'no-cors', 'same-origin', etc)
   mode: 'cors',
 
-  // charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
-  // defaults to auto-detect in `Content-Type` header or meta tag
-  // if none found, default `auto` option falls back to `utf-8`
-  // override by passing in charset here (ex: 'windows-1251'):
-  decode: 'auto',
-
   // timeout in milliseconds, default is 10 seconds
   timeout: 10000,
 
   // maximum redirects in request chain, defaults to 10
   maxRedirects: 10,
+
+  // charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
+  // defaults to auto-detect in `Content-Type` header or meta tag
+  // if none found, default `auto` option falls back to `utf-8`
+  // override by passing in charset here (ex: 'windows-1251'):
+  decode: 'auto',
 
   // number of characters to truncate description to
   descriptionLength: 750,
@@ -115,7 +115,30 @@ try {
 } catch (err) {
   console.log(err);
 }
-// ...If instead you need to parse a string of html you can create a response object and pass the html string into it. See example in test/options.test.js file.
+
+// Similarly, if you have a string of html you can create
+// a response object and pass the html string into it.
+const html = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Metadata page</title>
+    <meta name="author" content="foobar">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+  </head>
+  <body>
+    <h1>Metadata page</h1>
+  </body>
+</html>
+`;
+const response = new Response(html, {
+  headers: {
+    'Content-Type': 'text/html'
+  }
+});
+const metadata = await urlMetadata(null, { parseResponseObject: response });
+console.log(metadata);
 ```
 
 ### Returns

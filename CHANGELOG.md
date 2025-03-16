@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.0.3
+- improve README & readability UX
+
 5.0.2
 - README: clarfiy support for SSRF prevention/ Node.js versioning
 - update default request headers `User-Agent` string
