@@ -1,4 +1,24 @@
-const { useAgent } = require('request-filtering-agent')
+// Conditionally import useAgent from request-filtering-agent only in Node.js v18+ environments
+// or provide a no-op implementation in browser and older unsupported Node.js environments
+// https://www.npmjs.com/package/request-filtering-agent
+let useAgent
+try {
+  // Check if we're in a Node.js v18+ environment
+  if (typeof process !== 'undefined' &&
+      process.versions &&
+      process.versions.node &&
+      parseInt(process.versions.node.split('.')[0]) >= 18) {
+    // We're in Node.js v18+
+    const requestFilteringAgent = require('request-filtering-agent')
+    useAgent = requestFilteringAgent.useAgent
+  } else {
+    // We're in a browser or Node.js < v18
+    useAgent = (url, options) => undefined
+  }
+} catch (e) {
+  // Fallback to no-op if module can't be loaded
+  useAgent = (url, options) => undefined
+}
 const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 

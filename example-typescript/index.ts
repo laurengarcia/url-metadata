@@ -8,7 +8,7 @@ import urlMetadata from 'url-metadata';
       mode: 'same-origin',
       includeResponseBody: true
     });
-    console.log('1/ metadata.html:', metadata);
+    console.log('2/ fetch local metadata.html:', metadata);
   } catch(err) {
     console.log(err);
   }
@@ -40,7 +40,7 @@ import urlMetadata from 'url-metadata';
     // pass null `url` param & response object as option
     const metadata = await urlMetadata(null, { parseResponseObject: response })
 
-    console.log('2/ html string:', metadata);
+    console.log('1/ html string:', metadata);
   } catch(err) {
     console.log(err);
   }
