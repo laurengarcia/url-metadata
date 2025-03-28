@@ -1,5 +1,5 @@
-// Conditionally import useAgent from request-filtering-agent only in Node.js v18+ environments
-// or provide a no-op implementation in browser and older unsupported Node.js environments
+// Conditionally import `useAgent` from `request-filtering-agent`
+// only in Node.js v18+ environments; no-op for browser & older Node.js envs
 // https://www.npmjs.com/package/request-filtering-agent
 let useAgent
 try {

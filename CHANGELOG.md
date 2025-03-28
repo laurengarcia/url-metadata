@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.0.4
+- bugfix issue #99: conditional useAgent for vite (browser) builds & Node.js < v18
+
 5.0.3
 - improve README & readability UX
 

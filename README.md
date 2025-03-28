@@ -17,7 +17,7 @@ Includes:
 
 v5.0.0+ Protects against:
 - infinite redirect loops
-- SSRF attacks via `request-filtering-agent` in Node.js v20+ environments (custom options available)
+- SSRF attacks via `request-filtering-agent` in Node.js v18+ environments (custom options available)
 
 More details in the `Returns` section below.
 
@@ -58,7 +58,7 @@ const options = {
 
   // to prevent SSRF attacks, this default option blocks requests
   // to private network & reserved IP addresses
-  // supported in Node.js v20.0+; other envs ignore silently
+  // supported in Node.js v18+; other envs ignore silently
   // https://www.npmjs.com/package/request-filtering-agent
   requestFilteringAgentOptions: undefined,
 
