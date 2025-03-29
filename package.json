@@ -31,6 +31,7 @@
     ],
     "ignore": [
       "/example-typescript",
+      "/example-vite",
       "/test-debug"
     ]
   },
