@@ -11,8 +11,8 @@ declare namespace urlMetadata {
     requestFilteringAgentOptions?: import('request-filtering-agent').RequestFilteringAgentOptions;
     cache?: string;
     mode?: string;
-    timeout?: number;
     maxRedirects?: number;
+    timeout?: number;
     decode?: string;
     descriptionLength?: number;
     ensureSecureImageRequest?: boolean;

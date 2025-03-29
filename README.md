@@ -65,14 +65,14 @@ const options = {
   // `fetch` API cache setting for request
   cache: 'no-cache',
 
-  // `fetch` API mode (ex: 'cors', 'no-cors', 'same-origin', etc)
+  // `fetch` mode (ex: 'cors', 'same-origin', etc)
   mode: 'cors',
 
-  // timeout in milliseconds, default is 10 seconds
-  timeout: 10000,
-
-  // maximum redirects in request chain, defaults to 10
+  // max 10 redirects in the request chain
   maxRedirects: 10,
+
+  // fetch timeout in milliseconds, default is 10 seconds
+  timeout: 10000,
 
   // charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
   // defaults to auto-detect in `Content-Type` header or meta tag
@@ -163,7 +163,7 @@ A basic template for the returned metadata object can be found in `lib/metadata-
 
 **Issue:** `Response status code 0` or `CORS errors`. The `fetch` request failed at either the network or protocol level. Possible causes:
 
-- CORS errors. Try changing the mode option (ex: `cors`, `no-cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
+- CORS errors. Try changing the mode option (ex: `cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
 
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
 

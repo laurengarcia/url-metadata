@@ -35,8 +35,8 @@ module.exports = function (url, options) {
       requestFilteringAgentOptions: undefined,
       cache: 'no-cache',
       mode: 'cors',
-      timeout: 10000,
       maxRedirects: 10,
+      timeout: 10000,
       decode: 'auto',
       descriptionLength: 750,
       ensureSecureImageRequest: true,
@@ -66,8 +66,8 @@ module.exports = function (url, options) {
         agent: useAgent(url, opts.requestFilteringAgentOptions),
         cache: opts.cache,
         mode: opts.mode,
-        timeout: opts.timeout,
         redirect: 'manual',
+        timeout: opts.timeout,
         decode: opts.decode
       }
       const response = await fetch(_url, requestOpts)
