@@ -18,10 +18,12 @@ ___
 - [ ] index.d.ts: ensure parameters, options & Result are still correct
 - [ ] `npm run test`
 - [ ] ensure ts example works in /example-typescript: `npm run start`
+- [ ] ensure vite.js example works in /example-vite: `npm run dev`
 
 ### Maintainers checklist:
 - [ ] `npm run test` on the new PR branch
 - [ ] ensure ts example works in /example-typescript: `npm run start`
+- [ ] ensure vite.js example works in /example-vite: `npm run dev`
 - [ ] package.json: bump semver version, push commit to new PR branch on origin
 - [ ] `squash and merge` PR to master
 - [ ] git tag new version of master

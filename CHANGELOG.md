@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.0.5
+- add `/example-vite` directory (per issue #99)
+
 5.0.4
 - bugfix issue #99: conditional useAgent for vite (browser) builds & Node.js < v18
 
