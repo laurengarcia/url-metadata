@@ -68,7 +68,7 @@ const options = {
   // `fetch` mode (ex: 'cors', 'same-origin', etc)
   mode: 'cors',
 
-  // max 10 redirects in the request chain
+  // maximum redirects in request chain, defaults to 10
   maxRedirects: 10,
 
   // fetch timeout in milliseconds, default is 10 seconds
