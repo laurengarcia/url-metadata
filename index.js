@@ -1,26 +1,38 @@
-// Conditionally import `useAgent` from `request-filtering-agent`
-// only in Node.js v18+ environments; no-op for browser & older Node.js envs
-// https://www.npmjs.com/package/request-filtering-agent
-let useAgent
-try {
-  // Check if we're in a Node.js v18+ environment
-  if (typeof process !== 'undefined' &&
-      process.versions &&
-      process.versions.node &&
-      parseInt(process.versions.node.split('.')[0]) >= 18) {
-    // We're in Node.js v18+
-    const requestFilteringAgent = require('request-filtering-agent')
-    useAgent = requestFilteringAgent.useAgent
-  } else {
-    // We're in a browser or Node.js < v18
-    useAgent = (url, options) => undefined
-  }
-} catch (e) {
-  // Fallback to no-op if module can't be loaded
-  useAgent = (url, options) => undefined
-}
+const nodeFetch = require('node-fetch')
+const requestFilteringAgent = require('request-filtering-agent')
 const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
+
+// ** Only in Node.js v18+ environments **
+// To prevent SSRF attacks:
+// Conditionally `useAgent` from `request-filtering-agent`
+// --> https://www.npmjs.com/package/request-filtering-agent
+// & no-op `useAgent` for older Node.js envs & the browser.
+// Browser security policies prevent SSRF automatically.
+let useAgent = () => undefined
+
+// Node.js v18+ native fetch() API is not compatible with `useAgent`
+// So we polyfill fetch on the Node.js v18+ side with `node-fetch` v2
+let _fetch
+
+// Check if we're in Node.js
+const isNode = typeof process !== 'undefined' && process.versions && process.versions.node
+
+if (isNode) {
+  // In Node.js, use node-fetch with SSRF protection
+  _fetch = nodeFetch
+  useAgent = requestFilteringAgent.useAgent
+} else {
+  // In browser, use native fetch
+  _fetch = typeof window !== 'undefined' ? window.fetch.bind(window) : globalThis.fetch
+  // No-op in browser
+  useAgent = () => undefined
+}
+
+// Ensure we have a working fetch
+if (!_fetch) {
+  throw new Error('No fetch implementation available')
+}
 
 module.exports = function (url, options) {
   if (!options || typeof options !== 'object') options = {}
@@ -32,9 +44,9 @@ module.exports = function (url, options) {
         'User-Agent': 'url-metadata',
         From: 'example@example.com'
       },
-      requestFilteringAgentOptions: undefined,
-      cache: 'no-cache',
-      mode: 'cors',
+      requestFilteringAgentOptions: undefined, // Node.js v18+
+      cache: 'no-cache', // browser only
+      mode: 'cors', // browser only
       maxRedirects: 10,
       timeout: 10000,
       decode: 'auto',
@@ -43,7 +55,7 @@ module.exports = function (url, options) {
       includeResponseBody: false,
       parseResponseObject: undefined
     },
-    // options passed in override defaults
+    // user options override defaults
     options
   )
 
@@ -63,14 +75,13 @@ module.exports = function (url, options) {
       const requestOpts = {
         method: 'GET',
         headers: opts.requestHeaders,
-        agent: useAgent(url, opts.requestFilteringAgentOptions),
-        cache: opts.cache,
-        mode: opts.mode,
+        agent: useAgent(url, opts.requestFilteringAgentOptions), // Node.js v18+ only
+        cache: opts.cache, // browser only
+        mode: opts.mode, // browser only
         redirect: 'manual',
-        timeout: opts.timeout,
-        decode: opts.decode
+        timeout: opts.timeout
       }
-      const response = await fetch(_url, requestOpts)
+      const response = await _fetch(_url, requestOpts)
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
         const newUrl = new URL(response.headers.get('location'), url).href
         return fetchData(newUrl, redirectCount + 1)
