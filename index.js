@@ -19,7 +19,7 @@ let _fetch
 const isNode = typeof process !== 'undefined' && process.versions && process.versions.node
 
 if (isNode) {
-  // In Node.js, use node-fetch with SSRF protection
+  // In Node.js, use `node-fetch` module with SSRF protection
   _fetch = nodeFetch
   useAgent = requestFilteringAgent.useAgent
 } else {

@@ -1,7 +1,7 @@
 5.0+ Roadmap
 
 - [ ] use `node-fetch` v2 in Node.js v18+
-      - [ ] README: clearly demarcate the browser vs. node-only options
+      - [X] README: clearly demarcate browser vs. node-only options
       - [ ] request headers:
             - [ ] check our default vs custom headers against
             https://www.npmjs.com/package/node-fetch/v/2.7.0#default-headers
