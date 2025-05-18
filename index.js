@@ -149,11 +149,11 @@ module.exports = function (url, options) {
         // Cleanup resources to avoid memory leaks
         if (currentResponse && currentResponse.body) {
           // Destroy the body stream `node-fetch` uses to force-close the connection
-          if (currentResponse.body.destroy && typeof currentResponse.body.destroy === 'function') currentResponse.body.destroy()
+          if (typeof currentResponse.body.destroy === 'function') currentResponse.body.destroy()
           // Modern browsers and Node.js 18+ have cancel() on the ReadableStream
-          else if (currentResponse.body.cancel && typeof currentResponse.body.cancel === 'function') currentResponse.body.cancel().catch(() => {})
+          else if (typeof currentResponse.body.cancel === 'function') currentResponse.body.cancel().catch(() => {})
           // Fallback: consume the stream to close the connection
-          else if (!currentResponse.bodyUsed && typeof currentResponse.text === 'function') currentResponse.text().catch(() => {})
+          else if (typeof currentResponse.text === 'function') currentResponse.text().catch(() => {})
         }
         // Finally, reject
         return reject(error)
