@@ -44,11 +44,12 @@ module.exports = function (url, options) {
         'User-Agent': 'url-metadata',
         From: 'example@example.com'
       },
-      requestFilteringAgentOptions: undefined, // Node.js v18+
+      requestFilteringAgentOptions: undefined, // Node.js v18+ only
       cache: 'no-cache', // browser only
       mode: 'cors', // browser only
       maxRedirects: 10,
       timeout: 10000,
+      size: 0, // Node.js v6+ only
       decode: 'auto',
       descriptionLength: 750,
       ensureSecureImageRequest: true,
@@ -63,6 +64,7 @@ module.exports = function (url, options) {
   let destinationUrl = ''
   let contentType
   let charset
+  let currentResponse = null
 
   async function fetchData (_url, redirectCount = 0) {
     if (redirectCount > opts.maxRedirects) {
@@ -79,9 +81,13 @@ module.exports = function (url, options) {
         cache: opts.cache, // browser only
         mode: opts.mode, // browser only
         redirect: 'manual',
-        timeout: opts.timeout
+        timeout: opts.timeout,
+        size: opts.size // Node.js v6+ only
       }
+
+      // Make the fetch request
       const response = await _fetch(_url, requestOpts)
+
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
         const newUrl = new URL(response.headers.get('location'), url).href
         return fetchData(newUrl, redirectCount + 1)
@@ -96,11 +102,14 @@ module.exports = function (url, options) {
     fetchData(url)
       .then((response) => {
         if (!response) {
-          reject(new Error(`response is ${typeof response}`))
+          return reject(new Error(`response is ${typeof response}`))
         }
         if (!response.ok) {
-          reject(new Error(`response code ${response.status}`))
+          return reject(new Error(`response code ${response.status}`))
         }
+
+        // Set `currentResponse` in case of error
+        currentResponse = response
 
         // disambiguate `requestUrl` from final destination url
         // (ex: links shortened by bit.ly)
@@ -111,12 +120,14 @@ module.exports = function (url, options) {
         const isText = contentType && contentType.startsWith('text')
         const isHTML = contentType && contentType.includes('html')
         if (!isText || !isHTML) {
-          reject(new Error(`unsupported content type: ${contentType}`))
+          return reject(new Error(`unsupported content type: ${contentType}`))
         }
 
         return response.arrayBuffer()
       })
       .then(async (responseBuffer) => {
+        if (!responseBuffer) return
+
         // handle optional user-specified charset
         if (opts.decode !== 'auto') {
           charset = opts.decode
@@ -131,9 +142,21 @@ module.exports = function (url, options) {
           const responseDecoded = decoder.decode(responseBuffer)
           resolve(parse(requestUrl, destinationUrl, responseDecoded, opts))
         } catch (e) {
-          reject(new Error(`decoding with charset: ${charset}`))
+          return reject(new Error(`decoding with charset: ${charset}`))
         }
       })
-      .catch(reject)
+      .catch(error => {
+        // Cleanup resources to avoid memory leaks
+        if (currentResponse && currentResponse.body) {
+          // Destroy the body stream `node-fetch` uses to force-close the connection
+          if (currentResponse.body.destroy && typeof currentResponse.body.destroy === 'function') currentResponse.body.destroy()
+          // Modern browsers and Node.js 18+ have cancel() on the ReadableStream
+          else if (currentResponse.body.cancel && typeof currentResponse.body.cancel === 'function') currentResponse.body.cancel().catch(() => {})
+          // Fallback: consume the stream to close the connection
+          else if (!currentResponse.bodyUsed && typeof currentResponse.text === 'function') currentResponse.text().catch(() => {})
+        }
+        // Finally, reject
+        return reject(error)
+      })
   })
 }

@@ -20,8 +20,8 @@
   "scripts": {
     "lint": "standard",
     "format": "standard --fix",
-    "test": "jest --testPathIgnorePatterns=/test-debug/ && standard",
-    "debug": "jest test-debug/debug.test.js",
+    "test": "jest --testPathIgnorePatterns=/test-debug/ --detectOpenHandles && standard",
+    "debug": "jest test-debug/debug.test.js --detectOpenHandles",
     "prepare": "husky install"
   },
   "standard": {
@@ -34,6 +34,11 @@
       "/example-vite",
       "/test-debug"
     ]
+  },
+  "jest": {
+    "forceExit": true,
+    "clearMocks": true,
+    "resetModules": true
   },
   "keywords": [
     "html",

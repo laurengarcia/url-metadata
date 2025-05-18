@@ -75,6 +75,10 @@ const options = {
   // Fetch timeout in milliseconds, default is 10 seconds
   timeout: 10000,
 
+  // Node.js v6+ only: max size of response in bytes
+  // Set to 0 to disable
+  size: 0,
+
   // Charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
   // defaults to auto-detect in `Content-Type` header or meta tag
   // if none found, default `auto` option falls back to `utf-8`
