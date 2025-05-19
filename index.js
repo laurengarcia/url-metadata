@@ -41,15 +41,16 @@ module.exports = function (url, options) {
     // defaults
     {
       requestHeaders: {
-        'User-Agent': 'url-metadata',
+        'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
         From: 'example@example.com'
       },
-      requestFilteringAgentOptions: undefined, // Node.js v18+ only
-      cache: 'no-cache', // browser only
-      mode: 'cors', // browser only
+      requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
+      cache: 'no-cache', // Browser only
+      mode: 'cors', // Browser only
       maxRedirects: 10,
       timeout: 10000,
-      size: 0, // Node.js v6+ only
+      size: 0, // Node.js v6+ only; silently ignored by others
+      compress: true, // Node.js v6+ only; silently ignored by others
       decode: 'auto',
       descriptionLength: 750,
       ensureSecureImageRequest: true,
@@ -77,12 +78,13 @@ module.exports = function (url, options) {
       const requestOpts = {
         method: 'GET',
         headers: opts.requestHeaders,
-        agent: useAgent(url, opts.requestFilteringAgentOptions), // Node.js v18+ only
-        cache: opts.cache, // browser only
-        mode: opts.mode, // browser only
+        agent: useAgent(url, opts.requestFilteringAgentOptions),
+        cache: opts.cache,
+        mode: opts.mode,
         redirect: 'manual',
         timeout: opts.timeout,
-        size: opts.size // Node.js v6+ only
+        size: opts.size,
+        compress: opts.compress
       }
 
       // Make the fetch request

@@ -52,8 +52,8 @@ const options = {
 
   // Customize these default request headers:
   requestHeaders: {
-    'User-Agent': 'url-metadata',
-    'From': 'example@example.com'
+    'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
+    From: 'example@example.com'
   },
 
   // Node.js v18+ only, other envs (browser) ignore silently.
@@ -66,7 +66,7 @@ const options = {
   // Browser only: `fetch` API cache setting for request
   cache: 'no-cache',
 
-  // Browser only: `fetch` mode (ex: 'cors', 'same-origin', etc)
+  // Browser only: `fetch` API mode (ex: 'cors', 'same-origin', etc)
   mode: 'cors',
 
   // Maximum redirects in request chain, defaults to 10
@@ -76,8 +76,11 @@ const options = {
   timeout: 10000,
 
   // Node.js v6+ only: max size of response in bytes
-  // Set to 0 to disable
+  // Default set to 0 to disable max size
   size: 0,
+
+  // Node.js v6+ only; defaults to true
+  compress: true,
 
   // Charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
   // defaults to auto-detect in `Content-Type` header or meta tag
