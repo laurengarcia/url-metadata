@@ -9,10 +9,8 @@
             - [X] set custom `User-Agent`, keep `From` otherwise some hosts in the test suite serve response.status 400+
       - [X] pass max `size` option to our users from node-fetch
       - [X] pass `useAgent` thru to node-fetch
-      - [X] use raw buffer bc res.text() & res.json() decode to utf8 automatically --> otherwise: failing i18n tests!
       - [X] remove `decode` from request obj in `index.js`
-      - [X] ensure no relative or protocol-relative urls
-      - [X] handle all errors properly
+      - [X] handle all errors properly incl cleanup fetch requests
 
 - [ ] basic pdf support
       - [ ] /Info fields
