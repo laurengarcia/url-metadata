@@ -2,10 +2,10 @@
 
 5.1.0
 - separate entry points for browser and node.js
+- use `window.fetch` on browser side, let native browser security model protect against SSRF
 - use `node-fetch` v2 on node.js side to support proper SSRF filtering
 - add `options.compress` thru from `node-fetch` to our node.js user options
 - added npm url to `User-Agent` header
-- use `window.fetch` on browser side, let native browser security model protect against SSRF
 - improve cleanup & poss memory leaks when a fetch attempt errors out on node.js side
 
 5.0.5
