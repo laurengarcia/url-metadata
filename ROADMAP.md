@@ -1,5 +1,9 @@
 5.0+ Roadmap
 
+- [ ] basic pdf support
+      - [ ] /Info fields
+      - [ ] XMP fields
+
 - [X] use `node-fetch` v2 for now to get SSRF support
       - [X] README: clearly demarcate browser vs. node-only options
       - [X] request headers:
@@ -11,10 +15,7 @@
       - [X] pass `useAgent` thru to node-fetch
       - [X] remove `decode` from request obj in `index.js`
       - [X] handle all errors properly incl cleanup fetch requests
-
-- [ ] basic pdf support
-      - [ ] /Info fields
-      - [ ] XMP fields
+      - [X] split index.js into index.js & browser.js, test in both /example-* dirs w package.json "browser" field
 
 - [X] issue #97: prevent SSRF attacks
 - [X] issue #97: prevent infinite redirect loops

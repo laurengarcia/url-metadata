@@ -13,10 +13,16 @@
   },
   "homepage": "https://github.com/laurengarcia/url-metadata#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=6.0.0"
   },
   "main": "index.js",
+  "browser": "browser.js",
   "types": "index.d.ts",
+  "exports": {
+    "node": "./index.js",
+    "browser": "./browser.js",
+    "default": "./index.js"
+  },
   "scripts": {
     "lint": "standard",
     "format": "standard --fix",
