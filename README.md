@@ -25,7 +25,7 @@ To report a bug or request a feature please open an issue or pull request in [Gi
 
 
 ## Usage
-Works with Node.js versions `>=18.0.0` or in the browser when bundled with Webpack or Parcel (see `/example-typescript`). Under the hood, this package does some post-request processing on top of the `fetch` API. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` in your target environment.
+Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack or Parcel (see `/example-typescript`). Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` or Node.js version 6.0+ in your target environment.
 
 Install in your project:
 ```
@@ -50,47 +50,55 @@ The default options are the values below. To override the default options, pass 
 ```javascript
 const options = {
 
-  // custom request headers
+  // Customize these default request headers:
   requestHeaders: {
-    'User-Agent': 'url-metadata',
-    'From': 'example@example.com'
+    'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
+    From: 'example@example.com'
   },
 
-  // to prevent SSRF attacks, this default option blocks requests
-  // to private network & reserved IP addresses
-  // supported in Node.js v18+; other envs ignore silently
+  // Node.js v18+ only, other envs (browser) ignore silently.
+  // To prevent SSRF attacks, the default option below blocks
+  // requests to private network & reserved IP addresses via:
   // https://www.npmjs.com/package/request-filtering-agent
+  // Browser security policies prevent SSRF automatically.
   requestFilteringAgentOptions: undefined,
 
-  // `fetch` API cache setting for request
+  // Browser only: `fetch` API cache setting for request
   cache: 'no-cache',
 
-  // `fetch` mode (ex: 'cors', 'same-origin', etc)
+  // Browser only: `fetch` API mode (ex: 'cors', 'same-origin', etc)
   mode: 'cors',
 
-  // maximum redirects in request chain, defaults to 10
+  // Maximum redirects in request chain, defaults to 10
   maxRedirects: 10,
 
-  // fetch timeout in milliseconds, default is 10 seconds
+  // Fetch timeout in milliseconds, default is 10 seconds
   timeout: 10000,
 
-  // charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
+  // Node.js v6+ only: max size of response in bytes
+  // Default set to 0 to disable max size
+  size: 0,
+
+  // Node.js v6+ only; defaults to true
+  compress: true,
+
+  // Charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
   // defaults to auto-detect in `Content-Type` header or meta tag
   // if none found, default `auto` option falls back to `utf-8`
   // override by passing in charset here (ex: 'windows-1251'):
   decode: 'auto',
 
-  // number of characters to truncate description to
+  // Number of characters to truncate description to
   descriptionLength: 750,
 
-  // force image urls in selected tags to use https,
+  // Force image urls in selected tags to use https,
   // valid for images & favicons with full paths
   ensureSecureImageRequest: true,
 
-  // return raw response body as string
+  // Include raw response body as string
   includeResponseBody: false,
 
-  // alternate use-case: pass in `Response` object here to be parsed
+  // Alternate use-case: pass in `Response` object here to be parsed
   // see example below
   parseResponseObject: undefined
 };
@@ -137,7 +145,10 @@ const response = new Response(html, {
     'Content-Type': 'text/html'
   }
 });
-const metadata = await urlMetadata(null, { parseResponseObject: response });
+const metadata = await urlMetadata(null,
+{
+  parseResponseObject: response
+});
 console.log(metadata);
 ```
 
@@ -161,14 +172,16 @@ A basic template for the returned metadata object can be found in `lib/metadata-
 
 ### Troubleshooting
 
-**Issue:** `Response status code 0` or `CORS errors`. The `fetch` request failed at either the network or protocol level. Possible causes:
+**Issue:** `DNS Lookup` errors. The SSRF filtering agent defaults on this package prevent calls to private ip addresses, link-local addresses and reserved ip addresses. To change or disable this feature you need to pass custom `requestFilteringAgentOptions`. More info [here:](https://www.npmjs.com/package/request-filtering-agent).
+
+**Issue:** `No fetch implementation available`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js < v6). Try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
+
+**Issue:** `Response status code 0` or `CORS` errors. The `fetch` request failed at either the network or protocol level. Possible causes:
 
 - CORS errors. Try changing the mode option (ex: `cors`, `same-origin`, etc) or setting the `Access-Control-Allow-Origin` header on the server response from the url you are requesting if you have access to it.
 
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
 
 - A browser plugin such as an ad-blocker or privacy protector.
-
-**Issue:** `fetch is not defined`. Error thrown in a Node.js or browser environment that doesn't have `fetch` method available. Try upgrading your environment (Node.js version `>=18.0.0`), or you can use an earlier version of this package (version 2.5.0).
 
 **Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block.

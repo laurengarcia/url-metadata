@@ -13,6 +13,8 @@ declare namespace urlMetadata {
     mode?: string;
     maxRedirects?: number;
     timeout?: number;
+    size?: number;
+    compress?: boolean;
     decode?: string;
     descriptionLength?: number;
     ensureSecureImageRequest?: boolean;

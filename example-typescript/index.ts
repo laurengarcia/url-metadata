@@ -1,6 +1,5 @@
 import urlMetadata from 'url-metadata';
 
-
 (async function () {
   console.log('-- running 2 tests ---')
   try {
