@@ -17,3 +17,20 @@ test('default filtering agent opts blocks 127.0.0.1:8080', async () => {
     expect(err.message).toContain('is private IP address.')
   }
 })
+
+test('disable default filtering agent blocking request to 127.0.0.1:9191', async () => {
+  const url = 'http://127.0.0.1:9191'
+  try {
+    const metadata = await urlMetadata(url, {
+      requestFilteringAgentOptions: {
+        allowPrivateIPAddress: true
+      }
+    })
+    expect(metadata).toBeUndefined()
+  } catch (err) {
+    expect(err).toBeDefined()
+    // `ECONNREFUSED` error thrown when there's nothing
+    // running on 127.0.0.1:9191
+    expect(err.message).toContain('ECONNREFUSED')
+  }
+})
