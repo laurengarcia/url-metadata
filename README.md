@@ -15,11 +15,32 @@ Includes:
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 
+More details in the `Returns` section below.
+
 v5.0.0+ Protects against:
-- infinite redirect loops
+- Infinite redirect loops
 - SSRF attacks via `request-filtering-agent` in Node.js v18+ environments (custom options available)
 
-More details in the `Returns` section below.
+v5.1.0+:
+- Automatic environment detection: package now detects whether it's running in Node.js or a browser
+- Adds dedicated entry points for different environments
+```
+// in package.json:
+{
+  "main": "index.js",      // For Node.js
+  "browser": "browser.js", // For browsers
+  "exports": {
+    "node": "./index.js",
+    "browser": "./browser.js",
+    "default": "./index.js"
+  }
+}
+```
+- These changes reduce the bundle size on the browser
+- These changes are fully compatible with all modern bundlers (webpack, Rollup, Vite, Parcel) and require no code changes in your application
+- Added two new options:
+  - size: set a max size for the url in Node.js envs
+  - compress: support gzip/deflate content encoding in Node.js envs
 
 To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troublehsooting` section below *before* filing a bug.
 
@@ -80,6 +101,7 @@ const options = {
   size: 0,
 
   // Node.js v6+ only; defaults to true
+  // Support gzip/deflate content encoding, set `false` to disable
   compress: true,
 
   // Charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
@@ -118,7 +140,9 @@ try {
   const response = await fetch('https://www.npmjs.com/package/url-metadata');
   // ... do other stuff with it...
   // pass the `response` object to be parsed for its metadata
-  const metadata = await urlMetadata(null, { parseResponseObject: response });
+  const metadata = await urlMetadata(null, {
+    parseResponseObject: response
+  });
   console.log(metadata);
 } catch (err) {
   console.log(err);
@@ -145,8 +169,7 @@ const response = new Response(html, {
     'Content-Type': 'text/html'
   }
 });
-const metadata = await urlMetadata(null,
-{
+const metadata = await urlMetadata(null, {
   parseResponseObject: response
 });
 console.log(metadata);
