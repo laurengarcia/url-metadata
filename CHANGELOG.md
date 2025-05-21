@@ -6,8 +6,9 @@
 - add `options.compress` from `node-fetch` to our node.js user options
 - add `options.size` to set a max size for the response in Node.js envs
 - added npm url to the default `User-Agent` header
-- improve cleanup & memory leaks when a fetch attempt errors out
+- improve cleanup of memory leaks when a fetch attempt errors out
 - switch `/example-typescript` to webpack (vs. parcel)
+- update both /example- dirs to use the 5.1.0, ensure build works as expected
 
 5.0.5
 - add `/example-vite` directory (per issue #99)

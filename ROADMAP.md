@@ -13,7 +13,7 @@
             - [X] set custom `User-Agent`, keep `From` otherwise some hosts in the test suite serve response.status 400+
       - [X] pass max `size` option to our users from node-fetch
       - [X] pass `useAgent` thru to node-fetch
-      - [X] remove `decode` from request obj in `index.js`
+      - [X] remove `decode` from request obj in `main.js`
       - [X] handle all errors properly incl cleanup fetch requests
       - [X] split index.js into index.js & browser.js, test in both /example-* dirs w package.json "browser" field
 
