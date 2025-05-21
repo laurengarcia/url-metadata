@@ -17,11 +17,9 @@ Includes:
 
 More details in the `Returns` section below.
 
-v5.0.0+ Protects against:
+v5.1.0+ Protects against:
 - Infinite redirect loops
-- SSRF attacks via `request-filtering-agent` in Node.js v18+ environments (custom options available)
-
-v5.1.0+:
+- SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ environments (custom options available)
 - Automatic environment detection: package now detects whether it's running in Node.js or a browser
 - Adds dedicated entry points for different environments
 ```
@@ -36,8 +34,8 @@ v5.1.0+:
   }
 }
 ```
-- These changes reduce the bundle size on the browser
 - These changes are fully compatible with all modern bundlers (webpack, Rollup, Vite, Parcel) and require no code changes in your application
+- These changes reduce the bundle size on the browser
 - Added two new options:
   - size: set a max size for the url in Node.js envs
   - compress: support gzip/deflate content encoding in Node.js envs
