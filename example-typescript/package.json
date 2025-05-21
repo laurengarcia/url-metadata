@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "prebuild": "mkdir -p dist && cp index.html dist/ && cp metadata.html dist/",
     "build": "webpack",
     "start": "http-server dist"
   },
