@@ -40,7 +40,7 @@ Other new features:
 ```
 - These changes are fully compatible with all modern bundlers (Webpack, Rollup, Vite, Parcel) and require no code changes in your application. See /example directories included in package.
 - Added two new options:
-  - `size`: set a max size for the response in Node.js envs
+  - `size`: set a max size for the response in Node.js
   - `compress`: support gzip/deflate content encoding in Node.js
 
 To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
@@ -179,18 +179,19 @@ console.log(metadata);
 ### Returns
 Returns a promise resolved with an object. Note that the `url` field returned will be the last hop in the request chain. If you pass in a url from a url shortener you'll get back the final destination as the `url`.
 
-The returned `metadata` object consists of key/value pairs that are all strings, with a few exceptions:
-- `favicons` returns an array of objects containing key/value pairs (strings)
-- `jsonld` returns an array of objects
+The returned `metadata` object consists of key/value pairs as strings, with a few exceptions:
+- `favicons` is an array of objects containing key/value pairs of strings
+- `jsonld` is an array of objects
 - all meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings to conform to the [Google Scholar spec](https://www.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values. So if the html contains:
 ```
 <meta name="citation_author" content="Arlitsch, Kenning">
 <meta name="citation_author" content="OBrien, Patrick">
 ```
-... this module will return:
+... it will return as:
 ```
 'citation_author': ["Arlitsch, Kenning", "OBrien, Patrick"],
 ```
+- `responseHeaders` is an object containing key/value pairs of strings
 
 A basic template for the returned metadata object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object.
 
