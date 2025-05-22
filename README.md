@@ -196,7 +196,7 @@ A basic template for the returned metadata object can be found in `lib/metadata-
 
 ### Troubleshooting
 
-**Issue:** `DNS Lookup` errors. The SSRF filtering agent defaults on this package prevent calls to private ip addresses, link-local addresses and reserved ip addresses. To change or disable this feature you need to pass custom `requestFilteringAgentOptions`. More info [here:](https://www.npmjs.com/package/request-filtering-agent).
+**Issue:** `DNS Lookup` errors. The SSRF filtering agent defaults on this package prevent calls to private ip addresses, link-local addresses and reserved ip addresses. To change or disable this feature you need to pass custom `requestFilteringAgentOptions`. More info [here](https://www.npmjs.com/package/request-filtering-agent).
 
 **Issue:** `No fetch implementation available`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js < v6). Try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
 
