@@ -12,7 +12,7 @@ Includes:
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
 - h1-h6 tags
 - img tags
-- selected response headers
+- relevant response headers
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 

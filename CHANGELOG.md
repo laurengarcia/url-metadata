@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.1.1
+- return relevant `responseHeaders` with metadata (for details see lib/extract-headers.js)
+
 5.1.0
 - separate entry points for browser and node.js for more efficient bundling (see package.json) & SSRF support
 - switch to `node-fetch` v2 on node.js side to support proper SSRF filtering
