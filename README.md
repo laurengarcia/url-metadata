@@ -37,12 +37,12 @@ Other new features:
   }
 }
 ```
-- These changes are fully compatible with all modern bundlers (webpack, Rollup, Vite, Parcel) and require no code changes in your application. See /example directories included in package.
+- These changes are fully compatible with all modern bundlers (Webpack, Rollup, Vite, Parcel) and require no code changes in your application. See /example directories included in package.
 - Added two new options:
-  - size: set a max size for the url in Node.js envs
+  - size: set a max size for the response in Node.js envs
   - compress: support gzip/deflate content encoding in Node.js envs
 
-To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troublehsooting` section below *before* filing a bug.
+To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 
 
 ## Usage
@@ -96,7 +96,7 @@ const options = {
   // Fetch timeout in milliseconds, default is 10 seconds
   timeout: 10000,
 
-  // Node.js v6+ only: max size of response in bytes
+  // Node.js v6+ only: max size of response in bytes (uncompressed)
   // Default set to 0 to disable max size
   size: 0,
 
