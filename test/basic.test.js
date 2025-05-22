@@ -23,6 +23,8 @@ test('basic example', async () => {
     expect(metadata.imgTags[0].src).toBe('https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg')
     expect(metadata.imgTags[0].alt).toBe('TypeScript icon, indicating that this package has built-in type declarations')
     expect(metadata.imgTags[0].title).toBe('This package contains built-in TypeScript declarations')
+    expect(typeof metadata.responseHeaders).toBe('object')
+    expect(metadata.responseHeaders['content-type']).toBe('text/html')
   } catch (err) {
     expect(err).toBe(undefined)
   }

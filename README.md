@@ -12,6 +12,7 @@ Includes:
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
 - h1-h6 tags
 - img tags
+- selected response headers
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 
@@ -19,12 +20,12 @@ More details in the `Returns` section below.
 
 v5.1.0+ Protects against:
 - Infinite redirect loops
-- SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ environments (custom options available)
+- SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options available)
 
 Other new features:
 - Automatic environment detection: package now detects whether it's running in Node.js or a browser
 - These changes reduce the bundle size on the browser
-- Adds dedicated entry points for different environments
+- Dedicated entry points for different environments
 ```
 // in package.json:
 {
@@ -39,8 +40,8 @@ Other new features:
 ```
 - These changes are fully compatible with all modern bundlers (Webpack, Rollup, Vite, Parcel) and require no code changes in your application. See /example directories included in package.
 - Added two new options:
-  - size: set a max size for the response in Node.js envs
-  - compress: support gzip/deflate content encoding in Node.js envs
+  - `size`: set a max size for the response in Node.js envs
+  - `compress`: support gzip/deflate content encoding in Node.js
 
 To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 
@@ -77,7 +78,7 @@ const options = {
     From: 'example@example.com'
   },
 
-  // Node.js v18+ only, other envs (browser) ignore silently.
+  // Node.js v18+ only; other envs (browser) ignore silently.
   // To prevent SSRF attacks, the default option below blocks
   // requests to private network & reserved IP addresses via:
   // https://www.npmjs.com/package/request-filtering-agent

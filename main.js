@@ -105,11 +105,18 @@ module.exports = function (url, options, _fetch, useAgent) {
           charset = extractCharset(contentType, responseBuffer)
         }
 
-        // decode with charset
         try {
+          // decode with charset
           const decoder = new TextDecoder(charset)
           const responseDecoded = decoder.decode(responseBuffer)
-          resolve(parse(requestUrl, destinationUrl, responseDecoded, opts))
+          // now parse the metadata!
+          resolve(parse(
+            requestUrl,
+            destinationUrl,
+            responseDecoded,
+            currentResponse.headers,
+            opts
+          ))
         } catch (e) {
           return reject(new Error(`decoding with charset: ${charset}`))
         }
