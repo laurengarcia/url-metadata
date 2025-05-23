@@ -16,13 +16,17 @@
     "node": ">=6.0.0"
   },
   "main": "index.js",
-  "browser": "browser.js",
-  "types": "index.d.ts",
+  "browser": {
+    "./index.js": "./browser.js",
+    "node-fetch": false,
+    "request-filtering-agent": false
+  },
   "exports": {
     "node": "./index.js",
     "browser": "./browser.js",
     "default": "./index.js"
   },
+  "types": "index.d.ts",
   "scripts": {
     "lint": "standard",
     "format": "standard --fix",
