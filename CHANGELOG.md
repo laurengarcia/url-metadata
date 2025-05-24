@@ -1,7 +1,8 @@
 # CHANGELOG
 
 5.1.1
-- return relevant `responseHeaders` with metadata (for details see lib/extract-headers.js)
+- return relevant `responseHeaders` with metadata (see lib/extract-headers.js)
+- improve package.json browser bundling support
 
 5.1.0
 - separate entry points for browser and node.js for more efficient bundling (see package.json) & SSRF support
