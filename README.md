@@ -24,9 +24,8 @@ v5.1.0+ Protects against:
 
 Other new features:
 - Automatic environment detection: package now detects whether it's running in Node.js or a browser
-- These changes reduce the bundle size on the browser
-- Dedicated entry points for different environments
-- These changes are fully compatible with all modern bundlers (Webpack, Rollup, Vite, Parcel) and require no code changes in your application. See /example directories included in package.
+- Reduced bundle size on the browser
+- Fully compatible with all modern bundlers (Webpack, Rollup, Vite, Parcel) and require no code changes in your application. See /example directories included in package.
 - Added two new options:
   - `size`: set a max size for the response in Node.js
   - `compress`: support gzip/deflate content encoding in Node.js

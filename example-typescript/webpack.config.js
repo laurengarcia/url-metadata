@@ -16,19 +16,6 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     fallback: {
-      "http": require.resolve("stream-http"),
-      "https": require.resolve("https-browserify"),
-      "stream": require.resolve("stream-browserify"),
-      "buffer": require.resolve("buffer/"),
-      "util": require.resolve("util/"),
-      "assert": require.resolve("assert/"),
-      "url": require.resolve("url/"),
-      "net": false,
-      "tls": false,
-      "dns": false,
-      "fs": false,
-      "path": false,
-      "zlib": false
     }
   },
   plugins: [
