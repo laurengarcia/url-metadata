@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "5.1.1-beta.1",
+  "version": "5.1.1",
   "description": "Request a url and scrape the metadata from its HTML using Node.js or the browser.",
   "repository": {
     "type": "git",
