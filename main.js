@@ -12,6 +12,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         From: 'example@example.com'
       },
       requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
+      agent: undefined, // Node.js v6+ only; silently ignored by others
       cache: 'no-cache', // Browser only
       mode: 'cors', // Browser only
       maxRedirects: 10,
@@ -45,7 +46,7 @@ module.exports = function (url, options, _fetch, useAgent) {
       const requestOpts = {
         method: 'GET',
         headers: opts.requestHeaders,
-        agent: useAgent(url, opts.requestFilteringAgentOptions),
+        agent: opts.agent || useAgent(url, opts.requestFilteringAgentOptions),
         cache: opts.cache,
         mode: opts.mode,
         redirect: 'manual',

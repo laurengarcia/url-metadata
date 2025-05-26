@@ -1,7 +1,10 @@
 # CHANGELOG
 
+5.2.0
+- add `agent` option for Node v6+
+
 5.1.1
-- return relevant `responseHeaders` with metadata (see lib/extract-headers.js)
+- return relevant `responseHeaders` with metadata (see `lib/extract-headers.js`)
 - improve package.json browser bundling support
 
 5.1.0

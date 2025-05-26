@@ -16,6 +16,7 @@
       - [X] remove `decode` from request obj in `main.js`
       - [X] handle all errors properly incl cleanup fetch requests
       - [X] split index.js into index.js & browser.js, test in both /example-* dirs w package.json "browser" field
+      - [X] add `agent` option
 
 - [X] issue #97: prevent SSRF attacks
 - [X] issue #97: prevent infinite redirect loops

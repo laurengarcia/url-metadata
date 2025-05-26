@@ -9,6 +9,7 @@ declare namespace urlMetadata {
   interface Options {
     requestHeaders?: Record<string, string>;
     requestFilteringAgentOptions?: import('request-filtering-agent').RequestFilteringAgentOptions;
+    agent?: any; // Suggest: Node.js http.Agent | https.Agent
     cache?: string;
     mode?: string;
     maxRedirects?: number;

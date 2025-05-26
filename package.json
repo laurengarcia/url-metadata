@@ -1,17 +1,27 @@
 {
   "name": "url-metadata",
-  "version": "5.1.1",
+  "version": "5.2.0-beta.1",
   "description": "Request a url and scrape the metadata from its HTML using Node.js or the browser.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/laurengarcia/url-metadata.git"
-  },
-  "author": "Lauren Garcia <lauren.garcia@gmail.com> (https://github.com/laurengarcia)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/laurengarcia/url-metadata/issues"
-  },
-  "homepage": "https://github.com/laurengarcia/url-metadata#readme",
+  "keywords": [
+    "html",
+    "metadata",
+    "meta tags",
+    "scrape",
+    "scraper",
+    "parser",
+    "seo",
+    "url",
+    "article",
+    "citations",
+    "node",
+    "node.js",
+    "browser",
+    "og",
+    "open graph",
+    "og: tags",
+    "json-ld",
+    "twitter cards"
+  ],
   "engines": {
     "node": ">=6.0.0"
   },
@@ -50,26 +60,6 @@
     "clearMocks": true,
     "resetModules": true
   },
-  "keywords": [
-    "html",
-    "metadata",
-    "meta tags",
-    "scrape",
-    "scraper",
-    "parser",
-    "seo",
-    "url",
-    "article",
-    "citations",
-    "node",
-    "node.js",
-    "browser",
-    "og",
-    "open graph",
-    "og: tags",
-    "json-ld",
-    "twitter cards"
-  ],
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "node-fetch": "^2.7.0",
@@ -79,5 +69,15 @@
     "husky": "^8.0.3",
     "jest": "^29.5.0",
     "standard": "^17.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurengarcia/url-metadata.git"
+  },
+  "bugs": {
+    "url": "https://github.com/laurengarcia/url-metadata/issues"
+  },
+  "homepage": "https://github.com/laurengarcia/url-metadata#readme",
+  "author": "Lauren Garcia <lauren.garcia@gmail.com> (https://github.com/laurengarcia)",
+  "license": "MIT"
 }
