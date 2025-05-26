@@ -1,8 +1,8 @@
 # url-metadata
 
-Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an alternate mode that lets you pass in your own `Response` object as well (see `Options` section below).
+Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an optional mode that lets you pass in a string of html or a `Response` object as well (see `Options` section below).
 
-*Includes:*
+**Includes:**
 
 - meta tags
 - favicons
@@ -25,25 +25,29 @@ v5.1.0+ Protects against:
 To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 
 
-## Usage
-Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack (see `/example-typescript`) or Vite (see `/example-vite`). Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `fetch` or `node-fetch` in your target environment.
+## Install
+Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack (see `/example-typescript`) or Vite (see `/example-vite`). Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `node-fetch` or `window.fetch` in your target environment.
 
-*Install in your project:*
 ```
 npm install url-metadata --save
 ```
+
+## Usage
 
 In your project file:
 ```javascript
 const urlMetadata = require('url-metadata');
 
-try {
-  const url = 'https://www.npmjs.com/package/url-metadata';
-  const metadata = await urlMetadata(url);
-  console.log(metadata);
-} catch (err) {
-  console.log(err);
-}
+(async function () {
+  try {
+    const url = 'https://www.npmjs.com/package/url-metadata';
+    const metadata = await urlMetadata(url);
+    console.log(metadata);
+  } catch (err) {
+    console.log(err);
+  }
+})();
+
 ```
 
 ### Options & Defaults
