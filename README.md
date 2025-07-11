@@ -26,7 +26,7 @@ To report a bug or request a feature please open an issue or pull request in [Gi
 
 
 ## Install
-Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack (see `/example-typescript`) or Vite (see `/example-vite`). Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `node-fetch` or `window.fetch` in your target environment.
+Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack (see `/example-typescript`) or Vite (see `/example-vite`). For Next.js, see `/example-nextjs`. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `node-fetch` or `window.fetch` in your target environment.
 
 ```
 npm install url-metadata --save
