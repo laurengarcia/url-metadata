@@ -8,7 +8,7 @@ module.exports = function (url, options) {
 
   // Ensure we have a working fetch
   if (!_fetch) {
-    throw new Error('No fetch implementation available')
+    throw new Error('No fetch implementation found.')
   }
 
   return main(url, options, _fetch, useAgent)

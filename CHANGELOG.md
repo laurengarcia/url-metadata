@@ -1,5 +1,13 @@
 # CHANGELOG
 
+5.2.2
+- add og:image:alt to metadata returned
+- issue #103: improve Next.js support, add /example-nextjs directory
+- improve error messaging if fetch is undefined (browser vs node.js)
+
+5.2.1
+- just README changes
+
 5.2.0
 - add `agent` option for Node v6+
 
