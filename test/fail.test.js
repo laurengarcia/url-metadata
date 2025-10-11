@@ -24,7 +24,7 @@ test('fails gracefully when url param is missing', async () => {
 })
 
 test('fails gracefully on !response.ok', async () => {
-  // should 404
+  // should 403
   const url = 'https://www.npmjs.com/packageXXX/url-metadataXXX'
   try {
     const metadata = await urlMetadata(url)
@@ -32,7 +32,7 @@ test('fails gracefully on !response.ok', async () => {
     expect(metadata).toBeUndefined()
   } catch (err) {
     expect(err).toBeDefined()
-    expect(err.message).toContain('response code 404')
+    expect(err.message).toContain('response code 403')
   }
 })
 
@@ -48,8 +48,20 @@ test('fails gracefully when fetching non text/html', async () => {
   }
 })
 
+test('fails gracefully fetching .txt file', async () => {
+  const url = 'https://anthropic.com/robots.txt'
+  try {
+    const metadata = await urlMetadata(url)
+    // should not reach here, but just in case:
+    expect(metadata).toBeUndefined()
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.message).toContain('unsupported content type')
+  }
+})
+
 test('fails gracefully decoding with bad charset', async () => {
-  const url = 'https://www.npmjs.com/package/url-metadata'
+  const url = 'https://github.com'
   try {
     const metadata = await urlMetadata(url, { decode: 'FOO-BAR' })
     // should not reach here, but just in case:

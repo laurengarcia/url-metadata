@@ -1,5 +1,10 @@
 # CHANGELOG
 
+5.2.3
+- main.js: simplify contentType header rejection conditions
+- update tests
+- README change
+
 5.2.2
 - add og:image:alt to metadata returned
 - issue #103: improve Next.js support, add /example-nextjs directory

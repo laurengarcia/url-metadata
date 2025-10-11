@@ -166,7 +166,7 @@ console.log(metadata);
 ```
 
 ### Returns
-Returns a promise resolved with an object. Note that the `url` field returned will be the last hop in the request chain. If you pass in a url from a url shortener you'll get back the final destination as the `url`.
+Returns a promise resolved with a JSON object. Note that the `url` field returned will be the last hop in the request chain. If you pass in a url from a url shortener you'll get back the final destination as the `url`.
 
 A basic template for the returned metadata object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object.
 
