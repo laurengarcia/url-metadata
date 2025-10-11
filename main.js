@@ -87,9 +87,8 @@ module.exports = function (url, options, _fetch, useAgent) {
 
         // validate response content type
         contentType = response.headers.get('content-type')
-        const isText = contentType && contentType.startsWith('text')
         const isHTML = contentType && contentType.includes('html')
-        if (!isText || !isHTML) {
+        if (!isHTML) {
           return reject(new Error(`unsupported content type: ${contentType}`))
         }
 
