@@ -61,7 +61,7 @@ test('fails gracefully fetching .txt file', async () => {
 })
 
 test('fails gracefully decoding with bad charset', async () => {
-  const url = 'https://www.npmjs.com/package/url-metadata'
+  const url = 'https://github.com'
   try {
     const metadata = await urlMetadata(url, { decode: 'FOO-BAR' })
     // should not reach here, but just in case:
