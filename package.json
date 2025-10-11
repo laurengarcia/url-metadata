@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "description": "Request a url and scrape the metadata from its HTML using Node.js or the browser.",
   "keywords": [
     "html",
@@ -61,7 +61,7 @@
     "resetModules": true
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "^1.0.0",
     "node-fetch": "^2.7.0",
     "request-filtering-agent": "2.0.1"
   },
