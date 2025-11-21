@@ -1,9 +1,10 @@
 const urlMetadata = require('./../index')
 
 test('basic example', async () => {
-  const url = 'https://minifetch.com/'
+  const url = 'https://minifetch.com'
   try {
     const metadata = await urlMetadata(url)
+    expect(metadata.requestUrl).toBe(url)
     expect(metadata.url).toContain(url)
     expect(metadata.title).toBe('Minifetch.com: Fetch metadata from web pages')
     expect(metadata.lang).toBe('en')
@@ -21,12 +22,6 @@ test('basic example', async () => {
     expect(metadata.headings.length).toBeGreaterThan(3)
     expect(metadata.headings[0].level).toBe('h1')
     expect(metadata.headings[0].text).toBe('Minifetch.com')
-
-    // expect(metadata.imgTags.length).toBeGreaterThan(1)
-    // expect(metadata.imgTags[0].src).toBe('https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg')
-    // expect(metadata.imgTags[0].alt).toBe('TypeScript icon, indicating that this package has built-in type declarations')
-    // expect(metadata.imgTags[0].title).toBe('This package contains built-in TypeScript declarations')
-
     expect(typeof metadata.responseHeaders).toBe('object')
     expect(metadata.responseHeaders['content-type']).toContain('text/html')
   } catch (err) {
@@ -44,7 +39,7 @@ test('no error when favicons missing from page', async () => {
   }
 })
 
-test('favicons', async () => {
+test('favicons & images', async () => {
   const url = 'https://developer.apple.com/safari/resources/'
   const metadata = await urlMetadata(url, {
     requestHeaders: {
@@ -57,4 +52,9 @@ test('favicons', async () => {
   // Safari pinned tab 'mask-icons' can have 'color' attribute:
   expect(metadata.favicons[2].rel).toBe('mask-icon')
   expect(metadata.favicons[2].color).toBe('#333333')
+
+  expect(metadata.imgTags.length).toBeGreaterThan(1)
+  expect(metadata.imgTags[0].src).toContain('.png')
+  expect(metadata.imgTags[0].alt).toBe('')
+  expect(metadata.imgTags[0].title).toBe(undefined)
 })
