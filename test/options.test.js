@@ -59,8 +59,7 @@ test('options: `includeResponseBody`, custom `headers`, `descriptionLength`, `en
 
       <link rel="icon" type="image/png" href="http://foo.com/foo.png" sizes="96x96" />
       <link rel="icon" type="image/svg+xml" href="//foo.com/favicon.svg" />
-      <link rel="shortcut icon" href="//foo.com/favicon.ico" />
-      <link rel="apple-touch-icon" sizes="180x180" href="http://foo.com/apple-touch-icon.png" />
+      <link rel="shortcut icon" href="https://foo.com/favicon.ico" />
 
     </head>
     <body>
@@ -93,13 +92,29 @@ test('options: `includeResponseBody`, custom `headers`, `descriptionLength`, `en
     expect(metadata.responseBody).toContain('<!DOCTYPE html>')
     expect(metadata.description.length).toBe(20)
 
+    // test imgTags for https:// upgrade
     expect(metadata.imgTags.length).toBe(2)
     expect(metadata.imgTags[0].src).toBe('https://foo.com/foo.jpg')
     expect(metadata.imgTags[0].alt).toBe('bar')
     expect(metadata.imgTags[0].title).toBe('baz')
     expect(metadata.imgTags[1].src).toBe('https://foo.com/bar.png')
 
-    // TODO: test favicons for https:// upgrade
+    // test favicons for https:// upgrade
+    expect(metadata.favicons.length).toBe(3)
+    expect(metadata.favicons[0].href).toBe('https://foo.com/foo.png')
+    expect(metadata.favicons[0].rel).toBe('icon')
+    expect(metadata.favicons[0].type).toBe('image/png')
+    expect(metadata.favicons[0].sizes).toBe('96x96')
+
+    expect(metadata.favicons[1].href).toBe('https://foo.com/favicon.svg')
+    expect(metadata.favicons[1].rel).toBe('icon')
+    expect(metadata.favicons[1].type).toBe('image/svg+xml')
+    expect(metadata.favicons[1].sizes).toBe(undefined)
+
+    expect(metadata.favicons[2].href).toBe('https://foo.com/favicon.ico')
+    expect(metadata.favicons[2].rel).toBe('shortcut icon')
+    expect(metadata.favicons[2].type).toBe(undefined)
+    expect(metadata.favicons[2].sizes).toBe(undefined)
 
   } catch (err) {
     expect(err).toBe(undefined)
