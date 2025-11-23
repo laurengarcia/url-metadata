@@ -115,7 +115,6 @@ test('options: `includeResponseBody`, custom `headers`, `descriptionLength`, `en
     expect(metadata.favicons[2].rel).toBe('shortcut icon')
     expect(metadata.favicons[2].type).toBe(undefined)
     expect(metadata.favicons[2].sizes).toBe(undefined)
-
   } catch (err) {
     expect(err).toBe(undefined)
   }

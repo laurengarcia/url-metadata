@@ -8,7 +8,7 @@ const main = require('./main')
 
 module.exports = function (url, options) {
   // Handle Next.js bundler converting CommonJS `node-fetch` to ES module structure
-  const _fetch = typeof nodeFetch === 'function' ? nodeFetch : nodeFetch.default;
+  const _fetch = typeof nodeFetch === 'function' ? nodeFetch : nodeFetch.default
   const useAgent = requestFilteringAgent.useAgent
 
   // Ensure we have a working fetch
