@@ -1,5 +1,11 @@
 # CHANGELOG
 
+5.3.0
+- feature: add support for extracting `hreflang`
+- update README
+- bugfix: option `ensureSecureImageRequest`, with tests
+- add more meta tag types to the default metadata object template (see lib/metadata-fields.js). this does not change the metadata returned from this package at all, its more an aesthetic change to the data object since these fields would be included either way but they would be found at the "bottom" of the object before this change.
+
 5.2.3
 - main.js: simplify contentType header rejection conditions
 - update tests
