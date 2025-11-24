@@ -1,5 +1,7 @@
 const urlMetadata = require('./../index')
 
+/* eslint-disable */
+
 // https://ogp.me/
 test('og:type article', async () => {
 
@@ -135,6 +137,7 @@ test('og:type article', async () => {
     expect(err).toBe(undefined)
   }
 })
+/* eslint-enable */
 
 // https://developers.facebook.com/docs/opengraph/music/
 test('og:type music.song', async () => {
