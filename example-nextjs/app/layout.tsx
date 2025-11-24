@@ -1,6 +1,6 @@
 import { fetchMetadata } from './fetch';
 
-const metadata = await fetchMetadata('https://www.npmjs.com/package/url-metadata');
+const metadata = await fetchMetadata('https://minifetch.com');
 
 export default function RootLayout({
   children,
