@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.4.0
+- x402: special handling of 402 "payment required" response errors per the [x402](https://www.x402.org/) spec
+
 5.3.0
 - feature: add support for extracting `hreflang`
 - update README

@@ -8,7 +8,7 @@
     "start": "http-server dist"
   },
   "dependencies": {
-    "url-metadata": "^5.3.0"
+    "url-metadata": "^5.4.0"
   },
   "devDependencies": {
     "assert": "^2.1.0",

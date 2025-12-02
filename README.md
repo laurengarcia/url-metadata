@@ -16,14 +16,13 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 - relevant response headers
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
-
-More details in the `Returns` section below.
+- [x402](https://www.x402.org/) "payment required" support
 
 v5.1.0+ Protects against:
 - Infinite redirect loops
 - SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options available)
 
-To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
+More details below. To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 
 
 ## Install
@@ -46,6 +45,10 @@ const urlMetadata = require('url-metadata');
     console.log(metadata);
   } catch (err) {
     console.log(err);
+    // Optional: handle x402 "payment required" responses
+    if (err.paymentRequired && err.x402) {
+      // Handle x402 payment details
+    }
   }
 })();
 
@@ -123,6 +126,10 @@ try {
   console.log(metadata);
 } catch (err) {
   console.log(err);
+  // Optional: handle x402 "payment required" responses
+  if (err.paymentRequired && err.x402) {
+    // Handle x402 payment details
+  }
 }
 
 // Alternate use-case: parse a Response object instead
