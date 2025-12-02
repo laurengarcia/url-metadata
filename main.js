@@ -75,6 +75,24 @@ module.exports = function (url, options, _fetch, useAgent) {
           return reject(new Error(`response is ${typeof response}`))
         }
         if (!response.ok) {
+          // Special handling for 402 Payment Required
+          if (response.status === 402) {
+            const contentType = response.headers.get('content-type')
+            if (contentType && contentType.includes('application/json')) {
+              return response.json()
+                .then(x402Data => {
+                  const error = new Error(`response code ${response.status}`)
+                  error.paymentRequired = true
+                  error.x402 = x402Data
+                  return reject(error)
+                })
+                .catch(() => {
+                  // If JSON parsing fails, fall through to regular error
+                  return reject(new Error(`response code ${response.status}`))
+                })
+            }
+          }
+          // Non-402 responses:
           return reject(new Error(`response code ${response.status}`))
         }
 

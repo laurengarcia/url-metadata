@@ -22,5 +22,11 @@ declare namespace urlMetadata {
     includeResponseBody?: boolean;
     parseResponseObject?: globalThis.Response | import('node-fetch').Response;
   }
+
   type Result = Record<string, string | boolean | undefined | any | any[]>;
+
+  interface UrlMetadataError extends Error {
+    paymentRequired?: boolean;
+    x402?: Record<string, any>;
+  }
 }
