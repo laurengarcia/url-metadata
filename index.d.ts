@@ -23,7 +23,7 @@ declare namespace urlMetadata {
     parseResponseObject?: globalThis.Response | import('node-fetch').Response;
   }
 
-  type Result = Record<string, string | boolean | undefined | any | any[]>;
+  type Result = Record<string, string | boolean | number | null | undefined | any | any[]>;
 
   interface UrlMetadataError extends Error {
     paymentRequired?: boolean;

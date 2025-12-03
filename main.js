@@ -132,6 +132,7 @@ module.exports = function (url, options, _fetch, useAgent) {
             requestUrl,
             destinationUrl,
             responseDecoded,
+            currentResponse.status,
             currentResponse.headers,
             opts
           ))
