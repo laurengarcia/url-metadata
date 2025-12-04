@@ -7,15 +7,15 @@ import urlMetadata from 'url-metadata';
       mode: 'same-origin',
       includeResponseBody: true
     });
-    console.log('2/ fetch local metadata.html:', metadata);
-  } catch(err) {
-    console.log(err);
+    console.log('1/ fetch local metadata.html:', metadata);
+  } catch(error) {
+    const err = error as urlMetadata.UrlMetadataError;
+    console.log(err)
   }
 })();
 
 (async function () {
   try {
-
     const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -35,12 +35,11 @@ import urlMetadata from 'url-metadata';
         'Content-Type': 'text/html'
       }
     })
-
     // pass null `url` param & response object as option
     const metadata = await urlMetadata(null, { parseResponseObject: response })
-
-    console.log('1/ html string:', metadata);
-  } catch(err) {
+    console.log('2/ parse html string:', metadata);
+  } catch(error) {
+    const err = error as urlMetadata.UrlMetadataError;
     console.log(err);
   }
 })();

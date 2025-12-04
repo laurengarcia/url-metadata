@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.4.1
+- add response status code to metadata object as well as errors where appropriate
+
 5.4.0
 - x402: special handling of 402 "payment required" response errors per the [x402](https://www.x402.org/) spec
 
