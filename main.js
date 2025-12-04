@@ -1,5 +1,6 @@
 const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
+const createHttpError = require('./lib/http-error')
 
 module.exports = function (url, options, _fetch, useAgent) {
   if (!options || typeof options !== 'object') options = {}
@@ -71,33 +72,32 @@ module.exports = function (url, options, _fetch, useAgent) {
   return new Promise((resolve, reject) => {
     fetchData(url)
       .then((response) => {
+        // First, set `currentResponse` in case of error
+        currentResponse = response
+
         if (!response) {
           return reject(new Error(`response is ${typeof response}`))
         }
         if (!response.ok) {
+
           // Special handling for 402 Payment Required
           if (response.status === 402) {
             const contentType = response.headers.get('content-type')
             if (contentType && contentType.includes('application/json')) {
               return response.json()
                 .then(x402Data => {
-                  const error = new Error(`response code ${response.status}`)
-                  error.paymentRequired = true
-                  error.x402 = x402Data
-                  return reject(error)
+                  return reject(createHttpError(`response code ${response.status}`, response.status, true, x402Data))
                 })
                 .catch(() => {
-                  // If JSON parsing fails, fall through to regular error
-                  return reject(new Error(`response code ${response.status}`))
+                  // If JSON parsing fails
+                  return reject(createHttpError(`response code ${response.status}`, response.status, true))
                 })
             }
           }
-          // Non-402 responses:
-          return reject(new Error(`response code ${response.status}`))
-        }
 
-        // Set `currentResponse` in case of error
-        currentResponse = response
+          // Handle other non-402 responses:
+          return reject(createHttpError(`response code ${response.status}`, response.status))
+        }
 
         // disambiguate `requestUrl` from final destination url
         // (ex: links shortened by bit.ly)
@@ -107,7 +107,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         contentType = response.headers.get('content-type')
         const isHTML = contentType && contentType.includes('html')
         if (!isHTML) {
-          return reject(new Error(`unsupported content type: ${contentType}`))
+          return reject(createHttpError(`unsupported content type: ${contentType}`, response.status))
         }
 
         return response.arrayBuffer()
@@ -137,10 +137,11 @@ module.exports = function (url, options, _fetch, useAgent) {
             opts
           ))
         } catch (e) {
-          return reject(new Error(`decoding with charset: ${charset}`))
+          return reject(createHttpError(`decoding with charset: ${charset}`, currentResponse.status))
         }
       })
       .catch(error => {
+        // Catch-all block for errors not explicitly rejected above
         // Cleanup resources to avoid memory leaks
         if (currentResponse && currentResponse.body) {
           // Destroy the body stream `node-fetch` uses to force-close the connection
@@ -149,6 +150,10 @@ module.exports = function (url, options, _fetch, useAgent) {
           else if (typeof currentResponse.body.cancel === 'function') currentResponse.body.cancel().catch(() => {})
           // Fallback: consume the stream to close the connection
           else if (typeof currentResponse.text === 'function') currentResponse.text().catch(() => {})
+        }
+        // Set status code on error if it wasn't set already
+        if (currentResponse && currentResponse.status && !error.statusCode) {
+          error.statusCode = currentResponse.status
         }
         // Finally, reject
         return reject(error)

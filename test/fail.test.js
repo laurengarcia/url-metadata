@@ -23,6 +23,25 @@ test('fails gracefully when url param is missing', async () => {
   }
 })
 
+test('fails gracefully on DNS errors', async () => {
+  try {
+    // note: url typo (missing "i"), DNS doesn't resolve!
+    const url = 'https://minfetch.com'
+    const metadata = await urlMetadata(url)
+    // should not reach here, but just in case:
+    expect(metadata).toBeUndefined()
+  } catch (err) {
+    expect(err).toBeDefined()
+    // This error thrown by `node-fetch` or native fetch
+    expect(err.message).toContain('getaddrinfo ENOTFOUND')
+    expect(err.type).toBe('system')
+    // ENOTFOUND = Error: Not Found = DNS lookup error from `node-fetch`
+    expect(err.errno).toBe('ENOTFOUND')
+    expect(err.code).toBe('ENOTFOUND')
+  }
+})
+
+
 test('fails gracefully on !response.ok', async () => {
   // should 403
   const url = 'https://www.npmjs.com/packageXXX/url-metadataXXX'
@@ -33,6 +52,20 @@ test('fails gracefully on !response.ok', async () => {
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('response code 403')
+    expect(err.statusCode).toBe(403)
+  }
+})
+
+test('fails gracefully on 404', async () => {
+  try {
+    const url = 'https://nichenetworks.io/foo'
+    const metadata = await urlMetadata(url)
+    // should not reach here, but just in case:
+    expect(metadata).toBeUndefined()
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.message).toContain('404')
+    expect(err.statusCode).toBe(404)
   }
 })
 
@@ -45,6 +78,7 @@ test('fails gracefully when fetching non text/html', async () => {
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('unsupported content type')
+    expect(err.statusCode).toBe(200)
   }
 })
 
@@ -57,6 +91,7 @@ test('fails gracefully fetching .txt file', async () => {
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('unsupported content type')
+    expect(err.statusCode).toBe(200)
   }
 })
 
@@ -69,6 +104,7 @@ test('fails gracefully decoding with bad charset', async () => {
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('decoding with charset')
+    expect(err.statusCode).toBe(200)
   }
 })
 
@@ -81,6 +117,7 @@ test('fails gracefully when option `parseResponseObject` is empty object', async
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('response code undefined')
+    expect(err.statusCode).toBeUndefined()
   }
 })
 
