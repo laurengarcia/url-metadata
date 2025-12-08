@@ -31,6 +31,7 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 - h1-h6 tags
 - img tags
 - relevant response headers & status code
+- redirect count and array of redirect urls in request chain
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 - [x402](https://www.x402.org/) "payment required" support
@@ -196,6 +197,7 @@ Returns a promise resolved with a JSON object. Note that the `url` field returne
 A basic template for the returned metadata object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object.
 
 The returned `metadata` object consists of key/value pairs as strings, with a few exceptions:
+- `redirects` is an object with a `count` (number) and `chain` (array of urls as strings)
 - `hreflang`, `favicons`, and `responseHeaders` is an array of objects containing key/value pairs of strings
 - `jsonld` is an array of objects
 - all meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings to conform to the [Google Scholar spec](https://www.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values. So if the html contains:
