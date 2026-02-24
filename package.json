@@ -5,7 +5,7 @@
   "keywords": [
     "html",
     "metadata",
-    "meta tags",
+    "meta-tags",
     "scrape",
     "scraper",
     "parser",
@@ -17,10 +17,10 @@
     "node.js",
     "browser",
     "og",
-    "open graph",
-    "og: tags",
+    "open-graph",
+    "og-tags",
     "json-ld",
-    "twitter cards"
+    "twitter-cards"
   ],
   "engines": {
     "node": ">=6.0.0"
@@ -37,6 +37,16 @@
     "default": "./index.js"
   },
   "types": "index.d.ts",
+  "files": [
+    "lib",
+    "browser.js",
+    "CHANGELOG.md",
+    "index.d.ts",
+    "index.js",
+    "LICENSE",
+    "main.js",
+    "README.md"
+  ],
   "scripts": {
     "lint": "standard",
     "format": "standard --fix",
