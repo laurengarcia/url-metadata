@@ -9,7 +9,7 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
     <img src="https://minifetch.com/minifetch-dog-logo--whitebg.png" width="60" alt="Minifetch.com" />
   </a>
   <p><i><strong>Want to extract data from web pages without managing infrastructure? <a href="https://minifetch.com">Minifetch</a></strong> is a hosted data extraction API built on this library. Drop-in replacement, competitive pay-as-you-go pricing at fractions of a cent per request. Perfect for AI Agents and SEO research:</i>
-  <a href="https://www.npmjs.com/package/minifetch-api">`npm install minifetch-api`</a>
+  <p><a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a></p>
   </p>
 </div>
 
