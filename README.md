@@ -1,8 +1,19 @@
 # url-metadata
 
+[![npm version](https://badge.fury.io/js/url-metadata.svg)](https://badge.fury.io/js/url-metadata)
+
 Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an optional mode that lets you pass in a string of html or a `Response` object as well (see `Options` section below).
 
-**Includes:**
+<div align="center">
+  <a href="https://minifetch.com">
+    <img src="https://minifetch.com/minifetch-dog-logo--whitebg.png" width="60" alt="Minifetch.com" />
+  </a>
+  <p><i><strong>Want to extract data from web pages without managing infrastructure? <a href="https://minifetch.com">Minifetch</a></strong> is a hosted data extraction API built on this library. Drop-in replacement, competitive pay-as-you-go pricing at fractions of a cent per request. Perfect for AI Agents and SEO research:</i>
+  <a href="https://www.npmjs.com/package/minifetch-api">`npm install minifetch-api`</a>
+  </p>
+</div>
+
+## **Includes:**
 
 - meta tags
 - hreflang
@@ -26,7 +37,7 @@ More details below. To report a bug or request a feature please open an issue or
 
 
 ## Install
-Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack (see `/example-typescript`) or Vite (see `/example-vite`). For Next.js, see `/example-nextjs`. Use previous version `2.5.0` which uses the (now-deprecated) `request` module if you don't have access to `node-fetch` or `window.fetch` in your target environment.
+Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack (see `/example-typescript`) or Vite (see `/example-vite`) in the github repo. For Next.js, see `/example-nextjs`.
 
 ```
 npm install url-metadata --save
@@ -193,6 +204,8 @@ The returned `metadata` object consists of key/value pairs as strings, with a fe
 
 ### Troubleshooting
 
+**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block. You may also try the hosted version of this library, [Minifetch](https://www.npmjs.com/package/minifetch-api), which follows industry-standard best practices for extracting data from web pages.
+
 **Issue:** `DNS Lookup` errors. The SSRF filtering agent defaults on this package prevent calls to private ip addresses, link-local addresses and reserved ip addresses. To change or disable this feature you need to pass custom `requestFilteringAgentOptions`. More info [here](https://www.npmjs.com/package/request-filtering-agent).
 
 **Issue:** `No fetch implementation found`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js < v6). File a GitHub issue or try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
@@ -204,5 +217,3 @@ The returned `metadata` object consists of key/value pairs as strings, with a fe
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
 
 - A browser plugin such as an ad-blocker or privacy protector.
-
-**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block.
