@@ -1,5 +1,16 @@
 # CHANGELOG
 
+5.4.4
+- update README
+
+5.4.3
+- update README
+- update /example-typescript
+
+5.4.2
+- update README
+- remove extra files from publish to make bundle size smaller
+
 5.4.1
 - add response status code to metadata object as well as errors where appropriate
 
