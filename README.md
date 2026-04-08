@@ -4,15 +4,21 @@
 
 Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an optional mode that lets you pass in a string of html or a `Response` object as well (see `Options` section below).
 
+---
 <div align="center">
-  <a href="https://minifetch.com">
+  <a href="https://www.npmjs.com/package/minifetch-api">
     <img src="https://minifetch.com/minifetch-dog-logo--whitebg.png" width="60" alt="Minifetch.com" />
   </a>
-  <p><i><strong>Want to extract data from web pages without managing infrastructure? <a href="https://minifetch.com">Minifetch</a></strong> is a hosted data extraction API built on this library. Drop-in replacement, competitive pay-as-you-go pricing at fractions of a cent per request. Perfect for AI Agents and SEO research:</i>
+  <p><i><strong>Want to extract data from web pages without managing infrastructure? <a href="https://www.npmjs.com/package/minifetch-api">Minifetch</a></strong> is a hosted data extraction API built on this library. Perfect for AI Agents and SEO research:</i>
   <p><a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a></p>
-  </p>
+  </p><i>
+    <strong>🎉 Sign up for an account & get free credits to start 🎉 </strong>
+    <br />
+    Now accepting credit cards as well as x402 USDC payments on Base + Solana.
+  </i></p>
 </div>
 
+---
 ## **Includes:**
 
 - meta tags
