@@ -21,6 +21,9 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 ---
 ## **Includes:**
 
+- relevant response headers & status code
+- redirects
+- automatic charset detection & decoding (optional)
 - meta tags
 - hreflang
 - favicons
@@ -30,9 +33,6 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
 - h1-h6 tags
 - img tags
-- relevant response headers & status code
-- redirect count and array of redirect urls in request chain
-- automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 - [x402](https://www.x402.org/) "payment required" support
 

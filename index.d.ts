@@ -26,13 +26,13 @@ declare namespace urlMetadata {
   type Result = Record<string, string | boolean | number | undefined | any | any[]>;
 
   interface UrlMetadataError extends Error {
-    requestUrl: '', // the url the user passed in
-    url: '', // final destination url in request chain
-    statusCode?: number;
+    requestUrl?: string; // the url the user passed in
     redirects?: {
       count: number;
-      chain: string[];  // ordered from original request url to final destination url
+      chain: any[]
     };
+    url?: string; // final destination url in request chain
+    statusCode?: number;
     paymentRequired?: boolean;
     x402?: Record<string, any>;
   }

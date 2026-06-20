@@ -26,13 +26,13 @@ test('fails gracefully when url param is missing', async () => {
 test('fails gracefully on DNS errors', async () => {
   try {
     // note: url typo (missing "i"), DNS doesn't resolve!
-    const url = 'https://minfetch.com'
+    const url = 'https://something.invalid'
     const metadata = await urlMetadata(url)
     // should not reach here, but just in case:
     expect(metadata).toBeUndefined()
   } catch (err) {
     expect(err).toBeDefined()
-    // This error thrown by `node-fetch` or native fetch
+    // This error thrown by `node-fetch`
     expect(err.message).toContain('getaddrinfo ENOTFOUND')
     expect(err.type).toBe('system')
     // ENOTFOUND = Error: Not Found = DNS lookup error from `node-fetch`

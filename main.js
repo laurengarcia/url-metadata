@@ -32,13 +32,19 @@ module.exports = function (url, options, _fetch, useAgent) {
 
   let requestUrl = ''
   let destinationUrl = ''
+  let redirects = {
+    count: 0,
+    chain: []
+  }
   let contentType
   let charset
   let currentResponse = null
 
   async function fetchData (_url, redirectCount = 0) {
     if (redirectCount > opts.maxRedirects) {
-      throw new Error('too many redirects')
+      const err = new Error('too many redirects')
+      err.redirects = redirects
+      throw err
     }
     if (!_url && opts.parseResponseObject) {
       return opts.parseResponseObject
@@ -59,8 +65,17 @@ module.exports = function (url, options, _fetch, useAgent) {
       // Make the fetch request
       const response = await _fetch(_url, requestOpts)
 
+      // Handle 3xx redirects
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
         const newUrl = new URL(response.headers.get('location'), url).href
+        // Collect redirects in object that is passed back to user
+        redirects.count = redirectCount + 1
+        redirects.chain.push({
+          order: redirects.count,
+          url: _url,
+          statusCode: response.status
+        })
+        // Finally, follow the redirect
         return fetchData(newUrl, redirectCount + 1)
       }
       return response
@@ -130,6 +145,7 @@ module.exports = function (url, options, _fetch, useAgent) {
           // now parse the metadata!
           resolve(parse(
             requestUrl,
+            redirects,
             destinationUrl,
             responseDecoded,
             currentResponse.status,
@@ -144,7 +160,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         // Catch-all block for errors not explicitly rejected above
         // Cleanup resources to avoid memory leaks
         if (currentResponse && currentResponse.body) {
-          // Destroy the body stream `node-fetch` uses to force-close the connection
+          // Node.js: Destroy the body stream `node-fetch` uses to force-close the connection
           if (typeof currentResponse.body.destroy === 'function') currentResponse.body.destroy()
           // Modern browsers and Node.js 18+ have cancel() on the ReadableStream
           else if (typeof currentResponse.body.cancel === 'function') currentResponse.body.cancel().catch(() => {})
