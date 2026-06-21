@@ -41,7 +41,6 @@ test('fails gracefully on DNS errors', async () => {
   }
 })
 
-
 test('fails gracefully on !response.ok', async () => {
   // should 403
   const url = 'https://www.npmjs.com/packageXXX/url-metadataXXX'

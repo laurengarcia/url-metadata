@@ -30,9 +30,9 @@ module.exports = function (url, options, _fetch, useAgent) {
     options
   )
 
-  let requestUrl = url
+  const requestUrl = url
   let destinationUrl = ''
-  let redirects = {
+  const redirects = {
     count: 0,
     chain: []
   }
@@ -42,9 +42,10 @@ module.exports = function (url, options, _fetch, useAgent) {
 
   async function fetchData (_url, redirectCount = 0) {
     if (redirectCount > opts.maxRedirects) {
-      const err = new Error('too many redirects')
-      err.redirects = redirects
-      throw err
+      throw createHttpError({ msg: 'too many redirects', redirects })
+    }
+    if (!_url && !opts.parseResponseObject) {
+      throw new Error('url parameter is missing')
     }
     if (!_url && opts.parseResponseObject) {
       return opts.parseResponseObject
@@ -78,8 +79,6 @@ module.exports = function (url, options, _fetch, useAgent) {
         return fetchData(newUrl, redirectCount + 1)
       }
       return response
-    } else if (!_url) {
-      throw new Error('url parameter is missing')
     }
   }
 
@@ -90,30 +89,29 @@ module.exports = function (url, options, _fetch, useAgent) {
         currentResponse = response
 
         if (!response) {
-          return reject(new Error(`response is ${typeof response}`))
+          return reject(createHttpError({ msg: `response is ${typeof response}`, redirects }))
         }
         if (!response.ok) {
-
           // Special handling for 402 Payment Required
           if (response.status === 402) {
             const contentType = response.headers.get('content-type')
             if (contentType && contentType.includes('application/json')) {
               return response.json()
                 .then(x402Data => {
-                  return reject(createHttpError(`response code ${response.status}`, response.status, true, x402Data))
+                  return reject(createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: x402Data }))
                 })
                 .catch(() => {
                   // If JSON parsing fails
-                  return reject(createHttpError(`response code ${response.status}`, response.status, true))
+                  return reject(createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true }))
                 })
             }
           }
 
           // Handle other non-402 responses:
-          return reject(createHttpError(`response code ${response.status}`, response.status))
+          return reject(createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects }))
         }
 
-        // disambiguate `requestUrl` from final destination url
+        // disambiguate `requestUrl` from final destination `url`
         // (ex: links shortened by bit.ly)
         if (response.url) destinationUrl = response.url
 
@@ -121,7 +119,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         contentType = response.headers.get('content-type')
         const isHTML = contentType && contentType.includes('html')
         if (!isHTML) {
-          return reject(createHttpError(`unsupported content type: ${contentType}`, response.status))
+          return reject(createHttpError({ msg: `unsupported content type: ${contentType}`, statusCode: response.status, redirects }))
         }
 
         return response.arrayBuffer()
@@ -152,7 +150,7 @@ module.exports = function (url, options, _fetch, useAgent) {
             opts
           ))
         } catch (e) {
-          return reject(createHttpError(`decoding with charset: ${charset}`, currentResponse.status))
+          return reject(createHttpError({ msg: `decoding with charset: ${charset}`, statusCode: currentResponse.status, redirects }))
         }
       })
       .catch(error => {
