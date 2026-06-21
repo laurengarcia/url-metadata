@@ -30,7 +30,7 @@ module.exports = function (url, options, _fetch, useAgent) {
     options
   )
 
-  let requestUrl = ''
+  let requestUrl = url
   let destinationUrl = ''
   let redirects = {
     count: 0,
@@ -49,11 +49,10 @@ module.exports = function (url, options, _fetch, useAgent) {
     if (!_url && opts.parseResponseObject) {
       return opts.parseResponseObject
     } else if (_url) {
-      requestUrl = url
       const requestOpts = {
         method: 'GET',
         headers: opts.requestHeaders,
-        agent: opts.agent || useAgent(url, opts.requestFilteringAgentOptions),
+        agent: opts.agent || ((parsedURL) => useAgent(parsedURL.href, opts.requestFilteringAgentOptions)),
         cache: opts.cache,
         mode: opts.mode,
         redirect: 'manual',
