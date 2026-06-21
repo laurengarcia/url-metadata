@@ -53,6 +53,10 @@ module.exports = function (url, options, _fetch, useAgent) {
       const requestOpts = {
         method: 'GET',
         headers: opts.requestHeaders,
+        // If the user doesn't pass in their own agent:
+        // Hand `node-fetch` the agent function so it resolves the agent against its own `parsedURL`
+        // When agent is a function, `node-fetch` calls it with the parsed URL of the request it's
+        // about to make, and uses the return value as the agent for that request:
         agent: opts.agent || ((parsedURL) => useAgent(parsedURL.href, opts.requestFilteringAgentOptions)),
         cache: opts.cache,
         mode: opts.mode,
