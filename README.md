@@ -34,7 +34,7 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 - h1-h6 tags
 - img tags
 - the full response body as a string of html (optional)
-- [x402](https://www.x402.org/) "payment required" support
+- [x402](https://www.x402.org/) "payment required" error support
 
 v5.1.0+ Protects against:
 - Infinite redirect loops

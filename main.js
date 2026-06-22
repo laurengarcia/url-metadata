@@ -95,7 +95,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         currentResponse = response
 
         // Disambiguate `requestUrl` from final `url`
-        // (ex: redirects, links shortened by bit.ly)
+        // (ex: redirects, links shortened by bit.ly, etc)
         if (response.url) finalUrl = response.url
 
         if (!response) {
@@ -103,22 +103,42 @@ module.exports = function (url, options, _fetch, useAgent) {
         }
 
         if (!response.ok) {
-          // Special handling for 402 Payment Required
+          const throwGenericError = () => {
+            throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, requestUrl, url: finalUrl })
+          }
           if (response.status === 402) {
+            // x402 v2: the PAYMENT-REQUIRED header itself is the identifier.
+            const paymentRequiredHeader = response.headers.get('payment-required')
+            if (paymentRequiredHeader) {
+              let x402Data
+              try {
+                x402Data = JSON.parse(Buffer.from(paymentRequiredHeader.trim(), 'base64').toString('utf8'))
+              } catch {
+                // Identified as x402 but undecodable → x402 fails over to undefined.
+              }
+              throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: x402Data, requestUrl, url: finalUrl })
+            }
+            // x402 v1: the body markers (x402Version / accepts) are the identifier.
             const contentType = response.headers.get('content-type')
             if (contentType && contentType.includes('application/json')) {
-              return response.json()
-                .then(
-                  // Successful json parse, throw w rich x402 data:
-                  (x402Data) => { throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: x402Data, requestUrl, url: finalUrl }) },
-                  // Failed json parse, omit:
-                  () => { throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, requestUrl, url: finalUrl }) }
-                )
+              return response.json().then(
+                // Successful body parse:
+                (body) => {
+                  const isX402 = body && (Array.isArray(body.accepts) || body.x402Version !== undefined)
+                  if (isX402) {
+                    throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: body, requestUrl, url: finalUrl })
+                  }
+                  throwGenericError() // JSON 402, no x402 markers (MPP, Lightning, quota) → generic
+                },
+                // Failed body parse, can't confirm x402:
+                throwGenericError
+              )
             }
           }
 
-          // Throw other non-402 responses:
-          throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, requestUrl, url: finalUrl })
+          // All others get generic error:
+          // non-402, or a 402 we couldn't positively identify as x402.
+          throwGenericError()
         }
 
         // Validate response content type

@@ -40,7 +40,7 @@ declare namespace urlMetadata {
     url?: string; // final destination url in request chain
     statusCode?: number;
     paymentRequired?: boolean;
-    x402?: Record<string, any>;
+    x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
     // errors that *may* fall thru from `node-fetch` dependency in Node.js v6+:
     type?: string;
     errno?: string;
