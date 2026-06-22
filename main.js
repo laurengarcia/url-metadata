@@ -121,18 +121,19 @@ module.exports = function (url, options, _fetch, useAgent) {
             // x402 v1: the body markers (x402Version / accepts) are the identifier.
             const contentType = response.headers.get('content-type')
             if (contentType && contentType.includes('application/json')) {
-              return response.json().then(
-                // Successful body parse:
-                (body) => {
-                  const isX402 = body && (Array.isArray(body.accepts) || body.x402Version !== undefined)
-                  if (isX402) {
-                    throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: body, requestUrl, url: finalUrl })
-                  }
-                  throwGenericError() // JSON 402, no x402 markers (MPP, Lightning, quota) → generic
-                },
-                // Failed body parse, can't confirm x402:
-                throwGenericError
-              )
+              return response.json()
+                .then(
+                  // Successful body parse:
+                  (body) => {
+                    const isX402 = body && (Array.isArray(body.accepts) || body.x402Version !== undefined)
+                    if (isX402) {
+                      throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: body, requestUrl, url: finalUrl })
+                    }
+                    throwGenericError() // JSON 402, no x402 markers (MPP, Lightning, quota) → generic
+                  },
+                  // Failed body parse, can't confirm x402:
+                  throwGenericError
+                )
             }
           }
 
