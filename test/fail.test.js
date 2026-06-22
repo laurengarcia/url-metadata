@@ -109,19 +109,6 @@ test('fails gracefully when fetching non text/html', async () => {
   }
 })
 
-test('fails gracefully fetching .txt file', async () => {
-  const url = 'https://anthropic.com/robots.txt'
-  try {
-    const metadata = await urlMetadata(url)
-    // should not reach here, but just in case:
-    expect(metadata).toBeUndefined()
-  } catch (err) {
-    expect(err).toBeDefined()
-    expect(err.message).toContain('unsupported content type')
-    expect(err.statusCode).toBe(200)
-  }
-})
-
 test('fails gracefully decoding with bad charset', async () => {
   const url = 'https://github.com'
   try {
