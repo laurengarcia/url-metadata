@@ -69,9 +69,8 @@ module.exports = function (url, options, _fetch, useAgent) {
       // Make the fetch request
       const response = await _fetch(_url, requestOpts)
 
-      // Handle 3xx redirects
+      // If response is 3xx redirect
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
-        const newUrl = new URL(response.headers.get('location'), url).href
         // Collect redirects in object that is passed back to user
         redirects.count = redirectCount + 1
         redirects.chain.push({
@@ -79,9 +78,12 @@ module.exports = function (url, options, _fetch, useAgent) {
           url: _url,
           statusCode: response.status
         })
-        // Finally, follow the redirect
+        // Then, follow the redirect
+        const newUrl = new URL(response.headers.get('location'), _url).href
         return fetchData(newUrl, redirectCount + 1)
       }
+
+      // Finally, return the response
       return response
     }
   }
@@ -93,54 +95,56 @@ module.exports = function (url, options, _fetch, useAgent) {
         currentResponse = response
 
         if (!response) {
-          return reject(createHttpError({ msg: `response is ${typeof response}`, redirects }))
+          throw createHttpError({ msg: `response is ${typeof response}`, redirects })
         }
+
         if (!response.ok) {
           // Special handling for 402 Payment Required
           if (response.status === 402) {
             const contentType = response.headers.get('content-type')
             if (contentType && contentType.includes('application/json')) {
               return response.json()
-                .then(x402Data => {
-                  return reject(createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: x402Data }))
-                })
-                .catch(() => {
-                  // If JSON parsing fails
-                  return reject(createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true }))
-                })
+                .then(
+                  // Successful json parse, throw w rich x402 data:
+                  (x402Data) => { throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: x402Data }) },
+                  // Failed json parse, omit:
+                  () => { throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true }) }
+                )
             }
           }
 
-          // Handle other non-402 responses:
-          return reject(createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects }))
+          // Throw other non-402 responses:
+          throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects })
         }
 
-        // disambiguate `requestUrl` from final destination `url`
-        // (ex: links shortened by bit.ly)
+        // Disambiguate `requestUrl` from final destination `url`
+        // (ex: redirects, links shortened by bit.ly)
         if (response.url) destinationUrl = response.url
 
-        // validate response content type
+        // Validate response content type
         contentType = response.headers.get('content-type')
         const isHTML = contentType && contentType.includes('html')
         if (!isHTML) {
-          return reject(createHttpError({ msg: `unsupported content type: ${contentType}`, statusCode: response.status, redirects }))
+          throw createHttpError({ msg: `unsupported content type: ${contentType}`, statusCode: response.status, redirects })
         }
 
+        // Now, read the fetch response stream to completion,
+        // returns promise that resolves as array buffer (binary data)
         return response.arrayBuffer()
       })
       .then(async (responseBuffer) => {
         if (!responseBuffer) return
 
-        // handle optional user-specified charset
+        // Handle optional user-specified charset
         if (opts.decode !== 'auto') {
           charset = opts.decode
-        // extract charset in opts.decode='auto' mode
+        // Otherwise, default to extracting charset in opts.decode='auto' mode
         } else {
           charset = extractCharset(contentType, responseBuffer)
         }
 
         try {
-          // decode with charset
+          // Decode with charset
           const decoder = new TextDecoder(charset)
           const responseDecoded = decoder.decode(responseBuffer)
           // now parse the metadata!
@@ -154,12 +158,12 @@ module.exports = function (url, options, _fetch, useAgent) {
             opts
           ))
         } catch (e) {
-          return reject(createHttpError({ msg: `decoding with charset: ${charset}`, statusCode: currentResponse.status, redirects }))
+          throw createHttpError({ msg: `decoding with charset: ${charset}`, statusCode: currentResponse.status, redirects })
         }
       })
       .catch(error => {
-        // Catch-all block for errors not explicitly rejected above
-        // Cleanup resources to avoid memory leaks
+        // Catch all errors thrown above; they must fall thru this block to
+        // clean up resources and avoid memory leaks
         if (currentResponse && currentResponse.body) {
           // Node.js: Destroy the body stream `node-fetch` uses to force-close the connection
           if (typeof currentResponse.body.destroy === 'function') currentResponse.body.destroy()
