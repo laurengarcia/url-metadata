@@ -49,7 +49,7 @@ test('https:// -> http:// redirect success', async () => {
     const metadata = await urlMetadata(url, { maxRedirects: 2 })
     expect(metadata.redirects.count).toBeGreaterThan(0)
   } catch (err) {
-    console.log(err)
+    expect(err).toBe(undefined)
   }
 })
 
@@ -59,6 +59,6 @@ test('http:// -> https:// redirect success', async () => {
     const metadata = await urlMetadata(url)
     expect(metadata.redirects.count).toBeGreaterThan(0)
   } catch (err) {
-    console.log(err)
+    expect(err).toBe(undefined)
   }
 })

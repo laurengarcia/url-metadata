@@ -57,7 +57,7 @@ test('fails gracefully on DNS errors', async () => {
     expect(err).toBeDefined()
     expect(err.statusCode).toBeUndefined()
     expect(err.redirects).toBeUndefined()
-    // The error thrown by `node-fetch` falls thru
+    // The error props thrown by `node-fetch` fall thru:
     expect(err.message).toContain('getaddrinfo ENOTFOUND')
     expect(err.type).toBe('system')
     // ENOTFOUND = Error: Not Found = DNS lookup error from `node-fetch`
@@ -66,8 +66,7 @@ test('fails gracefully on DNS errors', async () => {
   }
 })
 
-test('fails gracefully on !response.ok', async () => {
-  // should 403
+test('fails gracefully on 403 blocks', async () => {
   const url = 'https://www.npmjs.com/packageXXX/url-metadataXXX'
   try {
     const metadata = await urlMetadata(url)
@@ -76,22 +75,27 @@ test('fails gracefully on !response.ok', async () => {
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toContain('response code 403')
-    expect(err.statusCode).toBe(403)
+    expect(err.requestUrl).toBe(url)
     expect(err.redirects).toBeDefined()
+    expect(err.url).toBe(url)
+    expect(err.statusCode).toBe(403)
   }
 })
 
 test('fails gracefully on 404', async () => {
+  const url = 'https://nichenetworks.io/foo'
   try {
-    const url = 'https://nichenetworks.io/foo'
     const metadata = await urlMetadata(url)
     // should not reach here, but just in case:
     expect(metadata).toBeUndefined()
   } catch (err) {
     expect(err).toBeDefined()
-    expect(err.message).toContain('404')
-    expect(err.statusCode).toBe(404)
+    // test response shape:
+    expect(err.message).toContain('response code 404')
+    expect(err.requestUrl).toBe(url)
     expect(err.redirects).toBeDefined()
+    expect(err.url).toBe(url)
+    expect(err.statusCode).toBe(404)
   }
 })
 
@@ -103,9 +107,12 @@ test('fails gracefully when fetching non text/html', async () => {
     expect(metadata).toBeUndefined()
   } catch (err) {
     expect(err).toBeDefined()
+    // test response shape:
     expect(err.message).toContain('unsupported content type')
-    expect(err.statusCode).toBe(200)
+    expect(err.requestUrl).toBe(url)
     expect(err.redirects).toBeDefined()
+    expect(err.url).toBe(url)
+    expect(err.statusCode).toBe(200)
   }
 })
 

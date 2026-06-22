@@ -29,8 +29,8 @@ test('option: `parseResponseObject` from html string', async () => {
     expect(metadata.lang).toBe('en')
     expect(metadata.charset).toBe('utf-8')
     expect(metadata.author).toBe('foobar')
-  } catch (e) {
-    expect(e).toBe(undefined)
+  } catch (err) {
+    expect(err).toBe(undefined)
   }
 })
 
@@ -41,8 +41,8 @@ test('option: max `size` 1000 bytes aborts call & errors', async () => {
     const metadata = await urlMetadata(url, { size })
     // should not reach here, but just in case:
     expect(metadata).toBeUndefined()
-  } catch (e) {
-    expect(e.message).toContain(`over limit: ${size}`)
+  } catch (err) {
+    expect(err.message).toContain(`over limit: ${size}`)
   }
 })
 

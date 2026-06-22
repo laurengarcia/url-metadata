@@ -25,7 +25,6 @@ test('basic https:// fetch', async () => {
     expect(typeof metadata.responseHeaders).toBe('object')
     expect(metadata.responseHeaders['content-type']).toContain('text/html')
   } catch (err) {
-    console.log(err)
     expect(err).toBe(undefined)
   }
 })
@@ -36,7 +35,7 @@ test('basic http:// fetch', async () => {
     const metadata = await urlMetadata(url)
     expect(metadata).toBeDefined()
   } catch (err) {
-    console.log(err)
+    expect(err).toBe(undefined)
   }
 })
 
