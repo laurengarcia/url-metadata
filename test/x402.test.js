@@ -6,7 +6,8 @@ test('x402 v1 error', async () => {
     const metadata = await urlMetadata(url)
     // should not reach here, but just in case:
     expect(metadata).toBeUndefined()
-  } catch (err) {    expect(err.message).toContain('response code 402')
+  } catch (err) {
+    expect(err.message).toContain('response code 402')
     expect(err.requestUrl).toBe(url)
     expect(err.redirects).toBeDefined()
     expect(err.url).toBe(url)
