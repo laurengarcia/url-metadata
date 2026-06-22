@@ -1,6 +1,6 @@
 const urlMetadata = require('./../index')
 
-test('basic example', async () => {
+test('basic https:// fetch', async () => {
   const url = 'https://minifetch.com'
   try {
     const metadata = await urlMetadata(url)
@@ -27,6 +27,16 @@ test('basic example', async () => {
   } catch (err) {
     console.log(err)
     expect(err).toBe(undefined)
+  }
+})
+
+test('basic http:// fetch', async () => {
+  try {
+    const url = 'http://httpforever.com/'
+    const metadata = await urlMetadata(url)
+    expect(metadata).toBeDefined()
+  } catch (err) {
+    console.log(err)
   }
 })
 
