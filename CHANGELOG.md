@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.5.1 and 5.5.2
+- update README
+
 5.5.0
 - feature: add `redirects` to metadata and errors
 - feature: add `requestUrl`, `redirects`, `url` to errors where possible

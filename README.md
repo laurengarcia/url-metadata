@@ -4,8 +4,7 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 
 ---
 <div>
-  👉 <i><strong>Looking for a hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong>
-  is a technical SEO toolkit for web developers built on top of this package by the same author. Get started free:
+  👉 <i><strong>Looking for a hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is an SEO toolkit built on top of this package by the same author/ maintainer. Get started free:
   <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
@@ -35,7 +34,7 @@ More details below. To report a bug or request a feature please open an issue or
 
 
 ## Install
-Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example bundle configs available in the github repo: Next.js, Vite and Webpack (see `/example-typescript`).
+Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example build configs available in the github repo `/example-*` dirs: Next.js, Vite and Webpack (see `/example-typescript`).
 
 ```
 npm install url-metadata --save
@@ -50,7 +49,7 @@ In your project file:
 import urlMetadata from 'url-metadata';
 // const urlMetadata = require('url-metadata');
 
-async function fetchIt () {
+async function getMetadata () {
   try {
     const url = 'https://www.npmjs.com/package/url-metadata';
     const metadata = await urlMetadata(url);
@@ -181,11 +180,11 @@ console.log(metadata);
 ```
 
 ### Returns
-Returns a promise resolved with a JSON object. Note that the `url` field returned will be the last hop in the request chain if there are redirects.
+Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
 
-A basic template for the returned metadata object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object.
+A basic template for the object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields.
 
-The metadata object consists of key/value pairs as strings, with a few exceptions:
+The object consists of key/value pairs as strings, with exceptions:
 - `redirects` is an object with `count` (number) and `chain` (array of `{ order, url, statusCode }`)
 - `hreflang`, `favicons`, and `responseHeaders` is an array of objects containing key/value pairs of strings
 - `jsonld` is an array of objects
