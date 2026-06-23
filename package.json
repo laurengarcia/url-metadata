@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "5.4.4",
+  "version": "5.5.0",
   "description": "Request a url and scrape the metadata from its HTML using Node.js or the browser.",
   "keywords": [
     "html",
@@ -9,7 +9,9 @@
     "scrape",
     "scraper",
     "parser",
+    "extraction",
     "seo",
+    "technical-seo",
     "url",
     "article",
     "citations",
@@ -20,7 +22,9 @@
     "open-graph",
     "og-tags",
     "json-ld",
-    "twitter-cards"
+    "twitter-cards",
+    "web-development-tools",
+    "x402 errors"
   ],
   "engines": {
     "node": ">=6.0.0"

@@ -30,24 +30,34 @@ module.exports = function (url, options, _fetch, useAgent) {
     options
   )
 
-  let requestUrl = ''
-  let destinationUrl = ''
+  const requestUrl = url
+  let finalUrl = ''
+  const redirects = {
+    count: 0,
+    chain: []
+  }
   let contentType
   let charset
   let currentResponse = null
 
   async function fetchData (_url, redirectCount = 0) {
     if (redirectCount > opts.maxRedirects) {
-      throw new Error('too many redirects')
+      throw createHttpError({ msg: 'too many redirects', redirects, requestUrl, url: _url })
+    }
+    if (!_url && !opts.parseResponseObject) {
+      throw new Error('url parameter is missing')
     }
     if (!_url && opts.parseResponseObject) {
       return opts.parseResponseObject
     } else if (_url) {
-      requestUrl = url
       const requestOpts = {
         method: 'GET',
         headers: opts.requestHeaders,
-        agent: opts.agent || useAgent(url, opts.requestFilteringAgentOptions),
+        // If the user doesn't pass in their own agent:
+        // When agent is a function, `node-fetch` calls it with the parsed URL
+        // of the request it's about to make, and uses the return value as the
+        // agent for that request:
+        agent: opts.agent || ((parsedURL) => useAgent(parsedURL.href, opts.requestFilteringAgentOptions)),
         cache: opts.cache,
         mode: opts.mode,
         redirect: 'manual',
@@ -59,13 +69,22 @@ module.exports = function (url, options, _fetch, useAgent) {
       // Make the fetch request
       const response = await _fetch(_url, requestOpts)
 
+      // If response is 3xx redirect
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
-        const newUrl = new URL(response.headers.get('location'), url).href
+        // Collect redirects in object that is passed back to user
+        redirects.count = redirectCount + 1
+        redirects.chain.push({
+          order: redirects.count,
+          url: _url,
+          statusCode: response.status
+        })
+        // Then, follow the redirect
+        const newUrl = new URL(response.headers.get('location'), _url).href
         return fetchData(newUrl, redirectCount + 1)
       }
+
+      // Finally, return the response
       return response
-    } else if (!_url) {
-      throw new Error('url parameter is missing')
     }
   }
 
@@ -75,76 +94,99 @@ module.exports = function (url, options, _fetch, useAgent) {
         // First, set `currentResponse` in case of error
         currentResponse = response
 
-        if (!response) {
-          return reject(new Error(`response is ${typeof response}`))
-        }
-        if (!response.ok) {
+        // Disambiguate `requestUrl` from final `url`
+        // (ex: redirects, links shortened by bit.ly, etc)
+        if (response.url) finalUrl = response.url
 
-          // Special handling for 402 Payment Required
+        if (!response) {
+          throw createHttpError({ msg: `response is ${typeof response}`, redirects, requestUrl, url: finalUrl })
+        }
+
+        if (!response.ok) {
+          const throwGenericError = () => {
+            throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, requestUrl, url: finalUrl })
+          }
           if (response.status === 402) {
+            // x402 v2: the PAYMENT-REQUIRED header itself is the identifier.
+            const paymentRequiredHeader = response.headers.get('payment-required')
+            if (paymentRequiredHeader) {
+              let x402Data
+              try {
+                x402Data = JSON.parse(Buffer.from(paymentRequiredHeader.trim(), 'base64').toString('utf8'))
+              } catch {
+                // Identified as x402 but undecodable → x402 fails over to undefined.
+              }
+              throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: x402Data, requestUrl, url: finalUrl })
+            }
+            // x402 v1: the body markers (x402Version / accepts) are the identifier.
             const contentType = response.headers.get('content-type')
             if (contentType && contentType.includes('application/json')) {
               return response.json()
-                .then(x402Data => {
-                  return reject(createHttpError(`response code ${response.status}`, response.status, true, x402Data))
-                })
-                .catch(() => {
-                  // If JSON parsing fails
-                  return reject(createHttpError(`response code ${response.status}`, response.status, true))
-                })
+                .then(
+                  // Successful body parse:
+                  (body) => {
+                    const isX402 = body && (Array.isArray(body.accepts) || body.x402Version !== undefined)
+                    if (isX402) {
+                      throw createHttpError({ msg: `response code ${response.status}`, statusCode: response.status, redirects, paymentRequired: true, x402: body, requestUrl, url: finalUrl })
+                    }
+                    throwGenericError() // JSON 402, no x402 markers (MPP, Lightning, quota) → generic
+                  },
+                  // Failed body parse, can't confirm x402:
+                  throwGenericError
+                )
             }
           }
 
-          // Handle other non-402 responses:
-          return reject(createHttpError(`response code ${response.status}`, response.status))
+          // All others get generic error:
+          // non-402, or a 402 we couldn't positively identify as x402.
+          throwGenericError()
         }
 
-        // disambiguate `requestUrl` from final destination url
-        // (ex: links shortened by bit.ly)
-        if (response.url) destinationUrl = response.url
-
-        // validate response content type
+        // Validate response content type
         contentType = response.headers.get('content-type')
         const isHTML = contentType && contentType.includes('html')
         if (!isHTML) {
-          return reject(createHttpError(`unsupported content type: ${contentType}`, response.status))
+          throw createHttpError({ msg: `unsupported content type: ${contentType}`, statusCode: response.status, redirects, requestUrl, url: finalUrl })
         }
 
+        // Now, read the fetch response stream to completion,
+        // returns promise that resolves as array buffer (binary data)
         return response.arrayBuffer()
       })
       .then(async (responseBuffer) => {
         if (!responseBuffer) return
 
-        // handle optional user-specified charset
+        // Handle optional user-specified charset
         if (opts.decode !== 'auto') {
           charset = opts.decode
-        // extract charset in opts.decode='auto' mode
+        // Otherwise, default to extracting charset in opts.decode='auto' mode
         } else {
           charset = extractCharset(contentType, responseBuffer)
         }
 
         try {
-          // decode with charset
+          // Decode with charset
           const decoder = new TextDecoder(charset)
           const responseDecoded = decoder.decode(responseBuffer)
           // now parse the metadata!
           resolve(parse(
             requestUrl,
-            destinationUrl,
+            redirects,
+            finalUrl,
             responseDecoded,
             currentResponse.status,
             currentResponse.headers,
             opts
           ))
         } catch (e) {
-          return reject(createHttpError(`decoding with charset: ${charset}`, currentResponse.status))
+          throw createHttpError({ msg: `decoding with charset: ${charset}`, statusCode: currentResponse.status, redirects, requestUrl, url: finalUrl })
         }
       })
       .catch(error => {
-        // Catch-all block for errors not explicitly rejected above
-        // Cleanup resources to avoid memory leaks
+        // Catch all errors thrown above; they must fall thru this block to
+        // clean up resources and avoid memory leaks
         if (currentResponse && currentResponse.body) {
-          // Destroy the body stream `node-fetch` uses to force-close the connection
+          // Node.js: Destroy the body stream `node-fetch` uses to force-close the connection
           if (typeof currentResponse.body.destroy === 'function') currentResponse.body.destroy()
           // Modern browsers and Node.js 18+ have cancel() on the ReadableStream
           else if (typeof currentResponse.body.cancel === 'function') currentResponse.body.cancel().catch(() => {})

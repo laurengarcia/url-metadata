@@ -25,9 +25,25 @@ declare namespace urlMetadata {
 
   type Result = Record<string, string | boolean | number | undefined | any | any[]>;
 
+  interface RedirectHop {
+    order: number; // 1-based position in the chain (first hop is order: 1)
+    url: string; // the url requested at this hop
+    statusCode: number; // the 3xx status returned by this hop
+  }
+
   interface UrlMetadataError extends Error {
+    requestUrl?: string; // the url the user passed in
+    redirects?: { // included in all errors where applicable (some do not reach this point tho)
+      count: number;
+      chain: RedirectHop[]
+    };
+    url?: string; // final destination url in request chain
     statusCode?: number;
     paymentRequired?: boolean;
-    x402?: Record<string, any>;
+    x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
+    // errors that *may* fall thru from `node-fetch` dependency in Node.js v6+:
+    type?: string;
+    errno?: string;
+    code?: string;
   }
 }
