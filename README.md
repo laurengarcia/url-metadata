@@ -35,19 +35,22 @@ More details below. To report a bug or request a feature please open an issue or
 
 
 ## Install
-Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example bundles available in the github repo: Webpack (see `/example-typescript`), Vite (see `/example-vite`), Next.js (see `/example-nextjs`).
+Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example bundle configs available in the github repo: Next.js, Vite and Webpack (see `/example-typescript`).
 
 ```
 npm install url-metadata --save
 ```
 
 ## Usage
-
 In your project file:
-```typescript
+```js
+// Use 'import' in .mjs and .ts files or if your
+// package.json has "type": "module", otherwise
+// use 'require'. This package supports both.
 import urlMetadata from 'url-metadata';
+// const urlMetadata = require('url-metadata');
 
-async function yourFunction () {
+async function fetchIt () {
   try {
     const url = 'https://www.npmjs.com/package/url-metadata';
     const metadata = await urlMetadata(url);
