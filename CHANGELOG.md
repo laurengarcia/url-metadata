@@ -1,5 +1,11 @@
 # CHANGELOG
 
+5.5.0
+- feature: add `redirects` to metadata and errors
+- feature: add `requestUrl`, `redirects`, `url` to errors where possible
+- feature: x402 version 2 support
+- bugfix: #109 - edge case throws `TypeError: Protocol "https:" not supported. Expected "http:"`
+
 5.4.4
 - update README
 

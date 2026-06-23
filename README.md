@@ -1,29 +1,19 @@
 # url-metadata
 
-[![npm version](https://badge.fury.io/js/url-metadata.svg)](https://badge.fury.io/js/url-metadata)
-
 Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an optional mode that lets you pass in a string of html or a `Response` object as well (see `Options` section below).
 
 ---
-<div align="center">
-  <a href="https://www.npmjs.com/package/minifetch-api">
-    <img src="https://minifetch.com/minifetch-dog-logo--whitebg.png" width="60" alt="Minifetch.com" />
-  </a>
-  <p><i><strong>Want to extract data from web pages without managing infrastructure? <a href="https://www.npmjs.com/package/minifetch-api">Minifetch</a></strong> is a hosted data extraction API built on this library. Perfect for AI Agents and SEO research:</i>
-  <p><a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a></p>
-  </p><i>
-    <strong>🎉 Sign up for an account & get free credits to start 🎉 </strong>
-    <br />
-    Now accepting credit cards as well as x402 USDC payments on Base + Solana.
-  </i></p>
+<div>
+  👉 <i><strong>Looking for a hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong>
+  is a technical SEO toolkit for web developers built on top of this package by the same author. Get started free:
+  <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
 ---
 ## **Includes:**
 
-- relevant response headers & status code
+- response headers
 - redirects
-- automatic charset detection & decoding (optional)
 - meta tags
 - hreflang
 - favicons
@@ -33,18 +23,19 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
 - h1-h6 tags
 - img tags
+- automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
 - [x402](https://www.x402.org/) "payment required" error support
 
-v5.1.0+ Protects against:
+**Security** - v5.1.0+ Protects against:
 - Infinite redirect loops
-- SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options available)
+- SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options also available)
 
 More details below. To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 
 
 ## Install
-Works with Node.js versions `>=6.0.0` or in the browser when bundled with Webpack (see `/example-typescript`) or Vite (see `/example-vite`) in the github repo. For Next.js, see `/example-nextjs`.
+Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example bundles available in the github repo: Webpack (see `/example-typescript`), Vite (see `/example-vite`), Next.js (see `/example-nextjs`).
 
 ```
 npm install url-metadata --save
@@ -53,23 +44,18 @@ npm install url-metadata --save
 ## Usage
 
 In your project file:
-```javascript
-const urlMetadata = require('url-metadata');
+```typescript
+import urlMetadata from 'url-metadata';
 
-(async function () {
+async function yourFunction () {
   try {
     const url = 'https://www.npmjs.com/package/url-metadata';
     const metadata = await urlMetadata(url);
     console.log(metadata);
   } catch (err) {
     console.log(err);
-    // Optional: handle x402 "payment required" responses
-    if (err.paymentRequired && err.x402) {
-      // Handle x402 payment details
-    }
   }
-})();
-
+}
 ```
 
 ### Options & Defaults
@@ -192,15 +178,15 @@ console.log(metadata);
 ```
 
 ### Returns
-Returns a promise resolved with a JSON object. Note that the `url` field returned will be the last hop in the request chain. If you pass in a url from a url shortener you'll get back the final destination as the `url`.
+Returns a promise resolved with a JSON object. Note that the `url` field returned will be the last hop in the request chain if there are redirects.
 
 A basic template for the returned metadata object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object.
 
-The returned `metadata` object consists of key/value pairs as strings, with a few exceptions:
-- `redirects` is an object with a `count` (number) and `chain` (array of objects { `order`, `url`, `statusCode` }, see `index.d.ts` for details)
+The metadata object consists of key/value pairs as strings, with a few exceptions:
+- `redirects` is an object with `count` (number) and `chain` (array of `{ order, url, statusCode }`)
 - `hreflang`, `favicons`, and `responseHeaders` is an array of objects containing key/value pairs of strings
 - `jsonld` is an array of objects
-- all meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings to conform to the [Google Scholar spec](https://www.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values. So if the html contains:
+- all meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings conforming to the [Google Scholar spec](https://www.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values. So if the html contains:
 ```
 <meta name="citation_author" content="Arlitsch, Kenning">
 <meta name="citation_author" content="OBrien, Patrick">
@@ -212,11 +198,11 @@ The returned `metadata` object consists of key/value pairs as strings, with a fe
 
 ### Troubleshooting
 
-**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block. You may also try the hosted version of this library, [Minifetch](https://www.npmjs.com/package/minifetch-api), which follows industry-standard best practices for extracting data from web pages.
-
-**Issue:** `DNS Lookup` errors. The SSRF filtering agent defaults on this package prevent calls to private ip addresses, link-local addresses and reserved ip addresses. To change or disable this feature you need to pass custom `requestFilteringAgentOptions`. More info [here](https://www.npmjs.com/package/request-filtering-agent).
+**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block.
 
 **Issue:** `No fetch implementation found`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js < v6). File a GitHub issue or try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
+
+**Issue:** `DNS Lookup` errors. The SSRF filtering agent defaults on this package prevent calls to private ip addresses, link-local addresses and reserved ip addresses. To change or disable this feature you need to pass custom `requestFilteringAgentOptions`. More info [here](https://www.npmjs.com/package/request-filtering-agent).
 
 **Issue:** `Response status code 0` or `CORS` errors. The `fetch` request failed at either the network or protocol level. Possible causes:
 
@@ -225,3 +211,5 @@ The returned `metadata` object consists of key/value pairs as strings, with a fe
 - Trying to access an `https` resource that has invalid certificate, or trying to access an `http` resource from a page with an `https` origin.
 
 - A browser plugin such as an ad-blocker or privacy protector.
+
+You may also want to try the hosted version of this package: [Minifetch](https://www.npmjs.com/package/minifetch-api).
