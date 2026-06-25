@@ -1,17 +1,4 @@
-import urlMetadata from 'url-metadata';
-
-(async function () {
-  console.log('-- running 2 tests ---');
-  try {
-    const metadata = await urlMetadata('./metadata.html', {
-      mode: 'same-origin',
-      includeResponseBody: true
-    });
-    console.log('1/ fetch local metadata.html:', metadata);
-  } catch (err: urlMetadata.UrlMetadataError) {
-    console.error(err);
-  }
-})();
+const urlMetadata = require('url-metadata');
 
 (async function () {
   try {
@@ -20,12 +7,12 @@ import urlMetadata from 'url-metadata';
     <html lang="en">
       <head>
         <meta charset="utf-8">
-        <title>Metadata page</title>
+        <title>Example Metadata Page</title>
         <meta name="author" content="foobar">
         <meta name="keywords" content="HTML, CSS, JavaScript">
       </head>
       <body>
-        <h1>Metadata page</h1>
+        <h1>Metadata page header 1</h1>
       </body>
     </html>
     `
@@ -36,8 +23,8 @@ import urlMetadata from 'url-metadata';
     })
     // pass null `url` param & response object as option
     const metadata = await urlMetadata(null, { parseResponseObject: response });
-    console.log('2/ parse html string:', metadata);
-  } catch (err: urlMetadata.UrlMetadataError) {
+    console.log('parse html string:', metadata);
+  } catch (err) {
     console.error(err);
   }
 })();

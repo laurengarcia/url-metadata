@@ -1,0 +1,12 @@
+{
+  "name": "example-javascript-require",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Example vanilla JavaScript app using require syntax",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "url-metadata": "^5.5.3"
+  }
+}
