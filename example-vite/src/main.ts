@@ -13,8 +13,8 @@ import { setupCounter } from './counter.ts'
       includeResponseBody: true
     });
     console.log('metdata fetched:', metadata);
-  } catch(err) {
-    console.log(err);
+  } catch (err: urlMetadata.UrlMetadataError) {
+    console.error(err);
   }
 })();
 

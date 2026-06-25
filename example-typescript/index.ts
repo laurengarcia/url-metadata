@@ -1,16 +1,15 @@
 import urlMetadata from 'url-metadata';
 
 (async function () {
-  console.log('-- running 2 tests ---')
+  console.log('-- running 2 tests ---');
   try {
     const metadata = await urlMetadata('./metadata.html', {
       mode: 'same-origin',
       includeResponseBody: true
     });
     console.log('1/ fetch local metadata.html:', metadata);
-  } catch(error) {
-    const err = error as urlMetadata.UrlMetadataError;
-    console.log(err)
+  } catch (err: urlMetadata.UrlMetadataError) {
+    console.error(err);
   }
 })();
 
@@ -36,10 +35,10 @@ import urlMetadata from 'url-metadata';
       }
     })
     // pass null `url` param & response object as option
-    const metadata = await urlMetadata(null, { parseResponseObject: response })
+    const metadata = await urlMetadata(null, { parseResponseObject: response });
     console.log('2/ parse html string:', metadata);
-  } catch(error) {
+  } catch (error) {
     const err = error as urlMetadata.UrlMetadataError;
-    console.log(err);
+    console.error(err);
   }
 })();

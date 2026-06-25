@@ -4,13 +4,12 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 
 ---
 <div>
-  👉 <i><strong>Looking for a hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is an SEO toolkit built on top of this package by the same author/ maintainer. Get started free:
+  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is an SEO toolkit built on top of this package by the same author/ maintainer. Get started free:
   <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
 ---
 ## **Includes:**
-
 - response headers
 - redirects
 - meta tags
@@ -34,7 +33,7 @@ More details below. To report a bug or request a feature please open an issue or
 
 
 ## Install
-Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example build configs available in the github repo `/example-*` dirs: Next.js, Vite and Webpack (see `/example-typescript`).
+Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example build configs available in the [GitHub repo](https://github.com/laurengarcia/url-metadata) `/example-*` dirs: Next.js, Vite and Webpack (see `/example-typescript`).
 
 ```
 npm install url-metadata --save
@@ -43,21 +42,21 @@ npm install url-metadata --save
 ## Usage
 In your project file:
 ```js
-// Use 'import' in .mjs and .ts files or if your
-// package.json has "type": "module", otherwise
-// use 'require'. This package supports both.
+// Use 'import' in .mjs/ .ts files or if your package.json
+// has "type": "module", otherwise use 'require'.
+// This package supports both:
 import urlMetadata from 'url-metadata';
 // const urlMetadata = require('url-metadata');
 
-async function getMetadata () {
+async function getMetadata(url) {
   try {
-    const url = 'https://www.npmjs.com/package/url-metadata';
-    const metadata = await urlMetadata(url);
-    console.log(metadata);
+    return await urlMetadata(url);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }
+
+const metadata = await getMetadata('https://en.wikipedia.org/wiki/Server-side_request_forgery');
 ```
 
 ### Options & Defaults
@@ -127,33 +126,32 @@ const options = {
 
 // Basic options usage
 try {
-  const url = 'https://www.npmjs.com/package/url-metadata';
+  const url = 'https://en.wikipedia.org/wiki/Server-side_request_forgery';
   const metadata = await urlMetadata(url, options);
   console.log(metadata);
 } catch (err) {
-  console.log(err);
+  console.error(err);
   // Optional: handle x402 "payment required" responses
   if (err.paymentRequired && err.x402) {
     // Handle x402 payment details
   }
 }
 
-// Alternate use-case: parse a Response object instead
+// Alternate use-case: parse a Response object instead:
 try {
   // fetch the url in your own code
-  const response = await fetch('https://www.npmjs.com/package/url-metadata');
-  // ... do other stuff with it...
+  const response = await fetch('https://en.wikipedia.org/wiki/Server-side_request_forgery');
   // pass the `response` object to be parsed for its metadata
   const metadata = await urlMetadata(null, {
     parseResponseObject: response
   });
   console.log(metadata);
 } catch (err) {
-  console.log(err);
+  console.error(err);
 }
 
 // Similarly, if you have a string of html you can create
-// a response object and pass the html string into it.
+// a Response object and pass the html string into it:
 const html = `
 <!DOCTYPE html>
 <html lang="en">

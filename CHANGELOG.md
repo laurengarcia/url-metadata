@@ -1,7 +1,7 @@
 # CHANGELOG
 
-5.5.1 and 5.5.2
-- update README
+5.5.1, 5.5.2, 5.5.3
+- update, improve README and /example-* for clarity
 
 5.5.0
 - feature: add `redirects` to metadata and errors

@@ -20,7 +20,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
       {children}
-      <p>Complete: metadata fetched from server-side of this app.</p>
+      <p>Complete: <br />
+        metadata fetched from server</p>
       <p>
         Request url: <br />
         {metadata.requestUrl}

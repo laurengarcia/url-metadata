@@ -15,10 +15,8 @@ const option: urlMetadata.Options = {
 
 export async function fetchMetadata(url: string) {
   try {
-    const metadata = await urlMetadata(url, option);
-    console.log(`Fetched metadata from ${url}:`, metadata);
-    return metadata || null;
-  } catch (error) {
-    console.error(`Failed to fetch metadata for ${url}:`, error);
+    return await urlMetadata(url, option);
+  } catch (err: urlMetadata.UrlMetadataError) {
+    console.error(`Failed to fetch metadata for ${url}:`, err);
   }
 }
