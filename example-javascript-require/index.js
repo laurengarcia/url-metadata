@@ -22,9 +22,9 @@ const urlMetadata = require('url-metadata');
       }
     })
     // pass null `url` param & response object as option
-    const metadata = await urlMetadata(null, { parseResponseObject: response });
-    console.log('parse html string:', metadata);
+    const metadata = await urlMetadata(null, { parseResponseObject: response })
+    console.log('parse html string:', metadata)
   } catch (err) {
-    console.error(err);
+    console.error(err)
   }
-})();
+})()
