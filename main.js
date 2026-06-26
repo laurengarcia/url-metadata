@@ -36,6 +36,11 @@ module.exports = function (url, options, _fetch, useAgent) {
     count: 0,
     chain: []
   }
+  const perf = {
+    redirectTimeMs: undefined, // redirect tax before last hop
+    ttfbMs: undefined, // last hop -> headers
+    responseTimeMs: undefined // last hop start -> body read complete
+  }
   let contentType
   let charset
   let currentResponse = null

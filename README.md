@@ -12,6 +12,7 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 ## **Includes:**
 - response headers
 - redirects
+- performance metrics
 - meta tags
 - hreflang
 - favicons
