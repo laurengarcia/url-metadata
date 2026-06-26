@@ -2,7 +2,7 @@ const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 const createHttpError = require('./lib/http-error')
 
-// Monotonic clock when available (browsers + Node 16+), else wall clock.
+// Monotonic clock when available (browsers + Node 16+), else wall clock fallback.
 // Every perf value is a delta from the same source, so the two never mix.
 const now = (typeof performance !== 'undefined' && performance.now)
   ? () => performance.now()
@@ -79,13 +79,14 @@ module.exports = function (url, options, _fetch, useAgent) {
         compress: opts.compress
       }
 
-      // Mark hop start; remember the first one for redirect accounting
+      // Perf: mark hop start; remember the first one for redirect accounting
       const hopStart = now()
       if (overallStart === undefined) overallStart = hopStart
 
-      // Make the fetch request
+      // --> Make the fetch request <--
       const response = await _fetch(_url, requestOpts)
-      // `node-fetch` resolves once response headers arrive (body is a stream),
+
+      // Perf: `node-fetch` resolves once response headers arrive (body is a stream),
       // so this is effectively time-to-first-byte for this hop
       const headersAt = now()
 
@@ -103,10 +104,10 @@ module.exports = function (url, options, _fetch, useAgent) {
         return fetchData(newUrl, redirectCount + 1)
       }
 
-      // Last hop reached: record timings relative to this hop only
+      // Perf: last hop reached; record timings relative to this hop only
       lastHopStart = hopStart
       perf.ttfbMs = Math.round(headersAt - hopStart)
-      // Redirect tax = everything that elapsed before the last hop began
+      // Perf: redirect tax = everything that elapsed before the last hop began
       if (redirects.count > 0) perf.redirectTimeMs = Math.round(hopStart - overallStart)
 
       // Finally, return the response
@@ -181,7 +182,8 @@ module.exports = function (url, options, _fetch, useAgent) {
       })
       .then(async (responseBuffer) => {
         if (!responseBuffer) return
-        // Body fully read here (arrayBuffer resolved). Same last-hop baseline as
+
+        // Perf: body fully read here (arrayBuffer resolved). Same last-hop baseline as
         // ttfbMs, so responseTimeMs - ttfbMs cleanly yields body download time
         if (lastHopStart !== undefined) perf.responseTimeMs = Math.round(now() - lastHopStart)
 
