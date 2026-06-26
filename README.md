@@ -10,8 +10,8 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 
 ---
 ## **Includes:**
-- response headers
 - redirects
+- response headers
 - basic performance metrics
 - meta tags
 - hreflang
@@ -24,7 +24,7 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 - img tags
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
-- [x402](https://www.x402.org/) "payment required" error support
+- [x402](https://www.x402.org/) error support w payment requirements
 
 **Security** - v5.1.0+ Protects against:
 - Infinite redirect loops
@@ -57,7 +57,7 @@ async function getMetadata(url) {
   }
 }
 
-const metadata = await getMetadata('https://en.wikipedia.org/wiki/Server-side_request_forgery');
+const metadata = await getMetadata('https://en.wikipedia.org/wiki/WHATWG');
 ```
 
 ### Options & Defaults
@@ -127,7 +127,7 @@ const options = {
 
 // Basic options usage
 try {
-  const url = 'https://en.wikipedia.org/wiki/Server-side_request_forgery';
+  const url = 'https://en.wikipedia.org/wiki/WHATWG';
   const metadata = await urlMetadata(url, options);
   console.log(metadata);
 } catch (err) {
@@ -141,7 +141,7 @@ try {
 // Alternate use-case: parse a Response object instead:
 try {
   // fetch the url in your own code
-  const response = await fetch('https://en.wikipedia.org/wiki/Server-side_request_forgery');
+  const response = await fetch('https://en.wikipedia.org/wiki/WHATWG');
   // pass the `response` object to be parsed for its metadata
   const metadata = await urlMetadata(null, {
     parseResponseObject: response

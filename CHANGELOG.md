@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.6.0
+- feature: add basic performance metrics (see main.js for specifics)
+
 5.5.1, 5.5.2, 5.5.3
 - update, improve README and /example-* for clarity
 
