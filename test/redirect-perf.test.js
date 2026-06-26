@@ -1,6 +1,6 @@
 const urlMetadata = require('./../index')
 
-test('follow redirects by default; metadata has redirects property w correct shape', async () => {
+test('follow redirects by default; redirects + performance props have correct shape', async () => {
   const url = 'https://t.co/3K2Oj1dRlE'
   try {
     const metadata = await urlMetadata(url)
@@ -14,6 +14,11 @@ test('follow redirects by default; metadata has redirects property w correct sha
     expect(metadata.redirects.chain[0].statusCode).toBeGreaterThan(300)
     expect(metadata.redirects.chain[0].statusCode).toBeLessThan(400)
     expect(metadata.redirects.chain[0].url).toBe(url)
+    // Test metadata.performance shape
+    expect(metadata.performance).toBeDefined()
+    expect(metadata.performance.redirectTimeMs).toBeGreaterThan(0)
+    expect(metadata.performance.ttfbMs).toBeGreaterThan(0)
+    expect(metadata.performance.responseTimeMs).toBeGreaterThan(metadata.performance.ttfbMs)
   } catch (err) {
     expect(err).toBe(undefined)
   }
@@ -48,6 +53,7 @@ test('https:// -> http:// redirect success', async () => {
     const url = 'https://bit.ly/4uIArop'
     const metadata = await urlMetadata(url, { maxRedirects: 2 })
     expect(metadata.redirects.count).toBeGreaterThan(0)
+    expect(metadata.performance).toBeDefined()
   } catch (err) {
     expect(err).toBe(undefined)
   }
@@ -58,6 +64,11 @@ test('http:// -> https:// redirect success', async () => {
     const url = 'http://bit.ly/4oFgU6Q'
     const metadata = await urlMetadata(url)
     expect(metadata.redirects.count).toBeGreaterThan(0)
+    // Test metadata.performance shape
+    expect(metadata.performance).toBeDefined()
+    expect(metadata.performance.redirectTimeMs).toBeGreaterThan(0)
+    expect(metadata.performance.ttfbMs).toBeGreaterThan(0)
+    expect(metadata.performance.responseTimeMs).toBeGreaterThan(metadata.performance.ttfbMs)
   } catch (err) {
     expect(err).toBe(undefined)
   }

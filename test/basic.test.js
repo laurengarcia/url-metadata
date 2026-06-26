@@ -5,6 +5,14 @@ test('basic https:// fetch', async () => {
   try {
     const metadata = await urlMetadata(url)
     expect(metadata.requestUrl).toBe(url)
+    expect(metadata.responseStatusCode).toBe(200)
+    expect(typeof metadata.responseHeaders).toBe('object')
+    expect(metadata.responseHeaders['content-type']).toContain('text/html')
+    expect(metadata.redirects).toBeDefined()
+    expect(metadata.redirects.count).toBe(0)
+    expect(metadata.redirects.chain.length).toBe(0)
+    expect(metadata.performance).toBeDefined()
+    expect(metadata.performance.redirectTimeMs).toBe(undefined) // invariant test; no redirects expected
     expect(metadata.url).toContain(url)
     expect(metadata.title).toContain('SEO')
     expect(metadata.lang).toBe('en')
@@ -21,9 +29,6 @@ test('basic https:// fetch', async () => {
     expect(metadata.jsonld.length).toBeGreaterThan(0)
     expect(metadata.headings.length).toBeGreaterThan(3)
     expect(metadata.headings[0].level).toBe('h1')
-    expect(metadata.responseStatusCode).toBe(200)
-    expect(typeof metadata.responseHeaders).toBe('object')
-    expect(metadata.responseHeaders['content-type']).toContain('text/html')
   } catch (err) {
     expect(err).toBe(undefined)
   }
