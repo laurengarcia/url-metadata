@@ -2,6 +2,12 @@ const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 const createHttpError = require('./lib/http-error')
 
+// Monotonic clock when available (browsers + Node 16+), else wall clock.
+// Every perf value is a delta from the same source, so the two never mix.
+const now = (typeof performance !== 'undefined' && performance.now)
+  ? () => performance.now()
+  : () => Date.now()
+
 module.exports = function (url, options, _fetch, useAgent) {
   if (!options || typeof options !== 'object') options = {}
 
@@ -41,6 +47,8 @@ module.exports = function (url, options, _fetch, useAgent) {
     ttfbMs: undefined, // last hop -> headers
     responseTimeMs: undefined // last hop start -> body read complete
   }
+  let overallStart // start of the very first hop
+  let lastHopStart // start of the final (non-redirect) hop
   let contentType
   let charset
   let currentResponse = null
@@ -71,8 +79,15 @@ module.exports = function (url, options, _fetch, useAgent) {
         compress: opts.compress
       }
 
+      // Mark hop start; remember the first one for redirect accounting
+      const hopStart = now()
+      if (overallStart === undefined) overallStart = hopStart
+
       // Make the fetch request
       const response = await _fetch(_url, requestOpts)
+      // `node-fetch` resolves once response headers arrive (body is a stream),
+      // so this is effectively time-to-first-byte for this hop
+      const headersAt = now()
 
       // If response is 3xx redirect
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
@@ -87,6 +102,12 @@ module.exports = function (url, options, _fetch, useAgent) {
         const newUrl = new URL(response.headers.get('location'), _url).href
         return fetchData(newUrl, redirectCount + 1)
       }
+
+      // Last hop reached: record timings relative to this hop only
+      lastHopStart = hopStart
+      perf.ttfbMs = Math.round(headersAt - hopStart)
+      // Redirect tax = everything that elapsed before the last hop began
+      if (redirects.count > 0) perf.redirectTimeMs = Math.round(hopStart - overallStart)
 
       // Finally, return the response
       return response
@@ -160,6 +181,9 @@ module.exports = function (url, options, _fetch, useAgent) {
       })
       .then(async (responseBuffer) => {
         if (!responseBuffer) return
+        // Body fully read here (arrayBuffer resolved). Same last-hop baseline as
+        // ttfbMs, so responseTimeMs - ttfbMs cleanly yields body download time
+        if (lastHopStart !== undefined) perf.responseTimeMs = Math.round(now() - lastHopStart)
 
         // Handle optional user-specified charset
         if (opts.decode !== 'auto') {
@@ -177,6 +201,7 @@ module.exports = function (url, options, _fetch, useAgent) {
           resolve(parse(
             requestUrl,
             redirects,
+            perf,
             finalUrl,
             responseDecoded,
             currentResponse.status,
