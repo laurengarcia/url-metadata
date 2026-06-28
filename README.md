@@ -1,6 +1,6 @@
 # url-metadata
 
-Request a url and scrape the metadata from its HTML using Node.js or the browser. Has an optional mode that lets you pass in a string of html or a `Response` object as well (see `Options` section below).
+Fetch a url and scrape metadata from its HTML using Node.js or the browser. Has optional modes to parse a string of html or a `Response` object instead.
 
 ---
 <div>
@@ -9,10 +9,10 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 </div>
 
 ---
-## **Includes:**
+## **Extracts:**
 - redirects
 - response headers
-- basic performance metrics
+- performance metrics
 - meta tags
 - hreflang
 - favicons
@@ -29,6 +29,7 @@ Request a url and scrape the metadata from its HTML using Node.js or the browser
 **Security** - v5.1.0+ Protects against:
 - Infinite redirect loops
 - SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options also available)
+- Memory-exhaustion attacks (gzip bombs, oversized responses): set `timeout` and `size` options to enable
 
 More details below. To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 
@@ -93,11 +94,14 @@ const options = {
   // Maximum redirects in request chain, defaults to 10
   maxRedirects: 10,
 
-  // `fetch` timeout in milliseconds, default is 10 seconds
+  // `fetch` timeout in milliseconds, default is 10 seconds.
+  // Time-bounds slow and connection-holding (Slowloris-class) responses.
   timeout: 10000,
 
-  // (Node.js v6+ only) max size of response in bytes (uncompressed)
-  // Default set to 0 to disable max size
+  // (Node.js v6+ only) max size of response in bytes (decompressed).
+  // Aborts before limit is exceeded so oversized upstreams can't
+  // exhaust process memory. Pair with `timeout` option above.
+  // Default set to 0 disables max size:
   size: 0,
 
   // (Node.js v6+ only) compression defaults to true
@@ -132,10 +136,6 @@ try {
   console.log(metadata);
 } catch (err) {
   console.error(err);
-  // Optional: handle x402 "payment required" responses
-  if (err.paymentRequired && err.x402) {
-    // Handle x402 payment details
-  }
 }
 
 // Alternate use-case: parse a Response object instead:
@@ -181,7 +181,9 @@ console.log(metadata);
 ### Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
 
-A basic template for the object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields.
+A basic template for the object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object. Extractor details live in `/lib/extract-*`.
+
+Content is returned raw, by design, as found on the page without sanitizing it. Only you know its output context, so sanitization is your call (e.g. DOMPurify before rendering to a DOM). Treat all extracted values as untrusted.
 
 The object consists of key/value pairs as strings, with exceptions:
 - `redirects` is an object with `count` (number) and `chain` (array of `{ order, url, statusCode }`)
