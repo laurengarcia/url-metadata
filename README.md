@@ -1,6 +1,6 @@
 # url-metadata
 
-Fetch a url and scrape metadata from its HTML using Node.js or the browser. Has optional modes to parse a string of html or a `Response` object instead.
+Fetch a URL and scrape its metadata using Node.js or the browser. Has optional mode to parse metadata from HTML strings or `Response` objects instead. First-class configurable security options available. Content is returned raw by design; sanitize your own output (so you control processing efficiency).
 
 ---
 <div>
@@ -24,12 +24,12 @@ Fetch a url and scrape metadata from its HTML using Node.js or the browser. Has 
 - img tags
 - automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
-- [x402](https://www.x402.org/) error support w payment requirements
+- [x402](https://www.x402.org/) errors return payment requirements
 
 **Security** - v5.1.0+ Protects against:
-- Infinite redirect loops
+- Infinite redirect loops: `maxRedirects` option defaults to 10.
 - SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options also available)
-- Memory-exhaustion attacks (gzip bombs, oversized responses): set `timeout` and `size` options to enable
+- Memory-exhaustion attacks (gzip bombs, oversized responses): set `size` option. Pair with `timeout` to prevent slow/connection-holding responses.
 
 More details below. To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 
@@ -52,7 +52,7 @@ import urlMetadata from 'url-metadata';
 
 async function getMetadata(url) {
   try {
-    return await urlMetadata(url);
+    return await urlMetadata(url); // pass options as 2nd argument
   } catch (err) {
     console.error(err);
   }
@@ -72,6 +72,10 @@ const options = {
     From: 'example@example.com'
   },
 
+  // Alternate use-case: pass `Response` object to be parsed
+  // See example usage below
+  parseResponseObject: undefined
+
   // (Node.js v18+ only)
   // To prevent SSRF attacks, the default option below blocks
   // requests to private network & reserved IP addresses via:
@@ -84,12 +88,6 @@ const options = {
   // built-in request filtering agent above
   // https://www.npmjs.com/package/node-fetch/v/2.7.0#custom-agent
   agent: undefined,
-
-  // (Browser only) `fetch` API cache setting
-  cache: 'no-cache',
-
-  // (Browser only) `fetch` API mode (ex: 'cors', 'same-origin', etc)
-  mode: 'cors',
 
   // Maximum redirects in request chain, defaults to 10
   maxRedirects: 10,
@@ -108,41 +106,39 @@ const options = {
   // Support gzip/deflate content encoding, set `false` to disable
   compress: true,
 
+  // Force-rewrites favicon and img url strings returned to use https://,
+  // valid for images with absolute & protocol-relative urls.
+  // Relative urls pass thru untouched:
+  ensureSecureImageRequest: true,
+
   // Charset to decode response with (ex: 'auto', 'utf-8', 'EUC-JP')
   // defaults to auto-detect in `Content-Type` header or meta tag
   // if none found, default `auto` option falls back to `utf-8`
   // override by passing in charset here (ex: 'windows-1251'):
   decode: 'auto',
 
+  // (Browser only) `fetch` API cache setting
+  cache: 'no-cache',
+
+  // (Browser only) `fetch` API mode (ex: 'cors', 'same-origin', etc)
+  mode: 'cors',
+
   // Number of characters to truncate description to
   descriptionLength: 750,
 
-  // Force image urls in selected tags to use https,
-  // valid for images & favicons with full paths
-  ensureSecureImageRequest: true,
-
   // Include raw response body as string
-  includeResponseBody: false,
-
-  // Alternate use-case: pass in `Response` object here to be parsed
-  // see example below
-  parseResponseObject: undefined
+  includeResponseBody: false
 };
 
-// Basic options usage
-try {
-  const url = 'https://en.wikipedia.org/wiki/WHATWG';
-  const metadata = await urlMetadata(url, options);
-  console.log(metadata);
-} catch (err) {
-  console.error(err);
-}
+// Options usage:
+const metadata = await urlMetadata(url, options);
 
-// Alternate use-case: parse a Response object instead:
+// Alternately, parse a Response object instead:
 try {
   // fetch the url in your own code
   const response = await fetch('https://en.wikipedia.org/wiki/WHATWG');
-  // pass the `response` object to be parsed for its metadata
+  // ...do your own thing
+  // then pass the `response` object to be parsed for metadata:
   const metadata = await urlMetadata(null, {
     parseResponseObject: response
   });
@@ -183,7 +179,7 @@ Returns a promise resolved with a JSON object. Note that the returned `url` fiel
 
 A basic template for the object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object. Extractor details live in `/lib/extract-*`.
 
-Content is returned raw, by design, as found on the page without sanitizing it. Only you know its output context, so sanitization is your call (e.g. DOMPurify before rendering to a DOM). Treat all extracted values as untrusted.
+Content is returned raw, by design, as found on the page without sanitizing it. Only you know its output context, so sanitization is your call (e.g. DOMPurify before rendering to a DOM; parameterized queries when storing to SQL). Treat all extracted values as untrusted.
 
 The object consists of key/value pairs as strings, with exceptions:
 - `redirects` is an object with `count` (number) and `chain` (array of `{ order, url, statusCode }`)

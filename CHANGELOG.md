@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.6.1
+- README: explain security model & options more clearly
+- harden `ensureSecureImageRequest` option tests
+
 5.6.0
 - feature: add basic performance metrics (see main.js for specifics)
 
