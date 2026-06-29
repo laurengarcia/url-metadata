@@ -74,7 +74,7 @@ const options = {
 
   // Alternate use-case: pass `Response` object to be parsed
   // See example usage below
-  parseResponseObject: undefined
+  parseResponseObject: undefined,
 
   // (Node.js v18+ only)
   // To prevent SSRF attacks, the default option below blocks

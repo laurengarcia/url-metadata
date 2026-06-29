@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.7.0
+- feature: add more headers to extract whitelist, esp w/r/t security
+- README: missing comma after parseResponseObject
+
 5.6.1
 - README: explain security model & options more clearly
 - harden `ensureSecureImageRequest` option tests
