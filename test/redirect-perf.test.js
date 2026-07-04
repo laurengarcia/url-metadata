@@ -50,7 +50,7 @@ test('obey maxRedirects option; error returns redirects property w correct shape
 
 test('https:// -> http:// redirect success', async () => {
   try {
-    const url = 'https://bit.ly/4uIArop'
+    const url = 'https://bit.ly/4uIArop' // redirects to httpforever.com
     const metadata = await urlMetadata(url, { maxRedirects: 2 })
     expect(metadata.redirects.count).toBeGreaterThan(0)
     expect(metadata.performance).toBeDefined()
@@ -61,7 +61,7 @@ test('https:// -> http:// redirect success', async () => {
 
 test('http:// -> https:// redirect success', async () => {
   try {
-    const url = 'http://bit.ly/4oFgU6Q'
+    const url = 'http://bit.ly/4oFgU6Q' // redirects http:// -> https://minifetch.com
     const metadata = await urlMetadata(url)
     expect(metadata.redirects.count).toBeGreaterThan(0)
     // Test metadata.performance shape
@@ -71,5 +71,28 @@ test('http:// -> https:// redirect success', async () => {
     expect(metadata.performance.responseTimeMs).toBeGreaterThan(metadata.performance.ttfbMs)
   } catch (err) {
     expect(err).toBe(undefined)
+  }
+})
+
+test('errors properly when redirect is blocked', async () => {
+  const url = 'https://bit.ly/4fjrqxy' // redirects to amazon profile (blocked)
+  try {
+    const metadata = await urlMetadata(url)
+    console.log(metadata)
+    // the ^code above should throw an error
+    // if the following line fails it means
+    // the test did not throw the proper error:
+    expect(metadata.url).toBe(undefined)
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.message).toBe('response code 400')
+    // Test error.redirects came back & in correct shape:
+    expect(err.redirects).toBeDefined()
+    expect(err.redirects.count).toBe(1)
+    expect(err.redirects.chain[0]).toBeDefined()
+    expect(err.redirects.chain[0].order).toBe(1)
+    expect(err.redirects.chain[0].statusCode).toBeGreaterThan(300)
+    expect(err.redirects.chain[0].statusCode).toBeLessThan(400)
+    expect(err.redirects.chain[0].url).toBe(url)
   }
 })
