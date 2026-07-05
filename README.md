@@ -35,7 +35,7 @@ More details below. To report a bug or request a feature please open an issue or
 
 
 ## Install
-Works with Node.js versions `>=6.0.0` or in the browser when bundled. Example build configs available in the [GitHub repo](https://github.com/laurengarcia/url-metadata) `/example-*` dirs: Next.js, Vite and Webpack (see `/example-typescript`).
+Works with Node.js versions `>=18.17` or in the browser when bundled. Example build configs available in the [GitHub repo](https://github.com/laurengarcia/url-metadata) `/example-*` dirs: Next.js, Vite and Webpack (see `/example-typescript`).
 
 ```
 npm install url-metadata --save
@@ -76,14 +76,14 @@ const options = {
   // See example usage below
   parseResponseObject: undefined,
 
-  // (Node.js v18+ only)
+  // (Node.js v18.17+ only)
   // To prevent SSRF attacks, the default option below blocks
   // requests to private network & reserved IP addresses via:
   // https://www.npmjs.com/package/request-filtering-agent
   // Browser security policies prevent SSRF automatically.
   requestFilteringAgentOptions: undefined,
 
-  // (Node.js v6+ only)
+  // (Node.js v18.17+ only)
   // Pass in your own custom `agent` to override the
   // built-in request filtering agent above
   // https://www.npmjs.com/package/node-fetch/v/2.7.0#custom-agent
@@ -96,13 +96,13 @@ const options = {
   // Time-bounds slow and connection-holding (Slowloris-class) responses.
   timeout: 10000,
 
-  // (Node.js v6+ only) max size of response in bytes (decompressed).
+  // (Node.js v18.17+ only) max size of response in bytes (decompressed).
   // Aborts before limit is exceeded so oversized upstreams can't
   // exhaust process memory. Pair with `timeout` option above.
   // Default set to 0 disables max size:
   size: 0,
 
-  // (Node.js v6+ only) compression defaults to true
+  // (Node.js v18.17+ only) compression defaults to true
   // Support gzip/deflate content encoding, set `false` to disable
   compress: true,
 
@@ -199,7 +199,7 @@ The object consists of key/value pairs as strings, with exceptions:
 
 **Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block.
 
-**Issue:** `No fetch implementation found`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js < v6). File a GitHub issue or try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
+**Issue:** `No fetch implementation found`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js <18.17). File a GitHub issue or try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
 
 **Issue:** `DNS Lookup` errors. The SSRF filtering agent defaults on this package prevent calls to private ip addresses, link-local addresses and reserved ip addresses. To change or disable this feature you need to pass custom `requestFilteringAgentOptions`. More info [here](https://www.npmjs.com/package/request-filtering-agent).
 

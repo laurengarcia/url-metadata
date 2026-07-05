@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.7.1
+- package.json: bump `engines.node` to >=18.17 since we are gated by `cheerio` 1.0.0 not just `node-fetch`
+- update README to reflect change
+
 5.7.0
 - feature: add more headers to extract whitelist, esp w/r/t security
 - README: missing comma after parseResponseObject

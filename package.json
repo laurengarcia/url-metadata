@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "5.7.0",
+  "version": "5.7.1",
   "description": "Fetch a URL and scrape its metadata using Node.js or the browser. Can parse metadata from HTML strings or Response objects as well.",
   "keywords": [
     "html",
@@ -27,7 +27,7 @@
     "x402 errors"
   ],
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=18.17"
   },
   "main": "index.js",
   "browser": {

@@ -19,13 +19,13 @@ module.exports = function (url, options, _fetch, useAgent) {
         From: 'example@example.com'
       },
       requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
-      agent: undefined, // Node.js v6+ only; silently ignored by others
+      agent: undefined, // Node.js only; silently ignored by others
       cache: 'no-cache', // Browser only
       mode: 'cors', // Browser only
       maxRedirects: 10,
       timeout: 10000,
-      size: 0, // Node.js v6+ only; silently ignored by others
-      compress: true, // Node.js v6+ only; silently ignored by others
+      size: 0, // Node.js only; silently ignored by others
+      compress: true, // Node.js only; silently ignored by others
       decode: 'auto',
       descriptionLength: 750,
       ensureSecureImageRequest: true,

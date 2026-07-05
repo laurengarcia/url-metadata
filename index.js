@@ -1,4 +1,4 @@
-// In all versions of Node.js >v6.0, use `node-fetch` module
+// In all versions of Node.js v >=18.17, use `node-fetch` module
 // with SSRF protection from `request-filtering-agent`.
 // We're using `node-fetch` bc Node.js's native `fetch` does
 // not support `request-filtering-agent` SSRF protection.
