@@ -43,12 +43,11 @@ module.exports = function (url, options, _fetch, useAgent) {
     chain: []
   }
   const perf = {
-    redirectTimeMs: undefined, // redirect tax before last hop
-    ttfbMs: undefined, // last hop -> headers
-    responseTimeMs: undefined // last hop start -> body read complete
+    redirectTimeMs: undefined, // redirect tax (before last hop)
+    ttfbMs: undefined, // cumulative: first request start -> final hop's headers arriving
+    responseTimeMs: undefined // cumulative: first request start -> body read complete
   }
-  let overallStart // start of the very first hop
-  let lastHopStart // start of the final (non-redirect) hop
+  let overallStart // start of the very first hop; baseline for both ttfbMs and responseTimeMs
   let contentType
   let charset
   let currentResponse = null
@@ -104,10 +103,13 @@ module.exports = function (url, options, _fetch, useAgent) {
         return fetchData(newUrl, redirectCount + 1)
       }
 
-      // Perf: last hop reached; record timings relative to this hop only
-      lastHopStart = hopStart
-      perf.ttfbMs = Math.round(headersAt - hopStart)
-      // Perf: redirect tax = everything that elapsed before the last hop began
+      // Perf: last hop reached (the first non-redirect response). ttfbMs and
+      // responseTimeMs are both measured from overallStart (the very first
+      // request), matching Google/web.dev's TTFB, which includes redirect time.
+      perf.ttfbMs = Math.round(headersAt - overallStart)
+      // Perf: redirect tax = everything that elapsed before the last hop began.
+      // Still its own field for transparency — now a component of ttfbMs rather
+      // than something a caller needs to add to it.
       if (redirects.count > 0) perf.redirectTimeMs = Math.round(hopStart - overallStart)
 
       // Finally, return the response
@@ -183,9 +185,11 @@ module.exports = function (url, options, _fetch, useAgent) {
       .then(async (responseBuffer) => {
         if (!responseBuffer) return
 
-        // Perf: body fully read here (arrayBuffer resolved). Same last-hop baseline as
-        // ttfbMs, so responseTimeMs - ttfbMs cleanly yields body download time
-        if (lastHopStart !== undefined) perf.responseTimeMs = Math.round(now() - lastHopStart)
+        // Perf: body fully read here (arrayBuffer resolved). Same overallStart
+        // baseline as ttfbMs, so responseTimeMs - ttfbMs cleanly yields body
+        // download time (redirect time cancels out of that subtraction since
+        // it's baked into both).
+        if (overallStart !== undefined) perf.responseTimeMs = Math.round(now() - overallStart)
 
         // Handle optional user-specified charset
         if (opts.decode !== 'auto') {

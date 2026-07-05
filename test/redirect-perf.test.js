@@ -14,10 +14,12 @@ test('follow redirects by default; redirects + performance props have correct sh
     expect(metadata.redirects.chain[0].statusCode).toBeGreaterThan(300)
     expect(metadata.redirects.chain[0].statusCode).toBeLessThan(400)
     expect(metadata.redirects.chain[0].url).toBe(url)
-    // Test metadata.performance shape
+    // Test `metadata.performance` shape. `ttfbMs` includes `redirectTimeMs`
+    // (Google/web.dev TTFB semantics), so ttfbMs > redirectTimeMs
     expect(metadata.performance).toBeDefined()
     expect(metadata.performance.redirectTimeMs).toBeGreaterThan(0)
     expect(metadata.performance.ttfbMs).toBeGreaterThan(0)
+    expect(metadata.performance.ttfbMs).toBeGreaterThan(metadata.performance.redirectTimeMs)
     expect(metadata.performance.responseTimeMs).toBeGreaterThan(metadata.performance.ttfbMs)
   } catch (err) {
     expect(err).toBe(undefined)
@@ -64,10 +66,11 @@ test('http:// -> https:// redirect success', async () => {
     const url = 'http://bit.ly/4oFgU6Q' // redirects http:// -> https://minifetch.com
     const metadata = await urlMetadata(url)
     expect(metadata.redirects.count).toBeGreaterThan(0)
-    // Test metadata.performance shape
+    // Test metadata.performance shape. ttfbMs > redirectTimeMs as above
     expect(metadata.performance).toBeDefined()
     expect(metadata.performance.redirectTimeMs).toBeGreaterThan(0)
     expect(metadata.performance.ttfbMs).toBeGreaterThan(0)
+    expect(metadata.performance.ttfbMs).toBeGreaterThan(metadata.performance.redirectTimeMs)
     expect(metadata.performance.responseTimeMs).toBeGreaterThan(metadata.performance.ttfbMs)
   } catch (err) {
     expect(err).toBe(undefined)

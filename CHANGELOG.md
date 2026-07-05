@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.7.2
+- bugfix: `performance.ttfb` now cumulative, includes `redirectTimeMs` per Google web.dev definition
+
 5.7.1
 - package.json: bump `engines.node` to >=18.17 since we are gated by `cheerio` 1.0.0 not just `node-fetch`
 - update README to reflect change
