@@ -30,6 +30,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - Infinite redirect loops: `maxRedirects` option defaults to 10.
 - SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options also available)
 - Memory-exhaustion attacks (gzip bombs, oversized responses): set `size` option. Pair with `timeout` to prevent slow/connection-holding responses.
+- Leaking sensitive headers (auth, cookies) if target URL redirects to a diff host.
 
 More details below. To report a bug or request a feature please open an issue or pull request in [GitHub](https://github.com/laurengarcia/url-metadata). Please read the `Troubleshooting` section below *before* filing a bug.
 

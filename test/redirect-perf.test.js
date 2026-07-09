@@ -1,4 +1,5 @@
 const urlMetadata = require('./../index')
+const main = require('./../main')
 
 test('follow redirects by default; redirects + performance props have correct shape', async () => {
   const url = 'https://t.co/3K2Oj1dRlE'
@@ -75,6 +76,67 @@ test('http:// -> https:// redirect success', async () => {
   } catch (err) {
     expect(err).toBe(undefined)
   }
+})
+
+test('strips sensitive headers on cross-host redirect hops only', async () => {
+  // Mock fetch: same-host hop, then cross-host hop, then 200 html.
+  // Records the headers each hop receives.
+  const hops = []
+  const mockHeaders = (obj) => {
+    const map = new Map(Object.entries(obj))
+    return {
+      get: (k) => (map.has(k.toLowerCase()) ? map.get(k.toLowerCase()) : null),
+      forEach: (fn) => map.forEach(fn)
+    }
+  }
+  const routes = {
+    'https://origin.example.com/start': {
+      status: 301,
+      headers: mockHeaders({ location: 'https://origin.example.com/step' })
+    },
+    'https://origin.example.com/step': {
+      status: 301,
+      headers: mockHeaders({ location: 'https://elsewhere.example.net/final' })
+    },
+    'https://elsewhere.example.net/final': {
+      status: 200,
+      ok: true,
+      url: 'https://elsewhere.example.net/final',
+      headers: mockHeaders({ 'content-type': 'text/html; charset=utf-8' }),
+      arrayBuffer: async () => new TextEncoder().encode(
+        '<html><head><title>ok</title></head><body></body></html>'
+      ).buffer
+    }
+  }
+  const mockFetch = async (url, requestOpts) => {
+    hops.push({ url, headers: requestOpts.headers })
+    return routes[url]
+  }
+  const noopAgent = () => undefined
+
+  const metadata = await main('https://origin.example.com/start', {
+    requestHeaders: {
+      'User-Agent': 'url-metadata test',
+      Authorization: 'Bearer hunter2',
+      Cookie: 'session=abc123'
+    }
+  }, mockFetch, noopAgent)
+
+  expect(metadata.redirects.count).toBe(2)
+  expect(hops.length).toBe(3)
+  // Hop 1 (original request): all headers present
+  expect(hops[0].url).toBe('https://origin.example.com/start') // original request
+  expect(hops[0].headers.Authorization).toBe('Bearer hunter2')
+  expect(hops[0].headers.Cookie).toBe('session=abc123')
+  // Hop 2 (same host): credentials still forwarded
+  expect(hops[1].url).toBe('https://origin.example.com/step') // 1st hop: same host
+  expect(hops[1].headers.Authorization).toBe('Bearer hunter2')
+  expect(hops[1].headers.Cookie).toBe('session=abc123')
+  // Hop 3 (cross host): credentials stripped, benign headers kept
+  expect(hops[2].url).toBe('https://elsewhere.example.net/final') // 2nd hop: diff host
+  expect(hops[2].headers.Authorization).toBe(undefined)
+  expect(hops[2].headers.Cookie).toBe(undefined)
+  expect(hops[2].headers['User-Agent']).toBe('url-metadata test')
 })
 
 test('errors properly when redirect is blocked', async () => {

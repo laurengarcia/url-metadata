@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.7.3
+- bugfix: #112 - security: strip sensitive headers on redirect to diff host
+
 5.7.2
 - bugfix: `performance.ttfb` now cumulative, includes `redirectTimeMs` per Google web.dev definition
 

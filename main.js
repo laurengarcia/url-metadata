@@ -8,6 +8,10 @@ const now = (typeof performance !== 'undefined' && performance.now)
   ? () => performance.now()
   : () => Date.now()
 
+// Credential-bearing headers dropped when a redirect hop changes host,
+// mirroring browsers & `node-fetch` >=2.6.7 (CVE-2022-0235 class)
+const sensitiveHeaders = ['authorization', 'www-authenticate', 'cookie', 'cookie2']
+
 module.exports = function (url, options, _fetch, useAgent) {
   if (!options || typeof options !== 'object') options = {}
 
@@ -52,7 +56,7 @@ module.exports = function (url, options, _fetch, useAgent) {
   let charset
   let currentResponse = null
 
-  async function fetchData (_url, redirectCount = 0) {
+  async function fetchData (_url, redirectCount = 0, requestHeaders = opts.requestHeaders) {
     if (redirectCount > opts.maxRedirects) {
       throw createHttpError({ msg: 'too many redirects', redirects, requestUrl, url: _url })
     }
@@ -64,7 +68,7 @@ module.exports = function (url, options, _fetch, useAgent) {
     } else if (_url) {
       const requestOpts = {
         method: 'GET',
-        headers: opts.requestHeaders,
+        headers: requestHeaders,
         // If the user doesn't pass in their own agent:
         // When agent is a function, `node-fetch` calls it with the parsed URL
         // of the request it's about to make, and uses the return value as the
@@ -98,9 +102,18 @@ module.exports = function (url, options, _fetch, useAgent) {
           url: _url,
           statusCode: response.status
         })
-        // Then, follow the redirect
+        // Then, follow the redirect. Strip sensitive headers when the hop
+        // crosses hosts; once stripped they stay stripped for later hops.
         const newUrl = new URL(response.headers.get('location'), _url).href
-        return fetchData(newUrl, redirectCount + 1)
+        let nextHeaders = requestHeaders
+        // Compare exact host - its what browsers, curl, unidici do
+        if (new URL(newUrl).host !== new URL(_url).host) {
+          nextHeaders = {}
+          for (const key of Object.keys(requestHeaders)) {
+            if (!sensitiveHeaders.includes(key.toLowerCase())) nextHeaders[key] = requestHeaders[key]
+          }
+        }
+        return fetchData(newUrl, redirectCount + 1, nextHeaders)
       }
 
       // Perf: last hop reached (the first non-redirect response). ttfbMs and
