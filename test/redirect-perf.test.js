@@ -125,12 +125,15 @@ test('strips sensitive headers on cross-host redirect hops only', async () => {
   expect(metadata.redirects.count).toBe(2)
   expect(hops.length).toBe(3)
   // Hop 1 (original request): all headers present
+  expect(hops[0].url).toBe('https://origin.example.com/start') // original request
   expect(hops[0].headers.Authorization).toBe('Bearer hunter2')
   expect(hops[0].headers.Cookie).toBe('session=abc123')
   // Hop 2 (same host): credentials still forwarded
+  expect(hops[1].url).toBe('https://origin.example.com/step') // 1st hop: same host
   expect(hops[1].headers.Authorization).toBe('Bearer hunter2')
   expect(hops[1].headers.Cookie).toBe('session=abc123')
   // Hop 3 (cross host): credentials stripped, benign headers kept
+  expect(hops[2].url).toBe('https://elsewhere.example.net/final') // 2nd hop: diff host
   expect(hops[2].headers.Authorization).toBe(undefined)
   expect(hops[2].headers.Cookie).toBe(undefined)
   expect(hops[2].headers['User-Agent']).toBe('url-metadata test')
