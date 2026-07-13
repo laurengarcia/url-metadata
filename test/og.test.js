@@ -27,7 +27,9 @@ test('og:type article', async () => {
         <meta data-rh="true" property="og:image" content="https://static01.nyt.com/images/2024/01/30/business/26crypto-security-print1/00crypto-sec-facebookJumbo.jpg?year=2024&amp;h=549&amp;w=1050&amp;s=a1eb111c82f11b0b9c5bb1f2a4509135ef43f3ca22834c0bd9a06984f4a909d5&amp;k=ZQJBKqZ0VN"/>
         <meta data-rh="true" property="og:image:alt" content=""/>
         <meta data-rh="true" property="og:description" content="Federal judges are weighing whether digital currencies should be subject to the same rules as stocks and bonds. The outcome could shape crypto’s future in the U.S."/>
+
         <link data-rh="true" rel="canonical" href="https://www.nytimes.com/2024/01/26/technology/cryptocurrency-stocks-bonds-courts-move-closer-to-an-answer.html"/>
+
         <link data-rh="true" rel="alternate" href="nyt://article/f7564591-873a-5674-be4b-1cf6d058ada4"/>
         <link data-rh="true" rel="alternate" type="application/json+oembed" href="https://www.nytimes.com/svc/oembed/json/?url=https%3A%2F%2Fwww.nytimes.com%2F2024%2F01%2F26%2Ftechnology%2Fcryptocurrency-stocks-bonds-courts-move-closer-to-an-answer.html" title="Is Cryptocurrency Like Stocks and Bonds? Courts Move Closer to an Answer."/>
 
@@ -44,6 +46,7 @@ test('og:type article', async () => {
         <meta data-rh="true" name="pdate" content="20240126"/>
         <meta data-rh="true" property="article:section" content="Technology"/><meta data-rh="true" property="article:author" content="https://www.nytimes.com/by/matthew-goldstein"/>
         <meta data-rh="true" property="article:author" content="https://www.nytimes.com/by/david-yaffe-bellany"/>
+
         <meta data-rh="true" property="article:tag" content="Virtual Currency"/>
         <meta data-rh="true" property="article:tag" content="Regulation and Deregulation of Industry"/>
         <meta data-rh="true" property="article:tag" content="Decisions and Verdicts"/>
@@ -55,6 +58,7 @@ test('og:type article', async () => {
         <meta data-rh="true" property="article:tag" content="Coinbase Inc"/>
         <meta data-rh="true" property="article:tag" content="Securities and Exchange Commission"/>
         <meta data-rh="true" property="article:tag" content="Gensler, Gary S"/>
+
         <meta data-rh="true" property="article:opinion" content="false"/>
         <meta data-rh="true" property="article:content_tier" content="metered"/>
         <meta data-rh="true" name="CG" content="technology"/><meta data-rh="true" name="SCG" content=""/>
@@ -184,6 +188,7 @@ test('og:type article', async () => {
 
   try {
     const metadata = await urlMetadata(null, { parseResponseObject: response })
+    console.log(metadata)
     expect(metadata['article:section']).toBe('Technology')
     expect(metadata['article:opinion']).toBe('false')
     // handle multiple `article:tag` tags w/ comma delimiter:
@@ -194,6 +199,7 @@ test('og:type article', async () => {
     expect(err).toBe(undefined)
   }
 })
+
 /* eslint-enable */
 
 // https://developers.facebook.com/docs/opengraph/music/

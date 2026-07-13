@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.7.4
+- bugfix: #113 - handle mulitple canonical tags
+
 5.7.3
 - bugfix: #112 - security: strip sensitive headers on redirect to diff host
 
