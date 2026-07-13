@@ -188,7 +188,6 @@ test('og:type article', async () => {
 
   try {
     const metadata = await urlMetadata(null, { parseResponseObject: response })
-    console.log(metadata)
     expect(metadata['article:section']).toBe('Technology')
     expect(metadata['article:opinion']).toBe('false')
     // handle multiple `article:tag` tags w/ comma delimiter:
