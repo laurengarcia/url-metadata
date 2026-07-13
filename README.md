@@ -184,9 +184,11 @@ Content is returned raw, by design, as found on the page without sanitizing it. 
 
 The object consists of key/value pairs as strings, with exceptions:
 - `redirects` is an object with `count` (number) and `chain` (array of `{ order, url, statusCode }`)
+- `canonical` is a string, and returns the first `<link rel="canonical">` found on the page (empty string if none). The raw href of every canonical tag found — including if there's only one, or none, or many — is also returned as `canonicalUrls`, an array of strings in the order encountered while parsing the page, so you can reason about this yourself (e.g. detect and fix multiples).
 - `hreflang`, `favicons`, and `responseHeaders` is an array of objects containing key/value pairs of strings
 - `jsonld` is an array of objects
-- all meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings conforming to the [Google Scholar spec](https://www.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values. So if the html contains:
+- `meta` tags with multiple or duplicate tags on the page are returned as strings with comma-separated values since these tags don't typically contain commas, except:
+- meta tags that begin with `citation_` (ex: `citation_author`) return with keys as strings and values that are an array of strings conforming to the [Google Scholar spec](https://scholar.google.com/intl/en/scholar/inclusion.html#indexing) which allows for multiple citation meta tags with different content values, including commas. So if the html contains:
 ```
 <meta name="citation_author" content="Arlitsch, Kenning">
 <meta name="citation_author" content="OBrien, Patrick">
@@ -195,6 +197,7 @@ The object consists of key/value pairs as strings, with exceptions:
 ```
 'citation_author': ["Arlitsch, Kenning", "OBrien, Patrick"],
 ```
+
 
 ### Troubleshooting
 
