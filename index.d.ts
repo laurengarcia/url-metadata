@@ -23,6 +23,22 @@ declare namespace urlMetadata {
     parseResponseObject?: globalThis.Response | import('node-fetch').Response;
   }
 
+  interface UrlMetadataError extends Error {
+    requestUrl?: string; // the url the user passed in
+    redirects?: { // included in all errors where applicable (some do not reach this point tho)
+      count: number;
+      chain: RedirectHop[];
+    };
+    url?: string; // final destination url in request chain
+    statusCode?: number;
+    paymentRequired?: boolean;
+    x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
+    // errors that *may* fall thru from `node-fetch` dependency in Node.js v18+:
+    type?: string;
+    errno?: string;
+    code?: string;
+  }
+
   /**
    * Intentionally loose (collapses to `any`) for maximum compatibility.
    * For a documented shape, opt in with:
@@ -31,10 +47,21 @@ declare namespace urlMetadata {
   type Result = Record<string, string | boolean | number | undefined | any | any[]>;
 
   /**
+   * Opt-in documented result shape:
+   *   const metadata = await urlMetadata(url) as urlMetadata.KnownFields;
+   * Known fields are fully typed; any additional meta tags found on the
+   * page are appended as new fields, as strings — except tags starting
+   * with `citation_`, which are string[] (per Google Scholar spec, see README).
+   */
+  interface KnownFields extends KnownFieldsStrict {
+    [metaTagName: string]: any;
+  }
+
+  /**
    * The complete catalog of fields always present on a successful result
    * (see lib/metadata-fields.js). Closed: no index signature, so `keyof`
    * yields the literal field-name union. Most users want `KnownFields`
-   * below instead.
+   * instead, which allows arbitrary meta tags to be included in definition.
    */
   interface KnownFieldsStrict {
     requestUrl: string; // the url the user passed in
@@ -51,7 +78,7 @@ declare namespace urlMetadata {
       redirectTimeMs?: number; // only set when redirects occurred
     };
     canonical: string; // first <link rel="canonical"> found, '' if none
-    canonicalUrls: string[]; // raw href of every canonical tag, in document order
+    canonicalUrls: string[]; // raw href of every canonical tag, in document order, if more than 1 found
     lang: string;
     hreflang: HreflangTag[];
     charset: string;
@@ -131,20 +158,6 @@ declare namespace urlMetadata {
     responseBody: string; // '' unless options.includeResponseBody is true
   }
 
-  /**
-   * Opt-in documented result shape:
-   *   const metadata = await urlMetadata(url) as urlMetadata.KnownFields;
-   * Known fields are fully typed; anything else falls through to `any`.
-   */
-  interface KnownFields extends KnownFieldsStrict {
-    /**
-     * Any additional meta tags found on the page are appended as new
-     * fields, as strings — except tags starting with `citation_`,
-     * which are string[] (per Google Scholar spec, see README).
-     */
-    [metaTagName: string]: any;
-  }
-
   interface HreflangTag {
     hreflang: string;
     href?: string;
@@ -177,19 +190,4 @@ declare namespace urlMetadata {
     statusCode: number; // the 3xx status returned by this hop
   }
 
-  interface UrlMetadataError extends Error {
-    requestUrl?: string; // the url the user passed in
-    redirects?: { // included in all errors where applicable (some do not reach this point tho)
-      count: number;
-      chain: RedirectHop[]
-    };
-    url?: string; // final destination url in request chain
-    statusCode?: number;
-    paymentRequired?: boolean;
-    x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
-    // errors that *may* fall thru from `node-fetch` dependency in Node.js v6+:
-    type?: string;
-    errno?: string;
-    code?: string;
-  }
 }
