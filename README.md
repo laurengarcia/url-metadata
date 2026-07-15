@@ -199,6 +199,29 @@ The object consists of key/value pairs as strings, with exceptions:
 ```
 
 
+### TypeScript
+The default return type `Result` is intentionally loose (collapses to `any`) so that existing codebases, mocks, and defensive scraping code compile untouched. If you want a documented, autocompleting shape, opt in with a cast — no runtime change:
+
+```ts
+import urlMetadata from 'url-metadata';
+
+// Known fields fully typed; any extra page-specific
+// meta tags fall through to `any`:
+const meta = await urlMetadata(url) as urlMetadata.KnownFields;
+meta.title;      // string
+meta.favicons;   // FaviconTag[]
+meta.redirects;  // { count: number, chain: RedirectHop[] }
+meta.foobar;     // any (arbitrary meta tag found on page)
+
+// Strictest variant: known fields ONLY, closed shape.
+// Catches typos at compile time, but arbitrary page-specific
+// meta tags (incl. `citation_*`) are compile errors:
+const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
+```
+
+See `index.d.ts` for the full field catalog and the exported `HreflangTag`, `FaviconTag`, `Heading`, `ImgTag`, and `RedirectHop` interfaces.
+
+
 ### Troubleshooting
 
 **Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block.
