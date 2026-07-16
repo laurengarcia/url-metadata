@@ -12,15 +12,15 @@ Please attach screenshots here if helpful.
 ___
 
 ### Contributors checklist:
-- [ ] update README (if applicable)
-- [ ] update CHANGELOG (if applicable)
-- [ ] update ROADMAP (if applicable)
 - [ ] index.d.ts: ensure parameters, options & Result are still correct
 - [ ] `npm run test`
 - [ ] ensure ts example works in /example-typescript: `npm run start`
 - [ ] ensure vite.js example works in /example-vite: `npm run dev`
 
 ### Maintainers checklist:
+- [ ] update README (if applicable)
+- [ ] update CHANGELOG (if applicable)
+- [ ] update ROADMAP (if applicable)
 - [ ] `npm run test` on the new PR branch
 - [ ] ensure ts example works in /example-typescript: `npm run start`
 - [ ] ensure vite.js example works in /example-vite: `npm run dev`
