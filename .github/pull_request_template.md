@@ -23,10 +23,10 @@ ___
 - [ ] update ROADMAP (if applicable)
 - [ ] `npm run test` on the new PR branch
 - [ ] optional: test examples against packed local .tgz file
-        - [ ] `npm pack`
-        - [ ] `cd /example-typescript` then `npm install ../url-metadata-<version>.tgz`
-        - [ ] build & start, ensure no errors
-        - [ ] do same for other `/example-*` dirs
+  - [ ] `npm pack`
+  - [ ] `cd /example-typescript` then `npm install ../url-metadata-<version>.tgz`
+  - [ ] build & start, ensure no errors
+  - [ ] do same for other `/example-*` dirs
 - [ ] package.json: bump semver version, push commit to new PR branch on origin
 - [ ] `squash and merge` PR to master
 - [ ] git tag new version of master

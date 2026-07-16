@@ -22,8 +22,10 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - [JSON-LD](https://moz.com/blog/json-ld-for-beginners)
 - h1-h6 tags
 - img tags
-- automatic charset detection & decoding (optional)
 - the full response body as a string of html (optional)
+
+**Features**
+- automatic charset detection & decoding (optional)
 - [x402](https://www.x402.org/) errors return payment requirements
 
 **Security** - v5.1.0+ Protects against:

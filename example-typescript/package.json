@@ -8,7 +8,7 @@
     "start": "http-server dist"
   },
   "dependencies": {
-    "url-metadata": "^5.7.5-beta.0"
+    "url-metadata": "file:../url-metadata-5.7.5-beta.0.tgz"
   },
   "devDependencies": {
     "assert": "^2.1.0",
