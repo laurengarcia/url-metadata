@@ -64,7 +64,7 @@ declare namespace urlMetadata {
    * instead, which allows arbitrary meta tags to be included in definition.
    */
   interface KnownFieldsStrict {
-    requestUrl: string; // the url the user passed in
+    requestUrl: string | null; // the url the user passed in; null in parseResponseObject mode
     redirects: {
       count: number;
       chain: RedirectHop[];
