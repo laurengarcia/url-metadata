@@ -24,27 +24,6 @@ declare namespace urlMetadata {
   }
 
   /**
-   * Design decision (do not "fix"): error fields are attached only when
-   * they carry information & are absent otherwise (see lib/http-error.js).
-   * Keeps serialized errors sparse & log-friendly.
-   */
-  interface UrlMetadataError extends Error {
-    requestUrl?: string; // the url the user passed in; absent if falsy (parseResponseObject mode)
-    redirects?: { // included in all errors where applicable (some do not reach this point tho)
-      count: number;
-      chain: RedirectHop[];
-    };
-    url?: string; // final destination url in request chain
-    statusCode?: number;
-    paymentRequired?: boolean;
-    x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
-    // errors that *may* fall thru from `node-fetch` dependency in Node.js v18+:
-    type?: string;
-    errno?: string;
-    code?: string;
-  }
-
-  /**
    * Intentionally loose (collapses to `any`) for maximum compatibility.
    * For a documented shape, opt in with:
    *   const metadata = await urlMetadata(url) as urlMetadata.KnownFields;
@@ -82,8 +61,8 @@ declare namespace urlMetadata {
       responseTimeMs?: number; // cumulative: first request start -> body read complete
       redirectTimeMs?: number; // only set when redirects occurred
     };
-    canonical: string; // first <link rel="canonical"> found, '' if none
-    canonicalUrls: string[]; // raw href of every canonical tag, in document order, if more than 1 found
+    canonical: string; // first <link rel="canonical"> found, empty string if none
+    canonicalUrls: string[]; // raw href of every canonical tag, in document order
     lang: string;
     hreflang: HreflangTag[];
     charset: string;
@@ -107,7 +86,7 @@ declare namespace urlMetadata {
     price: string;
     priceCurrency: string;
     availability: string;
-    jsonld: Record<string, any>[]; // arbitrary schema.org shapes, per-site
+    jsonld: Record<string, any>[]; // arbitrary schema.org shapes, shapes vary by page (schema.org types, often malformed)
 
     // http://ogp.me/
     'og:url': string;
@@ -160,7 +139,7 @@ declare namespace urlMetadata {
 
     headings: Heading[];
     imgTags: ImgTag[];
-    responseBody: string; // '' unless options.includeResponseBody is true
+    responseBody: string; // empty string unless options.includeResponseBody is true
   }
 
   interface HreflangTag {
@@ -193,6 +172,27 @@ declare namespace urlMetadata {
     order: number; // 1-based position in the chain (first hop is order: 1)
     url: string; // the url requested at this hop
     statusCode: number; // the 3xx status returned by this hop
+  }
+
+  /**
+   * Design decision (do not "fix"): error fields are attached only when
+   * they carry information & are absent otherwise (see lib/http-error.js).
+   * Keeps serialized errors sparse & log-friendly.
+   */
+  interface UrlMetadataError extends Error {
+    requestUrl?: string; // the url the user passed in; absent if falsy (parseResponseObject mode)
+    redirects?: { // included in all errors where applicable (some do not reach this point tho)
+      count: number;
+      chain: RedirectHop[];
+    };
+    url?: string; // final destination url in request chain
+    statusCode?: number;
+    paymentRequired?: boolean;
+    x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
+    // errors that *may* fall thru from `node-fetch` dependency in Node.js v18+:
+    type?: string;
+    errno?: string;
+    code?: string;
   }
 
 }

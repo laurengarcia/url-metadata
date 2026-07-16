@@ -224,7 +224,7 @@ metadata.foobar;     // any (arbitrary meta tag found on page; mostly returns as
 const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
 ```
 
-See `index.d.ts` for the full field catalog and the other exported interfaces: `HreflangTag`, `FaviconTag`, `Heading`, `ImgTag`, and `RedirectHop`.
+See `index.d.ts` for the full field catalog and the other exported interfaces: `Options`, `HreflangTag`, `FaviconTag`, `Heading`, `ImgTag`, `RedirectHop`, and `UrlMetadataError`.
 
 
 ### Troubleshooting
