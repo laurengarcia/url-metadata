@@ -35,9 +35,6 @@ import urlMetadata from 'url-metadata';
         'Content-Type': 'text/html'
       }
     })
-    // falsy `url` param (null here, but also '' or undefined) + response
-    // object as option triggers parse mode; all falsy urls coerce to
-    // `metadata.requestUrl === null` (v5.7.5+)
     const metadata = await urlMetadata(null, { parseResponseObject: response });
     console.log('2/ parse html string:', metadata);
   } catch (err) {
@@ -74,5 +71,5 @@ async function resultStaysPermissiveCanary (url: string) {
   const req: string | null = known.requestUrl;
   const extra = known['dc.creator']; // any
 
-  return [s, mock, titleX, favs, hops, req, extra];
+  return [s, mock, title, favs, hops, req, extra];
 }
