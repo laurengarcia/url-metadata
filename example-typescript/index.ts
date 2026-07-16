@@ -68,7 +68,7 @@ async function resultStaysPermissiveCanary (url: string) {
   const title: string = known.title;
   const favs: urlMetadata.FaviconTag[] = known.favicons;
   const hops: urlMetadata.RedirectHop[] = known.redirects.chain;
-  const req: string | null = known.requestUrl;
+  const req: string | null | undefined = known.requestUrl; // optional field, echoes url param verbatim
   const extra = known['dc.creator']; // any
 
   return [s, mock, title, favs, hops, req, extra];

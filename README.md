@@ -173,10 +173,11 @@ const metadata = await urlMetadata(null, {
   parseResponseObject: response
 });
 console.log(metadata);
-// Note on parseResponseObject mode: `requestUrl` returns null (echoing the
-// url param), fetch-dependent fields like `performance` timings are
-// undefined, and a synthetic `new Response()` reports its spec-default
-// `responseStatusCode` of 200 (unless you change it before parsing).
+// Note on parseResponseObject mode: `requestUrl` echoes the url param
+// verbatim (incl falsy values like null, '' or undefined), fetch-dependent
+// fields like `performance` timings are undefined, and a synthetic
+// `new Response()` reports its spec-default `responseStatusCode` of 200
+// (unless you change it before parsing).
 ```
 
 ### Returns
