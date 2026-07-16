@@ -16,7 +16,8 @@ const option: urlMetadata.Options = {
 export async function fetchMetadata(url: string) {
   try {
     return await urlMetadata(url, option);
-  } catch (err: urlMetadata.UrlMetadataError) {
-    console.error(`Failed to fetch metadata for ${url}:`, err);
+  } catch (err) {
+    const e = err as urlMetadata.UrlMetadataError;
+    console.error(`Fail:`, url, e.message, e.statusCode, e.redirects);
   }
 }

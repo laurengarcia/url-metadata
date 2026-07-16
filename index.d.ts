@@ -23,8 +23,13 @@ declare namespace urlMetadata {
     parseResponseObject?: globalThis.Response | import('node-fetch').Response;
   }
 
+  /**
+   * Design decision (do not "fix"): error fields are attached only when
+   * they carry information & are absent otherwise (see lib/http-error.js).
+   * Keeps serialized errors sparse & log-friendly.
+   */
   interface UrlMetadataError extends Error {
-    requestUrl?: string; // the url the user passed in
+    requestUrl?: string; // the url the user passed in; absent if falsy (parseResponseObject mode)
     redirects?: { // included in all errors where applicable (some do not reach this point tho)
       count: number;
       chain: RedirectHop[];
