@@ -200,18 +200,18 @@ The object consists of key/value pairs as strings, with exceptions:
 
 
 ### TypeScript
-The default return type `Result` is intentionally loose (collapses to `any`) so that existing codebases, mocks, and defensive scraping code compile untouched. If you want a documented, autocompleting shape, opt in with a cast — no runtime change:
+The default return type `Result` is intentionally loose (collapses to `any`) so that existing codebases, mocks, and defensive scraping code compile untouched. If you want a documented, autocompleting shape, opt in with a cast. No runtime change needed:
 
 ```ts
 import urlMetadata from 'url-metadata';
 
 // Known fields fully typed; any extra page-specific
 // meta tags fall through to `any`:
-const meta = await urlMetadata(url) as urlMetadata.KnownFields;
-meta.title;      // string
-meta.favicons;   // FaviconTag[]
-meta.redirects;  // { count: number, chain: RedirectHop[] }
-meta.foobar;     // any (arbitrary meta tag found on page)
+const metadata = await urlMetadata(url) as urlMetadata.KnownFields;
+metadata.title;      // string
+metadata.favicons;   // FaviconTag[]
+metadata.redirects;  // { count: number, chain: RedirectHop[] }
+metadata.foobar;     // any (arbitrary meta tag found on page; mostly returns as string)
 
 // Strictest variant: known fields ONLY, closed shape.
 // Catches typos at compile time, but arbitrary page-specific
@@ -219,7 +219,7 @@ meta.foobar;     // any (arbitrary meta tag found on page)
 const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
 ```
 
-See `index.d.ts` for the full field catalog and the exported `HreflangTag`, `FaviconTag`, `Heading`, `ImgTag`, and `RedirectHop` interfaces.
+See `index.d.ts` for the full field catalog and the other exported interfaces: `HreflangTag`, `FaviconTag`, `Heading`, `ImgTag`, and `RedirectHop`.
 
 
 ### Troubleshooting
