@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.7.5
+- index.d.ts: #115 add opt-in `KnownFields` & `KnownFieldsStrict` TS definitions
+- bugfix: `lang` could have returned as `undefined`, not empty `string`.
+
 5.7.4
 - bugfix: #113 - handle mulitple canonical tags
 
