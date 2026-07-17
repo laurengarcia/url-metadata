@@ -196,8 +196,11 @@ For reaching web pages that are blocked. Grab your API key from [ScraperAPI.com]
 const metadata = await urlMetadata('https://hardto.get', {
   proxy: {
     url: https://api.scraperapi.com,
-    apiKey: <YOUR_API_KEY>
-);
+    apiKey: <YOUR_API_KEY>,
+    params: {}
+});
+// To find out how many credits the request cost you:
+console.log(metadata.responseHeaders['sa-credit-cost'])
 ```
 
 ### Returns
@@ -250,6 +253,8 @@ See `index.d.ts` for the full field catalog and the other exported interfaces: `
 ### Troubleshooting
 
 **Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block. This package has a built-in proxy mode you can use for hard-to-get pages, see "Proxy Mode" section above.
+
+**Issue:** Proxy mode with the `render: true` param (headless-browser rendering) throws `unsupported content type: text/x-component`. Some JS-rendered sites (particularly Next.js App Router sites) can return a React Server Component payload — a serialized component tree, not HTML — instead of the rendered page. This package can't parse that as HTML, so it throws instead of silently returning corrupted metadata. This is a quirk of the target site (and sometimes intermittent, tied to CDN/caching behavior), not something fixable from this package's side; retrying or testing without `render` are your best options.
 
 **Issue:** `No fetch implementation found`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js <18.17). File a GitHub issue or try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
 

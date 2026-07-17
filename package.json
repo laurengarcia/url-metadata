@@ -72,7 +72,10 @@
   "jest": {
     "forceExit": true,
     "clearMocks": true,
-    "resetModules": true
+    "resetModules": true,
+    "setupFiles": [
+      "<rootDir>/test/setup-env.js"
+    ]
   },
   "dependencies": {
     "cheerio": "^1.0.0",
@@ -80,6 +83,7 @@
     "request-filtering-agent": "2.0.1"
   },
   "devDependencies": {
+    "dotenv": "^17.4.2",
     "husky": "^8.0.3",
     "jest": "^29.5.0",
     "standard": "^17.0.0"

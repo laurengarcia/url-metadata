@@ -31,6 +31,7 @@ declare namespace urlMetadata {
   interface ProxyConfig {
     url: string;
     apiKey: string;
+    params?: Record<string, string | boolean | number>; // extra passthrough query params
   }
 
   /**

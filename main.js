@@ -22,7 +22,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
         From: 'example@example.com'
       },
-      proxy: undefined, // { url, apiKey } - routes the request through a proxy/unblocking service
+      proxy: undefined, // { url, apiKey, params } - routes the request through a proxy/unblocking service; `params` passed through as extra query string params (ex: ScraperAPI's render, premium, country_code, etc)
       requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
       agent: undefined, // Node.js only; silently ignored by others
       cache: 'no-cache', // Browser only
@@ -75,10 +75,11 @@ module.exports = function (url, options, _fetch, useAgent) {
       // proxying) so it's available once we reach a final, non-redirect response.
       finalUrl = _url
 
-      // ScraperAPI-shaped for now (query params: api_key, url); revisit if
-      // we add a second proxy provider with a different request shape.
+      // ScraperAPI-shaped for now (query params: api_key, url, + passthrough
+      // opts.proxy.params); revisit if we add a second proxy provider with a
+      // different request shape.
       const fetchUrl = opts.proxy
-        ? `${opts.proxy.url}?api_key=${encodeURIComponent(opts.proxy.apiKey)}&url=${encodeURIComponent(_url)}`
+        ? `${opts.proxy.url}?${new URLSearchParams({ api_key: opts.proxy.apiKey, url: _url, ...opts.proxy.params }).toString()}`
         : _url
 
       const requestOpts = {
