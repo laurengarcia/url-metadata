@@ -25,7 +25,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - the full response body as a string of html (optional)
 
 **Features**
-- proxy mode for routing thru [unblocking service](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37) (optional)
+- proxy mode for routing thru unblocking service (optional)
 - parser mode - pass in an html string or Response object (optional)
 - automatic charset detection & decoding (optional)
 - [x402](https://www.x402.org/) errors return payment requirements
@@ -190,6 +190,16 @@ console.log(metadata);
 // (unless you change it before parsing).
 ```
 
+#### Proxy mode
+For reaching web pages that are blocked. Grab your API key from [ScraperAPI.com](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37) using this affiliate link to support the author of this package. If you have another vendor you'd like integrated, just ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
+```
+const metadata = await urlMetadata('https://hardto.get', {
+  proxy: {
+    url: https://api.scraperapi.com,
+    apiKey: <YOUR_API_KEY>
+);
+```
+
 ### Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
 
@@ -239,7 +249,7 @@ See `index.d.ts` for the full field catalog and the other exported interfaces: `
 
 ### Troubleshooting
 
-**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block.
+**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block. This package has a built-in proxy mode you can use for hard-to-get pages, see "Proxy Mode" section above.
 
 **Issue:** `No fetch implementation found`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js <18.17). File a GitHub issue or try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
 
