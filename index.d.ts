@@ -8,6 +8,7 @@ declare function urlMetadata(
 declare namespace urlMetadata {
   interface Options {
     requestHeaders?: Record<string, string>;
+    proxy?: ProxyConfig;
     requestFilteringAgentOptions?: import('request-filtering-agent').RequestFilteringAgentOptions;
     agent?: any; // Suggest: Node.js http.Agent | https.Agent
     cache?: string;
@@ -21,6 +22,15 @@ declare namespace urlMetadata {
     ensureSecureImageRequest?: boolean;
     includeResponseBody?: boolean;
     parseResponseObject?: globalThis.Response | import('node-fetch').Response;
+  }
+
+  /**
+   * ScraperAPI-shaped for now (url + apiKey); object form anticipates
+   * additional proxy providers without a breaking change to `Options`.
+   */
+  interface ProxyConfig {
+    url: string;
+    apiKey: string;
   }
 
   /**

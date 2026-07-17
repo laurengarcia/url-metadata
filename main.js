@@ -22,6 +22,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
         From: 'example@example.com'
       },
+      proxy: undefined, // { url, apiKey } - routes the request through a proxy/unblocking service
       requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
       agent: undefined, // Node.js only; silently ignored by others
       cache: 'no-cache', // Browser only
@@ -34,11 +35,15 @@ module.exports = function (url, options, _fetch, useAgent) {
       descriptionLength: 750,
       ensureSecureImageRequest: true,
       includeResponseBody: false,
-      parseResponseObject: undefined
+      parseResponseObject: undefined,
     },
     // user options override defaults
     options
   )
+
+  if (opts.proxy && (!opts.proxy.url || !opts.proxy.apiKey)) {
+    throw new Error('proxy option requires both url and apiKey')
+  }
 
   const requestUrl = url
   let finalUrl = ''
@@ -66,6 +71,16 @@ module.exports = function (url, options, _fetch, useAgent) {
     if (!_url && opts.parseResponseObject) {
       return opts.parseResponseObject
     } else if (_url) {
+      // Track the real target url for this hop (not the proxy endpoint, when
+      // proxying) so it's available once we reach a final, non-redirect response.
+      finalUrl = _url
+
+      // ScraperAPI-shaped for now (query params: api_key, url); revisit if
+      // we add a second proxy provider with a different request shape.
+      const fetchUrl = opts.proxy
+        ? `${opts.proxy.url}?api_key=${encodeURIComponent(opts.proxy.apiKey)}&url=${encodeURIComponent(_url)}`
+        : _url
+
       const requestOpts = {
         method: 'GET',
         headers: requestHeaders,
@@ -82,12 +97,14 @@ module.exports = function (url, options, _fetch, useAgent) {
         compress: opts.compress
       }
 
-      // Perf: mark hop start; remember the first one for redirect accounting
+      // Perf: mark hop start; remember the first one for redirect accounting.
+      // Note: with a proxy configured this measures time to the proxy service
+      // (which does its own upstream fetch), not direct origin time.
       const hopStart = now()
       if (overallStart === undefined) overallStart = hopStart
 
       // --> Make the fetch request <--
-      const response = await _fetch(_url, requestOpts)
+      const response = await _fetch(fetchUrl, requestOpts)
 
       // Perf: `node-fetch` resolves once response headers arrive (body is a stream),
       // so this is effectively time-to-first-byte for this hop
@@ -136,9 +153,10 @@ module.exports = function (url, options, _fetch, useAgent) {
         // First, set `currentResponse` in case of error
         currentResponse = response
 
-        // Disambiguate `requestUrl` from final `url`
-        // (ex: redirects, links shortened by bit.ly, etc)
-        if (response.url) finalUrl = response.url
+        // `finalUrl` (ex: redirects, links shortened by bit.ly, etc) is set
+        // per-hop inside `fetchData` above rather than read from `response.url`
+        // here, since `response.url` reflects the proxy endpoint's url when
+        // `opts.proxy` is configured, not the real target.
 
         if (!response) {
           throw createHttpError({ msg: `response is ${typeof response}`, redirects, requestUrl, url: finalUrl })

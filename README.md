@@ -25,8 +25,11 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - the full response body as a string of html (optional)
 
 **Features**
+- proxy mode for routing thru [unblocking service](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37) (optional)
+- parser mode - pass in an html string or Response object (optional)
 - automatic charset detection & decoding (optional)
 - [x402](https://www.x402.org/) errors return payment requirements
+- [Discord](https://discord.gg/BqVBeeGsc5) support channel
 
 **Security** - v5.1.0+ Protects against:
 - Infinite redirect loops: `maxRedirects` option defaults to 10.
@@ -74,6 +77,11 @@ const options = {
     'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
     From: 'example@example.com'
   },
+
+  // Route the request through a proxy/ unblocking service.
+  // In proxy mode, other fetch-related options will be silently ignored.
+  // See "Proxy Mode" section below for more details.
+  proxy: undefined, // { url: '<proxy url>', apiKey: 'YOUR_KEY' }
 
   // Alternate use-case: pass `Response` object to be parsed
   // See example usage below
