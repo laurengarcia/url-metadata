@@ -107,6 +107,9 @@ module.exports = function (url, options, _fetch, useAgent) {
       // --> Make the fetch request <--
       const response = await _fetch(fetchUrl, requestOpts)
 
+      // debug
+      console.log(response)
+
       // Perf: `node-fetch` resolves once response headers arrive (body is a stream),
       // so this is effectively time-to-first-byte for this hop
       const headersAt = now()
@@ -206,6 +209,10 @@ module.exports = function (url, options, _fetch, useAgent) {
         // Validate response content type
         contentType = response.headers.get('content-type')
         const isHTML = contentType && contentType.includes('html')
+
+        // debug
+        console.log(contentType)
+
         if (!isHTML) {
           throw createHttpError({ msg: `unsupported content type: ${contentType}`, statusCode: response.status, redirects, requestUrl, url: finalUrl })
         }
@@ -235,6 +242,10 @@ module.exports = function (url, options, _fetch, useAgent) {
           // Decode with charset
           const decoder = new TextDecoder(charset)
           const responseDecoded = decoder.decode(responseBuffer)
+
+          // debug
+          console.log(responseDecoded)
+
           // now parse the metadata!
           resolve(parse(
             requestUrl,

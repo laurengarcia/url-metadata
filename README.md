@@ -200,7 +200,9 @@ const metadata = await urlMetadata('https://hardto.get', {
     params: {}
 });
 // To find out how many credits the request cost you:
-console.log(metadata.responseHeaders['sa-credit-cost'])
+console.log(metadata.responseHeaders['sa-credit-cost']);
+// To retrieve screenshot when you set `params: { screenshot: true }`
+console.log(metadata.responseHeaders['sa-screenshot']);
 ```
 
 ### Returns

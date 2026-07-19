@@ -45,9 +45,10 @@ test('proxy: call with params', async () => {
         //   session_number, device_type, output_format, keep_headers, autoparse
         // Extra credit cost: premium, render, screenshot, ultra_premium
         params: {
-          // country_code: 'us' // works
-          // premium: true // works
-          render: true // works, with caveats in README
+          // country_code: 'us' // works, get results from a specific region
+          // premium: true // works, run thru hi quality residential proxies
+          // render: true // works, with caveats in README
+          'screenshot': true, // works, check `sa-screenshot` response header
         }
       }
     })
