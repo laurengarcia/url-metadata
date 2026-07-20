@@ -21,7 +21,7 @@ test('proxy: ScraperAPI basic call', async () => {
   } catch (err) {
     expect(err).toBe(undefined)
   }
-})
+}, 60000)
 
 test('proxy: ScraperAPI call with params', async () => {
   if (!apiKey) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
@@ -52,7 +52,7 @@ test('proxy: ScraperAPI call with params', async () => {
   } catch (err) {
     expect(err).toBe(undefined)
   }
-}, 60000) // jest's own per-test timeout (default 5000ms)
+}, 60000)
 
 
 test('proxy: omitting proxyUrl with proxyParams errors', async () => {
