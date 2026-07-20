@@ -8,7 +8,7 @@ const urlMetadata = require('./../index')
 const proxyUrl = 'http://api.scraperapi.com/'
 const apiKey = process.env.SCRAPERAPI_KEY
 
-test('proxy: basic call via ScraperAPI', async () => {
+test('proxy: ScraperAPI basic call', async () => {
   if (!apiKey) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
   const url = 'https://minifetch.com'
   try {
@@ -23,10 +23,9 @@ test('proxy: basic call via ScraperAPI', async () => {
   }
 })
 
-test('proxy: call with params', async () => {
+test('proxy: ScraperAPI call with params', async () => {
   if (!apiKey) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
-  // const url = 'https://www.ebay.com/itm/358599586518'
-  // const url = 'https://www.x402scan.com' // Triggers Next.js error when render: true
+  // const url = 'https://www.ebay.com/itm/358599586518' // reachable w premium:true param
   const url = 'https://quotes.toscrape.com/js/' // needs option.includeResponseBody: true
   try {
     const metadata = await urlMetadata(url, {
@@ -37,22 +36,20 @@ test('proxy: call with params', async () => {
       proxyUrl,
       proxyParams: {
         api_key: apiKey,
-        // Swap params one at a time to check which are compatible with the
-        // `isHTML` content-type check in main.js (ex: `screenshot` and some
-        // `output_format` values won't return html & will fail that check).
-        //
         // No extra credit cost: wait_for_selector, country_code,
-        //   session_number, device_type, output_format, keep_headers, autoparse
+        //   session_number, device_type, keep_headers
         // Extra credit cost: premium, render, screenshot, ultra_premium
+        //
         // country_code: 'us', // works, get results from a specific region
         // premium: true, // works, run thru hi quality residential proxies
         // render: true, // works, with caveats in README
-        screenshot: true // works, check `sa-screenshot` response header
+        screenshot: true // works, triggers render: true, check `sa-screenshot` response header
       }
     })
     expect(metadata.responseStatusCode).toBe(200)
-    console.log(metadata)
+    expect(metadata.responseHeaders['sa-screenshot']).toBeDefined()
+    expect(metadata.responseHeaders['sa-credit-cost']).toBeDefined()
   } catch (err) {
     expect(err).toBe(undefined)
   }
-}, 60000) // jest's own per-test timeout (default 5000ms) — separate from the `timeout` option above, needs bumping too
+}, 60000) // jest's own per-test timeout (default 5000ms)
