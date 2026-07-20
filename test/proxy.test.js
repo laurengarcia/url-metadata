@@ -13,7 +13,8 @@ test('proxy: basic call via ScraperAPI', async () => {
   const url = 'https://minifetch.com'
   try {
     const metadata = await urlMetadata(url, {
-      proxy: { url: proxyUrl, apiKey }
+      proxyUrl,
+      proxyParams: { api_key: apiKey }
     })
     expect(metadata.responseStatusCode).toBe(200)
     expect(metadata.title).toContain('SEO')
@@ -29,14 +30,13 @@ test('proxy: call with params', async () => {
   const url = 'https://quotes.toscrape.com/js/' // needs option.includeResponseBody: true
   try {
     const metadata = await urlMetadata(url, {
-      // url-metadata's own fetch timeout (default 10000ms) — bump alongside
-      // the jest test timeout below since `render: true` does full headless
-      // rendering on ScraperAPI's end and can run past 10s on its own.
-      timeout: 60000,
+      // url-metadata's own `timeout` now defaults to 60000ms automatically in
+      // proxy mode (proxyUrl set), so no need to pass it explicitly here
+      // anymore — jest's own per-test timeout below still needs bumping tho.
       includeResponseBody: true,
-      proxy: {
-        url: proxyUrl,
-        apiKey,
+      proxyUrl,
+      proxyParams: {
+        api_key: apiKey,
         // Swap params one at a time to check which are compatible with the
         // `isHTML` content-type check in main.js (ex: `screenshot` and some
         // `output_format` values won't return html & will fail that check).
@@ -44,12 +44,10 @@ test('proxy: call with params', async () => {
         // No extra credit cost: wait_for_selector, country_code,
         //   session_number, device_type, output_format, keep_headers, autoparse
         // Extra credit cost: premium, render, screenshot, ultra_premium
-        params: {
-          // country_code: 'us' // works, get results from a specific region
-          // premium: true // works, run thru hi quality residential proxies
-          // render: true // works, with caveats in README
-          'screenshot': true, // works, check `sa-screenshot` response header
-        }
+        // country_code: 'us', // works, get results from a specific region
+        // premium: true, // works, run thru hi quality residential proxies
+        // render: true, // works, with caveats in README
+        screenshot: true // works, check `sa-screenshot` response header
       }
     })
     expect(metadata.responseStatusCode).toBe(200)

@@ -22,27 +22,47 @@ module.exports = function (url, options, _fetch, useAgent) {
         'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
         From: 'example@example.com'
       },
-      proxy: undefined, // { url, apiKey, params } - routes the request through a proxy/unblocking service; `params` passed through as extra query string params (ex: ScraperAPI's render, premium, country_code, etc)
+      proxyUrl: undefined, // proxy/unblocking service endpoint (ex: ScraperAPI); presence of this triggers proxy mode
+      proxyParams: undefined, // optional vendor query params, passed through verbatim exactly as named in their docs (ex: ScraperAPI's api_key, render, screenshot, country_code) - some vendors need none (ex: header-auth vendors, see requestHeaders)
+      parseResponseObject: undefined,
       requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
       agent: undefined, // Node.js only; silently ignored by others
-      cache: 'no-cache', // Browser only
-      mode: 'cors', // Browser only
       maxRedirects: 10,
-      timeout: 10000,
+      timeout: 10000, // auto-bumped to 60000 in proxy mode unless explicitly overridden, see below
       size: 0, // Node.js only; silently ignored by others
       compress: true, // Node.js only; silently ignored by others
-      decode: 'auto',
-      descriptionLength: 750,
       ensureSecureImageRequest: true,
-      includeResponseBody: false,
-      parseResponseObject: undefined,
+      decode: 'auto',
+      cache: 'no-cache', // Browser only
+      mode: 'cors', // Browser only
+      descriptionLength: 750,
+      includeResponseBody: false
     },
     // user options override defaults
     options
   )
 
-  if (opts.proxy && (!opts.proxy.url || !opts.proxy.apiKey)) {
-    throw new Error('proxy option requires both url and apiKey')
+  if (opts.proxyParams && !opts.proxyUrl) {
+    throw new Error('proxyParams requires a proxyUrl')
+  }
+
+  // Proxy calls route through a third-party service doing its own upstream
+  // fetch (plus optional headless rendering via params like ScraperAPI's
+  // `render`), which routinely takes far longer than a direct fetch.
+  // Default to a longer timeout in proxy mode, unless the caller explicitly
+  // passed their own `timeout`.
+  if (opts.proxyUrl && options.timeout === undefined) {
+    opts.timeout = 60000
+  }
+
+  // Builds the outgoing proxy request url. `proxyParams` (if any) passes
+  // through verbatim as query params, so any vendor-specific param (ex:
+  // ScraperAPI's api_key, render, screenshot, country_code) just works
+  // without us maintaining a list. `url` (the real target) is always
+  // injected last so it always wins, even if `proxyParams` happens to
+  // include one of its own.
+  function buildProxyUrl (targetUrl) {
+    return `${opts.proxyUrl}?${new URLSearchParams({ ...opts.proxyParams, url: targetUrl }).toString()}`
   }
 
   const requestUrl = url
@@ -75,12 +95,9 @@ module.exports = function (url, options, _fetch, useAgent) {
       // proxying) so it's available once we reach a final, non-redirect response.
       finalUrl = _url
 
-      // ScraperAPI-shaped for now (query params: api_key, url, + passthrough
-      // opts.proxy.params); revisit if we add a second proxy provider with a
-      // different request shape.
-      const fetchUrl = opts.proxy
-        ? `${opts.proxy.url}?${new URLSearchParams({ api_key: opts.proxy.apiKey, url: _url, ...opts.proxy.params }).toString()}`
-        : _url
+      // ScraperAPI-shaped for now via `buildProxyUrl` above; revisit if we
+      // add a second proxy provider with a different request shape.
+      const fetchUrl = opts.proxyUrl ? buildProxyUrl(_url) : _url
 
       const requestOpts = {
         method: 'GET',
@@ -160,7 +177,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         // `finalUrl` (ex: redirects, links shortened by bit.ly, etc) is set
         // per-hop inside `fetchData` above rather than read from `response.url`
         // here, since `response.url` reflects the proxy endpoint's url when
-        // `opts.proxy` is configured, not the real target.
+        // `opts.proxyUrl` is configured, not the real target.
 
         if (!response) {
           throw createHttpError({ msg: `response is ${typeof response}`, redirects, requestUrl, url: finalUrl })

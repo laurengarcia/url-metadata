@@ -26,6 +26,8 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 
 **Features**
 - proxy mode for routing thru unblocking service (optional)
+- javascript rendering (in proxy mode)
+- screenshots (in proxy mode)
 - parser mode - pass in an html string or Response object (optional)
 - automatic charset detection & decoding (optional)
 - [x402](https://www.x402.org/) errors return payment requirements
@@ -78,17 +80,22 @@ const options = {
     From: 'example@example.com'
   },
 
-  // Route the request through a proxy/ unblocking service.
-  // In proxy mode, other fetch-related options will be silently ignored.
-  // See "Proxy Mode" section below for more details.
-  proxy: undefined, // { url: '<proxy url>', apiKey: 'YOUR_KEY' }
+  // Route the fetch through a proxy/ unblocking service.
+  // In proxy mode, other fetch-related options will be
+  // silently ignored. Details in  "Proxy Mode" section below.
+  // Presence of proxyUrl alone triggers proxy mode.
+  // Example: 'https://api.scraperapi.com/'
+  proxyUrl: undefined,
+  // Optional vendor-specific query params passed thru as-is,
+  // exactly as named in their docs
+  proxyParams: undefined,
 
   // Alternate use-case: pass `Response` object to be parsed
   // See example usage below
   parseResponseObject: undefined,
 
   // (Node.js v18.17+ only)
-  // To prevent SSRF attacks, the default option below blocks
+  // To prevent SSRF attacks, the default option below blocks fetch
   // requests to private network & reserved IP addresses via:
   // https://www.npmjs.com/package/request-filtering-agent
   // Browser security policies prevent SSRF automatically.
@@ -105,6 +112,8 @@ const options = {
 
   // `fetch` timeout in milliseconds, default is 10 seconds.
   // Time-bounds slow and connection-holding (Slowloris-class) responses.
+  // Auto-bumped to 60 seconds in proxy mode (see "Proxy mode" below)
+  // unless you explicitly pass your own `timeout`.
   timeout: 10000,
 
   // (Node.js v18.17+ only) max size of response in bytes (decompressed).
@@ -191,19 +200,29 @@ console.log(metadata);
 ```
 
 #### Proxy mode
-For reaching web pages that are blocked. Grab your API key from [ScraperAPI.com](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37) using this affiliate link to support the author of this package. If you have another vendor you'd like integrated, just ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
+For reaching web pages that are blocked. Grab your API key from [ScraperAPI.com](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37) using this affiliate link to support the author of this package. If you have another vendor you'd like integrated, just ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5). More to come soon.
+
+`proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch (and, with params like ScraperAPI's `render`, full headless-browser rendering), which routinely takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds in proxy mode instead of the usual 10, unless you explicitly pass your own.
+
+`proxyParams` is a flat passthrough, sent verbatim as query params exactly as named in your vendor's docs - no allowlist, no translation on our side. Some vendors authenticate via a header instead of a query param (ex: an `x-api-key` header) — for those, pass it in `requestHeaders` instead and skip `proxyParams` entirely if the vendor needs no other params.
+
+[ScraperAPI's proxy params list](https://docs.scraperapi.com/control-and-optimization/supported-parameters?fp_ref=lauren37) offers headless javascript rendering via `render: true`, also supports `screenshot: true`. Activate residential and mobile IPs by setting `premium: true`, and `ultra_premium: true` activates advanced bypassing mechanisms (cannot be combined w `premium`).
+
+Note: in proxy mode, `requestHeaders` are sent to the proxy vendor, not the target URL — the vendor makes its own request to the target URL and won't include them unless it has a passthrough param for it (ex: ScraperAPI's `keep_headers: true`). If you're used to putting origin-bound auth/cookies in `requestHeaders`, that won't reach the target URL in proxy mode.
+
 ```
 const metadata = await urlMetadata('https://hardto.get', {
-  proxy: {
-    url: https://api.scraperapi.com,
-    apiKey: <YOUR_API_KEY>,
-    params: {}
+  proxyUrl: 'https://api.scraperapi.com/',
+  proxyParams: {
+    api_key: '<YOUR_API_KEY>'
+  }
 });
 // To find out how many credits the request cost you:
 console.log(metadata.responseHeaders['sa-credit-cost']);
-// To retrieve screenshot when you set `params: { screenshot: true }`
+// To retrieve screenshot when you set `proxyParams: { screenshot: true }`
 console.log(metadata.responseHeaders['sa-screenshot']);
 ```
+Note: ScraperAPI's structured/merchant endpoints (ex: `https://api.scraperapi.com/structured/amazon/product`) return JSON or CSV, not HTML — this package can't parse those and will throw `unsupported content type` if `proxyUrl` is pointed at one. That's expected; those endpoints are a different kind of tool than page metadata extraction.
 
 ### Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
@@ -254,9 +273,9 @@ See `index.d.ts` for the full field catalog and the other exported interfaces: `
 
 ### Troubleshooting
 
-**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the server because it suspects you are a bot or scraper. Check [this list](https://dev.to/princepeterhansen/7-ways-to-avoid-getting-blocked-or-blacklisted-when-web-scraping-45ii) to ensure you're not triggering a block. This package has a built-in proxy mode you can use for hard-to-get pages, see "Proxy Mode" section above.
+**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your request may have been blocked by the target server because it suspects you are a bot or scraper. This package has a built-in proxy mode you can use for hard-to-get pages, see "Proxy Mode" section above.
 
-**Issue:** Proxy mode with the `render: true` param (headless-browser rendering) throws `unsupported content type: text/x-component`. Some JS-rendered sites (particularly Next.js App Router sites) can return a React Server Component payload — a serialized component tree, not HTML — instead of the rendered page. This package can't parse that as HTML, so it throws instead of silently returning corrupted metadata. This is a quirk of the target site (and sometimes intermittent, tied to CDN/caching behavior), not something fixable from this package's side; retrying or testing without `render` are your best options.
+**Issue:** Proxy mode with `render: true` param (headless-browser rendering) throws `unsupported content type: text/x-component`. Some JS-rendered sites (esp Next.js App Router sites) can return a React Server Component payload — a serialized component tree — instead of the rendered HTML page. This package can't parse that as HTML, so it throws instead of returning corrupted metadata. This is a quirk of the target site (and sometimes intermittent, tied to CDN/caching behavior), not something fixable from this package's side; retry or test without `render: true`. You may also try a different proxy.
 
 **Issue:** `No fetch implementation found`. You're in either an older browser that doesn't have the native `fetch` API or a Node.js environment that doesn't support `node-fetch` (Node.js <18.17). File a GitHub issue or try dowgrading to `url-metadata` version 2.5.0 which uses the now-deprecated `request` module.
 

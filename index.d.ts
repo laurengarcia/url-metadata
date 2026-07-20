@@ -8,30 +8,31 @@ declare function urlMetadata(
 declare namespace urlMetadata {
   interface Options {
     requestHeaders?: Record<string, string>;
-    proxy?: ProxyConfig;
+    proxyUrl?: string; // proxy/unblocking service endpoint (ex: https://api.scraperapi.com/); presence of this triggers proxy mode
+    proxyParams?: ProxyParams;
+    parseResponseObject?: globalThis.Response | import('node-fetch').Response;
     requestFilteringAgentOptions?: import('request-filtering-agent').RequestFilteringAgentOptions;
     agent?: any; // Suggest: Node.js http.Agent | https.Agent
-    cache?: string;
-    mode?: string;
     maxRedirects?: number;
-    timeout?: number;
+    timeout?: number; // default 10000ms; auto-bumped to 60000ms in proxy mode unless explicitly set
     size?: number;
     compress?: boolean;
-    decode?: string;
-    descriptionLength?: number;
     ensureSecureImageRequest?: boolean;
+    decode?: string;
+    cache?: string;
+    mode?: string;
+    descriptionLength?: number;
     includeResponseBody?: boolean;
-    parseResponseObject?: globalThis.Response | import('node-fetch').Response;
   }
 
   /**
-   * ScraperAPI-shaped for now (url + apiKey); object form anticipates
-   * additional proxy providers without a breaking change to `Options`.
+   * ScraperAPI-shaped for now; passes through verbatim as query params on
+   * `proxyUrl` (no allowlist), so this stays accurate for whatever params a
+   * vendor supports without us maintaining a list. Optional — some vendors
+   * (header-auth ones) will need `proxyUrl` with no params at all.
    */
-  interface ProxyConfig {
-    url: string;
-    apiKey: string;
-    params?: Record<string, string | boolean | number>; // extra passthrough query params
+  interface ProxyParams {
+    [param: string]: string | boolean | number;
   }
 
   /**
