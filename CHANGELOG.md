@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.8.0
+- proxy options: #116 unblocking, headless rendering, screensots etc via ScraperAPI.com to start
+- bugfix: index.d.ts - `KnownFieldsStrict` clarify `performance` fields undefineds
+
 5.7.5
 - index.d.ts: #115 add opt-in `KnownFields` & `KnownFieldsStrict` TS definitions
 - bugfix: `lang` could have returned as `undefined`, not empty `string`.
