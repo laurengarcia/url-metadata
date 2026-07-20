@@ -53,3 +53,20 @@ test('proxy: ScraperAPI call with params', async () => {
     expect(err).toBe(undefined)
   }
 }, 60000) // jest's own per-test timeout (default 5000ms)
+
+
+test('proxy: omitting proxyUrl with proxyParams errors', async () => {
+  if (!apiKey) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
+  const url = 'https://minifetch.com'
+  try {
+    const metadata = await urlMetadata(url, {
+      proxyParams: { api_key: apiKey }
+    })
+    expect(metadata.responseStatusCode).toBe(200)
+    // shouldn't get here but just in case
+    expect(metadata).toBeUndefined()
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.message).toContain('proxyUrl')
+  }
+})
