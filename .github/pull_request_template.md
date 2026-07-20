@@ -18,17 +18,18 @@ ___
 - [ ] ensure vite.js example works in /example-vite: `npm run dev`
 
 ### Maintainers checklist:
-- [ ] update README (if applicable)
-- [ ] update CHANGELOG (if applicable)
-- [ ] update ROADMAP (if applicable)
 - [ ] `npm run test` on the new PR branch
+- [ ] `squash and merge` PR to master
+- [ ] switch to master, `git pull origin master` then `npm run test`
 - [ ] optional: test examples against packed local .tgz file
   - [ ] `npm pack`
   - [ ] `cd /example-typescript` then `npm install ../url-metadata-<version>.tgz`
   - [ ] build & start, ensure no errors
   - [ ] do same for other `/example-*` dirs
-- [ ] package.json: bump semver version, push commit to new PR branch on origin
-- [ ] `squash and merge` PR to master
+- [ ] update README (if applicable)
+- [ ] update CHANGELOG (if applicable)
+- [ ] update ROADMAP (if applicable)
+- [ ] package.json: bump semver version, push commit to master
 - [ ] git tag new version of master
         `$ git pull origin master`
         `$ npm run test`
