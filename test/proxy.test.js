@@ -54,7 +54,6 @@ test('proxy: ScraperAPI call with params', async () => {
   }
 }, 60000)
 
-
 test('proxy: omitting proxyUrl with proxyParams errors', async () => {
   if (!apiKey) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
   const url = 'https://minifetch.com'
