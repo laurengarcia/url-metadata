@@ -6,3 +6,4 @@ example-typescript/index.js
 example-typescript/dist*
 example-typescript/.parcel-cache*
 example-nextjs/.next
+.env-*
