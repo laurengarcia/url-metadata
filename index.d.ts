@@ -69,9 +69,9 @@ declare namespace urlMetadata {
     responseStatusCode: number;
     responseHeaders: Record<string, string>; // whitelisted set, see lib/extract-headers.js
     performance: {
-      ttfbMs?: number; // cumulative: first request start -> final hop's headers arriving
-      responseTimeMs?: number; // cumulative: first request start -> body read complete
-      redirectTimeMs?: number; // only set when redirects occurred
+      ttfbMs: number | undefined; // cumulative: first request start -> final hop's headers arriving
+      responseTimeMs: number | undefined; // cumulative: first request start -> body read complete
+      redirectTimeMs: number | undefined; // only set when redirects occurred
     };
     canonical: string; // first <link rel="canonical"> found, empty string if none
     canonicalUrls: string[]; // raw href of every canonical tag, in document order
