@@ -95,8 +95,9 @@ module.exports = function (url, options, _fetch, useAgent) {
       // proxying) so it's available once we reach a final, non-redirect response.
       finalUrl = _url
 
-      // ScraperAPI-shaped for now via `buildProxyUrl` above; revisit if we
-      // add a second proxy provider with a different request shape.
+      // Generic query-param passthrough via `buildProxyUrl` above, confirmed
+      // working across ≥2 vendors (ScraperAPI, ScrapingAnt) with no branching
+      // needed — both just take `url` + their own auth param in the query string.
       const fetchUrl = opts.proxyUrl ? buildProxyUrl(_url) : _url
 
       const requestOpts = {
