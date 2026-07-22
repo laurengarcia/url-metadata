@@ -9,7 +9,16 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 </div>
 
 ---
-## **Extracts:**
+## **Features**
+- proxy mode for routing thru unblocking service (optional)
+- headless javascript rendering (in proxy mode)
+- screenshots (in proxy mode)
+- parser mode - pass in an html string or Response object (optional)
+- automatic charset detection & decoding (optional)
+- [x402](https://www.x402.org/) errors return payment requirements
+- [Discord](https://discord.gg/BqVBeeGsc5) support channel
+
+**Extracts:**
 - redirects
 - response headers
 - performance metrics
@@ -23,15 +32,6 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - h1-h6 tags
 - img tags
 - the full response body as a string of html (optional)
-
-**Features**
-- proxy mode for routing thru unblocking service (optional)
-- headless javascript rendering (in proxy mode)
-- screenshots (in proxy mode)
-- parser mode - pass in an html string or Response object (optional)
-- automatic charset detection & decoding (optional)
-- [x402](https://www.x402.org/) errors return payment requirements
-- [Discord](https://discord.gg/BqVBeeGsc5) support channel
 
 **Security** - v5.1.0+ Protects against:
 - Infinite redirect loops: `maxRedirects` option defaults to 10.
