@@ -231,9 +231,9 @@ console.log(metadata.responseHeaders['sa-screenshot']);
 
 ##### ScrapingAnt.com
 
-TODO affiliate link - Grab your [ScrapingAnt API Key](https://scrapingant.com/GRAB_KEY_LINK?). Good choice if you are more price-sensitive.
+[Grab your ScrapingAnt API Key](https://scrapingant.com/?ref=ztg1mgz). Good choice if you are more price-sensitive.
 
-TODO: swap out for affiliate link! [Their full proxy params list](https://docs.scrapingant.com/request-response-format#available-parameters) offers headless javascript rendering by default. Set `browser: false` to turn it off. You may pass your API key as proxy param `x-api-key` or send it as a header for extra security and privacy. Set `proxy_type` to `residential` for pages that are more difficult (default is `datacenter`).
+Offers headless javascript rendering by default. Set `browser: false` to turn it off. You may pass your API key as proxy param `x-api-key` or send it as a header for extra security and privacy. Set `proxy_type` to `residential` for pages that are more difficult (default is `datacenter`).
 
 It works the same way, with its own `proxyUrl` and query params:
 ```javascript
@@ -244,7 +244,7 @@ const metadata = await urlMetadata('https://hardto.get', {
   }
 });
 ```
-TODO swap for affiliate link[ScrapingAnt status codes and errors](https://docs.scrapingant.com/errors) list is here.
+[ScrapingAnt status codes and errors](https://docs.scrapingant.com/errors) list is here.
 
 ### Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
