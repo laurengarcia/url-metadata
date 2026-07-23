@@ -26,10 +26,11 @@ declare namespace urlMetadata {
   }
 
   /**
-   * ScraperAPI-shaped for now; passes through verbatim as query params on
-   * `proxyUrl` (no allowlist), so this stays accurate for whatever params a
-   * vendor supports without us maintaining a list. Optional — some vendors
-   * (header-auth ones) will need `proxyUrl` with no params at all.
+   * Confirmed generic across ≥2 vendors (ScraperAPI, ScrapingAnt) — passes
+   * through verbatim as query params on `proxyUrl` (no allowlist), so this
+   * stays accurate for whatever params a vendor supports without us
+   * maintaining a list. Optional — some vendors (header-auth ones) will
+   * need `proxyUrl` with no params at all.
    */
   interface ProxyParams {
     [param: string]: string | boolean | number;
