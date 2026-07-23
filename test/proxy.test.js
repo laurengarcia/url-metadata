@@ -47,7 +47,7 @@ test('proxy: ScraperAPI call with params', async () => {
   if (!apiKey1) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
   const url = 'https://quotes.toscrape.com/js/'
   // const url = 'https://www.ebay.com/itm/358599586518' // works w `premium:true` param
-  // const url = 'https://www.amazon.com/MOUNTO-Filter-Replacement-HEPA500-pre-Filter/dp/B07G9234QL'
+  // const url = 'https://www.amazon.com/MOUNTO-Filter-Replacement-HEPA500-pre-Filter/dp/B07G9234QL' // fails
   try {
     const metadata = await urlMetadata(url, {
       includeResponseBody: true,
@@ -77,15 +77,18 @@ test('proxy: ScraperAPI call with params', async () => {
 test('proxy: ScrapingAnt basic call', async () => {
   if (!apiKey2) throw new Error('Set SCRAPINGANT_API_KEY env var to run this test')
   const url = 'https://minifetch.com/docs/api'
+  // const url = 'https://quotes.toscrape.com/js/'
   // const url = 'nike.com' // works, returns french when `proxy_country` set to 'fr'
   // const url = 'https://www.amazon.com/MOUNTO-Filter-Replacement-HEPA500-pre-Filter/dp/B07G9234QL' // works
-  const url = 'https://www.ebay.com/itm/358599586518' // doesn't work
+  // const url = 'https://www.ebay.com/itm/358599586518' // fails
   try {
     const metadata = await urlMetadata(url, {
+      // includeResponseBody: true,
       proxyUrl: proxyUrl2,
       proxyParams: {
         'x-api-key': apiKey2,
-        'proxy_type': 'residential',
+        // browser: false, // works, turns off default rendering
+        // 'proxy_type': 'residential',
         // 'proxy_country': 'fr', // works, country to make request from
         // 'wait_for_selector': 'h1' // speed up scraping time
         // 'block_resource': 'stylesheet' // speed up scraping time

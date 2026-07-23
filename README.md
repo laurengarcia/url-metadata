@@ -197,7 +197,7 @@ console.log(metadata);
 #### Proxy mode
 For reaching web pages that are blocked. This package is vendor-neutral — any proxy/unblocking service works via `proxyUrl` + `proxyParams`. Recommended vendors below support the author via affiliate links. Have another vendor you'd like? Ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
 
-Code examples available in our [Github test suite](https://github.com/laurengarcia/url-metadata/blob/master/test/proxy.test.js).
+Code examples and notes available in our [Github test suite](https://github.com/laurengarcia/url-metadata/blob/master/test/proxy.test.js).
 
 `proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch, which takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds in instead of the usual 10, or you can customize.
 
