@@ -58,10 +58,10 @@ test('proxy: ScraperAPI call with params', async () => {
         //   session_number, device_type, keep_headers
         // Extra credit cost: premium, render, screenshot, ultra_premium
         //
-        // country_code: 'us', // works, get results from a specific region
-        // premium: true, // works, run thru hi quality residential proxies
-        // 'ultra_premium': true,
         // render: true, // works, with caveats in README
+        // country_code: 'us', // works, get results from a specific region
+        // premium: true, // works, run thru residential proxies
+        // 'ultra_premium': true, advanced bypassing, bump `timeout` option higher
         screenshot: true // works, triggers render: true, check `sa-screenshot` response header
       }
     })
