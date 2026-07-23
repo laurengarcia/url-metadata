@@ -6,7 +6,7 @@
     "next": "^15.3.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "url-metadata": "^5.7.5-beta.0"
+    "url-metadata": "file:../url-metadata-5.8.1.tgz"
   },
   "scripts": {
     "dev": "next dev",
