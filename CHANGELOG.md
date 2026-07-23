@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.8.1
+- README updates & tests for ScrapingAnt proxy integration
+
 5.8.0
 - proxy options: #116 unblocking, headless rendering, screensots etc via ScraperAPI.com to start
 - bugfix: index.d.ts - `KnownFieldsStrict` clarify `performance` fields undefineds

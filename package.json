@@ -1,6 +1,6 @@
 {
   "name": "url-metadata",
-  "version": "5.8.0",
+  "version": "5.8.1",
   "description": "Fetch a URL and scrape its metadata using Node.js or the browser. Can parse metadata from HTML strings or Response objects as well.",
   "keywords": [
     "html",
@@ -10,11 +10,13 @@
     "scraper",
     "parser",
     "extraction",
+    "proxy-extraction",
     "headless-render",
     "javascript-render",
     "screenshots",
     "proxy",
     "ScraperAPI",
+    "ScrapingAnt",
     "seo",
     "technical-seo",
     "url",
