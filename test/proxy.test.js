@@ -45,13 +45,11 @@ test('proxy: ScraperAPI basic call', async () => {
 
 test('proxy: ScraperAPI call with params', async () => {
   if (!apiKey1) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
-  // const url = 'https://www.ebay.com/itm/358599586518' // reachable w premium:true param
-  const url = 'https://quotes.toscrape.com/js/' // needs option.includeResponseBody: true
+  const url = 'https://quotes.toscrape.com/js/'
+  // const url = 'https://www.ebay.com/itm/358599586518' // works w `premium:true` param
+  // const url = 'https://www.amazon.com/MOUNTO-Filter-Replacement-HEPA500-pre-Filter/dp/B07G9234QL'
   try {
     const metadata = await urlMetadata(url, {
-      // url-metadata's own `timeout` now defaults to 60000ms automatically in
-      // proxy mode (proxyUrl set), so no need to pass it explicitly here
-      // anymore — jest's own per-test timeout below still needs bumping tho.
       includeResponseBody: true,
       proxyUrl: proxyUrl1,
       proxyParams: {
@@ -62,6 +60,7 @@ test('proxy: ScraperAPI call with params', async () => {
         //
         // country_code: 'us', // works, get results from a specific region
         // premium: true, // works, run thru hi quality residential proxies
+        // 'ultra_premium': true,
         // render: true, // works, with caveats in README
         screenshot: true // works, triggers render: true, check `sa-screenshot` response header
       }
@@ -78,11 +77,19 @@ test('proxy: ScraperAPI call with params', async () => {
 test('proxy: ScrapingAnt basic call', async () => {
   if (!apiKey2) throw new Error('Set SCRAPINGANT_API_KEY env var to run this test')
   const url = 'https://minifetch.com/docs/api'
+  // const url = 'nike.com' // works, returns french when `proxy_country` set to 'fr'
+  // const url = 'https://www.amazon.com/MOUNTO-Filter-Replacement-HEPA500-pre-Filter/dp/B07G9234QL' // works
+  const url = 'https://www.ebay.com/itm/358599586518' // doesn't work
   try {
     const metadata = await urlMetadata(url, {
       proxyUrl: proxyUrl2,
       proxyParams: {
-        'x-api-key': apiKey2 }
+        'x-api-key': apiKey2,
+        'proxy_type': 'residential',
+        // 'proxy_country': 'fr', // works, country to make request from
+        // 'wait_for_selector': 'h1' // speed up scraping time
+        // 'block_resource': 'stylesheet' // speed up scraping time
+      }
     })
     expect(metadata.responseStatusCode).toBe(200)
     expect(metadata.title).toContain('API')

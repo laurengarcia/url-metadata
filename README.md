@@ -195,10 +195,9 @@ console.log(metadata);
 ```
 
 #### Proxy mode
-For reaching web pages that are blocked. This package is vendor-neutral — any proxy/unblocking service works via `proxyUrl` + `proxyParams`. Recommended vendors below support the author via affiliate links. Have another vendor you'd like documented here? Ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
+For reaching web pages that are blocked. This package is vendor-neutral — any proxy/unblocking service works via `proxyUrl` + `proxyParams`. Recommended vendors below support the author via affiliate links. Have another vendor you'd like? Ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
 
-- [ScraperAPI](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37) (affiliate link)
-- [ScrapingAnt](https://scrapingant.com/) (affiliate link pending)
+Code examples available in our [Github test suite](https://github.com/laurengarcia/url-metadata/blob/master/test/proxy.test.js).
 
 `proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch, which takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds in instead of the usual 10, or you can customize.
 
@@ -206,11 +205,15 @@ For reaching web pages that are blocked. This package is vendor-neutral — any 
 
 In proxy mode, `requestHeaders` are sent to the proxy vendor, not the target URL — the vendor makes its own request to the target URL and won't include them unless it has a passthrough param for it (ex: ScraperAPI's `keep_headers: true`).
 
-**Note:** Some vendors offer structured-data or merchant-specific endpoints that return JSON or CSV, not HTML — this package can't parse those and will throw `unsupported content type` if `proxyUrl` is pointed at one. That's expected; those are a different kind of tool than web page metadata extraction. Stick to each vendor's plain HTML-fetching endpoint (ex: ScraperAPI's https://api.scraperapi.com/, ScrapingAnt's https://api.scrapingant.com/v2/general).
+**Note:** HTML-only. Some vendors offer structured-data or merchant-specific endpoints that return JSON or CSV, not HTML — this package can't parse those and will throw `unsupported content type` if your proxy config is pointed at one. That's expected; those are a different kind of tool. Stick to each vendor's plain HTML-fetching endpoint (ex: ScraperAPI's https://api.scraperapi.com/, ScrapingAnt's https://api.scrapingant.com/v2/general).
+
+**Note:** `redirects`, `responseHeaders` and `performance` timing reflects the proxy call, not the target server's actual response.
 
 #### ScraperAPI.com
 
-[ScraperAPI's proxy params list](https://docs.scraperapi.com/control-and-optimization/supported-parameters?fp_ref=lauren37) offers headless javascript rendering via `render: true`, also supports `screenshot: true`. Activate residential and mobile IPs by setting `premium: true`, and `ultra_premium: true` activates advanced bypassing mechanisms.
+[Grab your ScraperAPI key](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37). It is a premium choice for hard-to-get pages and offers screenshots as part of its API.
+
+[Their full proxy params list](https://docs.scraperapi.com/control-and-optimization/supported-parameters?fp_ref=lauren37) offers headless javascript rendering via `render: true`, also supports `screenshot: true`. Activate residential and mobile IPs by setting `premium: true`, and `ultra_premium: true` activates advanced bypassing mechanisms.
 
 ```javascript
 const metadata = await urlMetadata('https://hardto.get', {
@@ -228,7 +231,11 @@ console.log(metadata.responseHeaders['sa-screenshot']);
 
 ##### ScrapingAnt.com
 
-ScrapingAnt works the same way, just with its own `proxyUrl` and query params:
+TODO affiliate link - Grab your [ScrapingAnt API Key](https://scrapingant.com/GRAB_KEY_LINK?). Good choice if you are more price-sensitive.
+
+TODO: swap out for affiliate link! [Their full proxy params list](https://docs.scrapingant.com/request-response-format#available-parameters) offers headless javascript rendering by default. Set `browser: false` to turn it off. You may pass your API key as proxy param `x-api-key` or send it as a header for extra security and privacy. Set `proxy_type` to `residential` for pages that are more difficult (default is `datacenter`).
+
+It works the same way, with its own `proxyUrl` and query params:
 ```javascript
 const metadata = await urlMetadata('https://hardto.get', {
   proxyUrl: 'https://api.scrapingant.com/v2/general',
@@ -237,8 +244,6 @@ const metadata = await urlMetadata('https://hardto.get', {
   }
 });
 ```
-TODO: swap out for affiliate link! [ScrapingAnt's proxy params list](https://docs.scrapingant.com/request-response-format#available-parameters) offers headless javascript rendering by default. Set `browser: false` to turn it off. You may pass your API key as proxy param `x-api-key` or send it as a header for extra security.
-
 TODO swap for affiliate link[ScrapingAnt status codes and errors](https://docs.scrapingant.com/errors) list is here.
 
 ### Returns
