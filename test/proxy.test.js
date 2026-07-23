@@ -73,7 +73,6 @@ test('proxy: ScraperAPI call with params', async () => {
   }
 }, 60000)
 
-
 test('proxy: ScrapingAnt basic call', async () => {
   if (!apiKey2) throw new Error('Set SCRAPINGANT_API_KEY env var to run this test')
   const url = 'https://minifetch.com/docs/api'
@@ -86,7 +85,7 @@ test('proxy: ScrapingAnt basic call', async () => {
       // includeResponseBody: true,
       proxyUrl: proxyUrl2,
       proxyParams: {
-        'x-api-key': apiKey2,
+        'x-api-key': apiKey2
         // browser: false, // works, turns off default rendering
         // 'proxy_type': 'residential',
         // 'proxy_country': 'fr', // works, country to make request from
