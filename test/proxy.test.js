@@ -100,3 +100,22 @@ test('proxy: ScrapingAnt basic call', async () => {
     expect(err).toBe(undefined)
   }
 }, 60000)
+
+test('proxy: ScrapingAnt api key in header', async () => {
+  if (!apiKey2) throw new Error('Set SCRAPINGANT_API_KEY env var to run this test')
+  const url = 'https://minifetch.com/docs/api'
+
+  try {
+    const metadata = await urlMetadata(url, {
+      requestHeaders: {
+        'x-api-key': apiKey2
+      },
+      proxyUrl: proxyUrl2,
+      proxyParams: {}
+    })
+    expect(metadata.responseStatusCode).toBe(200)
+    expect(metadata.title).toContain('API')
+  } catch (err) {
+    expect(err).toBe(undefined)
+  }
+}, 60000)
