@@ -17,7 +17,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - **parser mode** - pass in an html string or Response object (optional)
 - automatic charset detection & decoding (optional)
 - [x402](https://www.x402.org/) errors return payment requirements
-- [Discord](https://discord.gg/BqVBeeGsc5) support channel
+- 📬 [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) and [Discord](https://discord.gg/BqVBeeGsc5) support channel
 
 ## **Extracts:**
 - redirects
@@ -319,4 +319,4 @@ const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
 👉 You may also want to try the hosted version of this package: [Minifetch](https://www.npmjs.com/package/minifetch-api).
 
 ---
-
+📬 Get in touch: [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) | [Discord](https://discord.gg/BqVBeeGsc5) | [Github Issues](https://github.com/laurengarcia/url-metadata/issues)
