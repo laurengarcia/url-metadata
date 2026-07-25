@@ -74,7 +74,7 @@ To override the default options, pass in a second options argument. The default 
 ```javascript
 const options = {
 
-  // Customize the default request headers:
+  // Customize the default fetch request headers:
   requestHeaders: {
     'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
     From: 'example@example.com'
@@ -203,17 +203,19 @@ This package is vendor-neutral. Any proxy/ unblocking service works via `proxyUr
 
 In proxy mode, `requestHeaders` are sent to the proxy vendor, not the target URL — the vendor makes its own request to the target URL and won't include them unless it has a passthrough param for it (ex: ScraperAPI's `keep_headers: true`).
 
-**Note:** HTML-only. Some vendors offer structured-data or merchant-specific endpoints that return JSON or CSV, not HTML — this package can't parse those and will throw `unsupported content type` if your proxy config is pointed at one. That's expected; those are a different kind of tool. Stick to each vendor's plain HTML-fetching endpoint (ex: ScraperAPI's https://api.scraperapi.com/, ScrapingAnt's https://api.scrapingant.com/v2/general).
+**Note: HTML-only.** Some vendors offer structured-data or merchant-specific endpoints that return JSON or CSV, not HTML — this package can't parse those and will throw `unsupported content type` if your proxy config is pointed at one. That's expected; those are a different kind of tool. Stick to each vendor's plain HTML-fetching endpoint (ex: ScraperAPI's https://api.scraperapi.com/, ScrapingAnt's https://api.scrapingant.com/v2/general).
 
 **Note:** `redirects`, `responseHeaders` and `performance` timing reflect the proxy call, not the target server's actual response.
 
-More code examples and notes available in our [Github test suite](https://github.com/laurengarcia/url-metadata/blob/master/test/proxy.test.js).
+**More code examples** and notes available in our [Github test suite](https://github.com/laurengarcia/url-metadata/blob/master/test/proxy.test.js).
 
 #### ScraperAPI.com
 
 [Grab your ScraperAPI key (affiliate link supports the author)](https://docs.scraperapi.com/getting-started/quick-start/grab-your-api-key?fp_ref=lauren37). It's a premium choice for hard-to-get pages.
 
-[ScraperAPI's proxy params list](https://docs.scraperapi.com/control-and-optimization/supported-parameters?fp_ref=lauren37) offers headless javascript rendering via `render: true`, also supports `screenshot: true`. Activate residential and mobile IPs by setting `premium: true`. `ultra_premium: true` activates advanced bypassing mechanisms - can exceed the 60s default, so pass a higher `timeout` option explicitly in that case.
+ScraperAPI's [proxy params list](https://docs.scraperapi.com/control-and-optimization/supported-parameters?fp_ref=lauren37) offers headless javascript rendering via `render: true`, also supports `screenshot: true`. Activate residential and mobile IPs by setting `premium: true`. `ultra_premium: true` activates advanced bypassing mechanisms - can exceed the 60s default, so pass a higher `timeout` option explicitly in that case.
+
+ScraperAPI [status codes and error list](https://docs.scraperapi.com/ai-parser/status-codes-and-errors?fp_ref=lauren37) is here.
 
 ```javascript
 const metadata = await urlMetadata('https://hardto.get', {
@@ -227,15 +229,15 @@ console.log(metadata.responseHeaders['sa-credit-cost']);
 // Get screenshot URL when you set `proxyParams: { screenshot: true }`
 console.log(metadata.responseHeaders['sa-screenshot']);
 ```
-[ScraperAPI status codes and errors](https://docs.scraperapi.com/ai-parser/status-codes-and-errors?fp_ref=lauren37) list is here.
 
 #### ScrapingAnt.com
 
 [Grab your ScrapingAnt API Key (affiliate link supports the author)](https://scrapingant.com/?ref=ztg1mgz). Good choice if you are more price-sensitive.
 
-Offers headless javascript rendering by default. Set `browser: false` to turn it off. You may pass your API key as proxy param `x-api-key` or send it as a header for extra security and privacy. Set `proxy_type` to `residential` for pages that are more difficult (default is `datacenter`).
+It works the same way, with its own `proxyUrl` and `proxyParams`. Offers headless javascript rendering by default. Set proxy param `browser: false` to turn it off. You may pass your API key as proxy param `x-api-key` or send it as a header for extra security and privacy. Set `proxy_type` to `residential` for pages that are more difficult (default is `datacenter`).
 
-It works the same way, with its own `proxyUrl` and query params:
+ScrapingAnt [status codes and error list](https://docs.scrapingant.com/errors?ref=ztg1mgz) is here.
+
 ```javascript
 const metadata = await urlMetadata('https://hardto.get', {
   proxyUrl: 'https://api.scrapingant.com/v2/general',
@@ -244,9 +246,8 @@ const metadata = await urlMetadata('https://hardto.get', {
   }
 });
 ```
-[ScrapingAnt status codes and errors](https://docs.scrapingant.com/errors?ref=ztg1mgz) list is here.
 
-### Returns
+## Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
 
 A basic template for the object can be found in `lib/metadata-fields.js`. Any additional meta tags found on the page are appended as new fields to the object. Extractor details live in `/lib/extract-*`.
@@ -270,6 +271,9 @@ The object consists of key/value pairs as strings, with exceptions:
 ```
 
 ### TypeScript
+
+See `index.d.ts` for the full field catalog and the other exported interfaces: `Options`, `HreflangTag`, `FaviconTag`, `Heading`, `ImgTag`, `RedirectHop`, and `UrlMetadataError`.
+
 The default return type `Result` is intentionally loose (collapses to `any`) so that existing codebases, mocks, and defensive scraping code compile untouched. If you want a documented, autocompleting shape, opt in with a cast. No runtime change needed:
 
 ```ts
@@ -289,11 +293,9 @@ metadata.foobar;     // any (arbitrary meta tag found on page; mostly returns as
 const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
 ```
 
-See `index.d.ts` for the full field catalog and the other exported interfaces: `Options`, `HreflangTag`, `FaviconTag`, `Heading`, `ImgTag`, `RedirectHop`, and `UrlMetadataError`.
-
 ### Troubleshooting
 
-**Issue:** Request returns `404`, `403` errors or a CAPTCHA form. Your fetch request may have been blocked by the target server because it suspects you are a bot or scraper. This package has a built-in proxy mode you can use for hard-to-get pages, see "Proxy Mode" section above.
+**Issue:** Returns `404`, `403` errors or a CAPTCHA form. Your fetch request may have been blocked by the target server because it suspects you are a bot or scraper. This package has a built-in proxy mode you can use for hard-to-get pages, see "Proxy Mode" section above.
 
 **Issue:** Proxy mode throws `unsupported content type` errors. This is expected behavior when you use a proxy url or proxy params that produce anything other than HTML. See "Proxy Mode" section above.
 
