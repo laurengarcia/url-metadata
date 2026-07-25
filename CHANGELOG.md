@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.8.2
+- README: add Feedback Form
+
 5.8.1
 - README updates & tests for ScrapingAnt proxy integration
 
