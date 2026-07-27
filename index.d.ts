@@ -23,6 +23,7 @@ declare namespace urlMetadata {
     mode?: string;
     descriptionLength?: number;
     includeResponseBody?: boolean;
+    omitEmpty?: boolean; // drop top-level empty fields (undefined, null, '', [], {}) for token efficiency; cast result to Partial<KnownFields>
   }
 
   /**
@@ -49,6 +50,9 @@ declare namespace urlMetadata {
    * Known fields are fully typed; any additional meta tags found on the
    * page are appended as new fields, as strings — except tags starting
    * with `citation_`, which are string[] (per Google Scholar spec, see README).
+   *
+   * When `omitEmpty` option is true, empty fields are dropped, so cast to
+   * `Partial<KnownFields>` instead — presence guarantees no longer hold.
    */
   interface KnownFields extends KnownFieldsStrict {
     [metaTagName: string]: any;

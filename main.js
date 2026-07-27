@@ -36,7 +36,8 @@ module.exports = function (url, options, _fetch, useAgent) {
       cache: 'no-cache', // Browser only
       mode: 'cors', // Browser only
       descriptionLength: 750,
-      includeResponseBody: false
+      includeResponseBody: false,
+      omitEmpty: false // drop empty fields (undefined, null, '', [], {}) from result for token efficiency
     },
     // user options override defaults
     options
