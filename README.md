@@ -148,7 +148,13 @@ const options = {
   descriptionLength: 750,
 
   // Include raw response body as string
-  includeResponseBody: false
+  includeResponseBody: false,
+
+  // Drop empty fields (undefined, null, '', [], {}) from the returned
+  // object for a smaller, more token-efficient response. Shallow: only
+  // top-level fields are removed. If you cast in Typescript, use:
+  // `Partial<urlMetadata.KnownFields>` (see below).
+  omitEmpty: false
 };
 
 // Options usage:
@@ -292,6 +298,12 @@ metadata.foobar;     // any (arbitrary meta tag found on page; mostly returns as
 // Catches typos at compile time, but arbitrary page-specific
 // meta tags (incl. `citation_*`) are compile errors:
 const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
+```
+
+Using the `omitEmpty` option? Empty fields are dropped from the result, so the "always present" guarantee no longer holds — cast to `Partial` instead:
+
+```ts
+const metadata = await urlMetadata(url, { omitEmpty: true }) as Partial<urlMetadata.KnownFields>;
 ```
 
 ### Troubleshooting
