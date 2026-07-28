@@ -2,6 +2,7 @@ const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 const createHttpError = require('./lib/http-error')
 const resolveFields = require('./lib/resolve-fields')
+const { isHeaderOnly, expandHeaderSelection, hasNetworkGroup } = resolveFields
 
 // Monotonic clock when available (browsers + Node 16+), else wall clock fallback.
 // Every perf value is a delta from the same source, so the two never mix.
@@ -12,6 +13,17 @@ const now = (typeof performance !== 'undefined' && performance.now)
 // Credential-bearing headers dropped when a redirect hop changes host,
 // mirroring browsers & `node-fetch` >=2.6.7 (CVE-2022-0235 class)
 const sensitiveHeaders = ['authorization', 'www-authenticate', 'cookie', 'cookie2']
+
+// Releases the response body stream back to the connection pool without
+// reading it. Required whenever we resolve or reject at headers (network mode
+// or error) — otherwise the socket is held until timeout/GC. Covers
+// `node-fetch` (destroy), whatwg streams (cancel), and a text() fallback.
+function drainBody (response) {
+  if (!response || !response.body) return
+  if (typeof response.body.destroy === 'function') response.body.destroy()
+  else if (typeof response.body.cancel === 'function') response.body.cancel().catch(() => {})
+  else if (typeof response.text === 'function') response.text().catch(() => {})
+}
 
 module.exports = function (url, options, _fetch, useAgent) {
   if (!options || typeof options !== 'object') options = {}
@@ -52,6 +64,17 @@ module.exports = function (url, options, _fetch, useAgent) {
   // Eager `fields` option validation — throws before any network round-trip
   // on an invalid selection (unknown token, empty array, wrong shape).
   resolveFields(opts.fields)
+
+  // The `network` group is a live-transaction probe; it has no meaning when
+  // parsing a passed-in Response (no fetch happens). Guard eagerly.
+  if (opts.parseResponseObject && hasNetworkGroup(opts.fields)) {
+    throw new Error("`fields: ['network']` is not supported in parseResponseObject mode")
+  }
+
+  // Header-only selection (`network` or a subset of its atomic fields): the
+  // body read can be skipped. Engages for live fetches only — filtering in
+  // parseResponseObject mode is handled separately.
+  const headerOnly = !opts.parseResponseObject && isHeaderOnly(opts.fields)
 
   // Proxy calls route through a third-party service doing its own upstream
   // fetch (plus optional headless rendering via params like ScraperAPI's
@@ -228,12 +251,36 @@ module.exports = function (url, options, _fetch, useAgent) {
           throwGenericError()
         }
 
-        // Validate response content type
-        contentType = response.headers.get('content-type')
-        const isHTML = contentType && contentType.includes('html')
+        // Header-only (`fields: ['network']`) mode: everything requested is
+        // available from the response headers. When the caller doesn't also
+        // want the raw body, skip the body entirely — drain the stream to
+        // release the socket, then resolve.
+        // `performance.responseTimeMs` stays undefined (body unread).
+        if (headerOnly && !opts.includeResponseBody) {
+          drainBody(response)
+          resolve(parse.headerOnly(
+            requestUrl,
+            redirects,
+            perf,
+            finalUrl,
+            response.status,
+            response.headers,
+            expandHeaderSelection(opts.fields),
+            undefined,
+            opts
+          ))
+          return
+        }
 
-        if (!isHTML) {
-          throw createHttpError({ msg: `unsupported content type: ${contentType}`, statusCode: response.status, redirects, requestUrl, url: finalUrl })
+        // Read content type (also used for charset detection below). In
+        // header-only mode we don't enforce HTML, so a `network` probe works
+        // against any content type (PDF, JSON, image).
+        contentType = response.headers.get('content-type')
+        if (!headerOnly) {
+          const isHTML = contentType && contentType.includes('html')
+          if (!isHTML) {
+            throw createHttpError({ msg: `unsupported content type: ${contentType}`, statusCode: response.status, redirects, requestUrl, url: finalUrl })
+          }
         }
 
         // Now, read the fetch response stream to completion,
@@ -262,7 +309,25 @@ module.exports = function (url, options, _fetch, useAgent) {
           const decoder = new TextDecoder(charset)
           const responseDecoded = decoder.decode(responseBuffer)
 
-          // now parse the metadata!
+          // Header-only mode reaches here only when `includeResponseBody` is
+          // set: return the transport fields + raw body, skipping cheerio and
+          // all extractors.
+          if (headerOnly) {
+            resolve(parse.headerOnly(
+              requestUrl,
+              redirects,
+              perf,
+              finalUrl,
+              currentResponse.status,
+              currentResponse.headers,
+              expandHeaderSelection(opts.fields),
+              responseDecoded,
+              opts
+            ))
+            return
+          }
+
+          // Now parse the metadata!
           resolve(parse(
             requestUrl,
             redirects,
@@ -280,14 +345,7 @@ module.exports = function (url, options, _fetch, useAgent) {
       .catch(error => {
         // Catch all errors thrown above; they must fall thru this block to
         // clean up resources and avoid memory leaks
-        if (currentResponse && currentResponse.body) {
-          // Node.js: Destroy the body stream `node-fetch` uses to force-close the connection
-          if (typeof currentResponse.body.destroy === 'function') currentResponse.body.destroy()
-          // Modern browsers and Node.js 18+ have cancel() on the ReadableStream
-          else if (typeof currentResponse.body.cancel === 'function') currentResponse.body.cancel().catch(() => {})
-          // Fallback: consume the stream to close the connection
-          else if (typeof currentResponse.text === 'function') currentResponse.text().catch(() => {})
-        }
+        drainBody(currentResponse)
         // Set status code on error if it wasn't set already
         if (currentResponse && currentResponse.status && !error.statusCode) {
           error.statusCode = currentResponse.status
