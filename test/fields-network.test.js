@@ -117,3 +117,14 @@ test('network mode (live): returns only transport fields, body never parsed', as
   expect(metadata.performance.ttfbMs).toBeGreaterThan(0)
   expect(metadata.performance.responseTimeMs).toBe(undefined)
 })
+
+test('network mode (live): does not throw on non-HTML content (image/png)', async () => {
+  // A full-parse fetch would throw `unsupported content type` here;
+  // network mode skips the `isHTML` check and probes any content type.
+  const metadata = await urlMetadata('https://minifetch.com/favicon-96x96.png', { fields: ['network'] })
+  expect(metadata.responseStatusCode).toBe(200)
+  expect(metadata.responseHeaders['content-type']).toContain('image/png')
+  // body never parsed - just to be sure:
+  expect('title' in metadata).toBe(false)
+  expect('favicons' in metadata).toBe(false)
+})
