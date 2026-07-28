@@ -24,6 +24,7 @@ declare namespace urlMetadata {
     descriptionLength?: number;
     includeResponseBody?: boolean;
     omitEmpty?: boolean; // drop top-level empty fields (undefined, null, '', [], {}) for token efficiency; cast result to Partial<KnownFields>
+    fields?: string[]; // sparse fieldset: atomic keys, group names ('network'|'og'|'twitter'|'meta'), and/or 'meta:<name>' for page-specific tags; undefined returns full result
   }
 
   /**

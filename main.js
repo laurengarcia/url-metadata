@@ -1,6 +1,7 @@
 const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 const createHttpError = require('./lib/http-error')
+const resolveFields = require('./lib/resolve-fields')
 
 // Monotonic clock when available (browsers + Node 16+), else wall clock fallback.
 // Every perf value is a delta from the same source, so the two never mix.
@@ -37,7 +38,8 @@ module.exports = function (url, options, _fetch, useAgent) {
       mode: 'cors', // Browser only
       descriptionLength: 750,
       includeResponseBody: false,
-      omitEmpty: false // drop empty fields (undefined, null, '', [], {}) from result for token efficiency
+      omitEmpty: false, // drop empty fields (undefined, null, '', [], {}) from result for token efficiency
+      fields: undefined // sparse fieldset (array of atomic keys and/or group names); undefined returns full result
     },
     // user options override defaults
     options
@@ -46,6 +48,10 @@ module.exports = function (url, options, _fetch, useAgent) {
   if (opts.proxyParams && !opts.proxyUrl) {
     throw new Error('proxyParams requires a proxyUrl')
   }
+
+  // Eager `fields` option validation — throws before any network round-trip
+  // on an invalid selection (unknown token, empty array, wrong shape).
+  resolveFields(opts.fields)
 
   // Proxy calls route through a third-party service doing its own upstream
   // fetch (plus optional headless rendering via params like ScraperAPI's
