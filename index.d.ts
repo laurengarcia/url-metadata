@@ -33,6 +33,8 @@ declare namespace urlMetadata {
     proxyUrl?: string; // proxy/unblocking service endpoint (ex: https://api.scraperapi.com/); presence of this triggers proxy mode
     proxyParams?: ProxyParams;
     parseResponseObject?: globalThis.Response | import('node-fetch').Response;
+    fields?: string[]; // sparse fieldset: atomic keys, group names ('network'|'og'|'twitter'|'meta'), and/or 'meta:<name>' for page-specific tags; undefined returns full result
+    omitEmpty?: boolean; // drop top-level empty fields (undefined, null, '', [], {}) for token efficiency; when true, result is typed Partial<KnownFields>
     requestFilteringAgentOptions?: import('request-filtering-agent').RequestFilteringAgentOptions;
     agent?: any; // Suggest: Node.js http.Agent | https.Agent
     maxRedirects?: number;
@@ -45,8 +47,6 @@ declare namespace urlMetadata {
     mode?: string;
     descriptionLength?: number;
     includeResponseBody?: boolean;
-    omitEmpty?: boolean; // drop top-level empty fields (undefined, null, '', [], {}) for token efficiency; when true, result is typed Partial<KnownFields>
-    fields?: string[]; // sparse fieldset: atomic keys, group names ('network'|'og'|'twitter'|'meta'), and/or 'meta:<name>' for page-specific tags; undefined returns full result
   }
 
   /**

@@ -38,6 +38,8 @@ module.exports = function (url, options, _fetch, useAgent) {
       proxyUrl: undefined, // proxy/unblocking service endpoint (ex: ScraperAPI); presence of this triggers proxy mode
       proxyParams: undefined, // optional vendor query params, passed through verbatim exactly as named in their docs (ex: ScraperAPI's api_key, render, screenshot, country_code) - some vendors need none (ex: header-auth vendors, see requestHeaders)
       parseResponseObject: undefined,
+      fields: undefined, // sparse fieldset (array of atomic keys and/or group names); undefined returns full result
+      omitEmpty: false, // drop empty fields (undefined, null, '', [], {}) from result for token efficiency
       requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
       agent: undefined, // Node.js only; silently ignored by others
       maxRedirects: 10,
@@ -49,9 +51,7 @@ module.exports = function (url, options, _fetch, useAgent) {
       cache: 'no-cache', // Browser only
       mode: 'cors', // Browser only
       descriptionLength: 750,
-      includeResponseBody: false,
-      omitEmpty: false, // drop empty fields (undefined, null, '', [], {}) from result for token efficiency
-      fields: undefined // sparse fieldset (array of atomic keys and/or group names); undefined returns full result
+      includeResponseBody: false
     },
     // user options override defaults
     options

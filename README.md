@@ -1,10 +1,10 @@
 # url-metadata
 
-Fetch a URL and scrape its metadata using Node.js or the browser. Has optional mode to parse metadata from HTML strings or `Response` objects instead. First-class configurable security options available. Content is returned raw by design; sanitize your own output (so you control processing efficiency).
+Fetch a URL and scrape its metadata using Node.js or the browser. Optional mode to parse metadata from HTML strings or `Response` objects instead. You can also request just the fields you need for smaller responses and less extraction work, tuned for your use-case. First-class configurable security options available. Content is returned raw by design; sanitize your own output (so you control processing efficiency).
 
 ---
 <div>
-  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is an SEO toolkit built on top of this package by the same author/ maintainer. Get started free:
+  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is an extraction & SEO toolkit built on top of this package by the same author/ maintainer. Get started free:
   <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
@@ -17,7 +17,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - **parser mode** - pass in an html string or Response object (optional)
 - automatic charset detection & decoding (optional)
 - [x402](https://www.x402.org/) errors return payment requirements
-- 📬 [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) and [Discord](https://discord.gg/BqVBeeGsc5) support channel
+- 📬 [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) | [Discord](https://discord.gg/BqVBeeGsc5) | [GitHub](https://github.com/laurengarcia/url-metadata) actively monitored
 
 ## **Extracts:**
 - redirects
@@ -33,6 +33,12 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - h1-h6 tags
 - img tags
 - the full response body as a string of html (optional)
+
+### Performance Tuning & Token-Efficiency
+- Use `fields` option to request only what you need
+- Shrinks the response size *and* skips the extra extraction work
+- Use `omitEmpty: true` option to drop empty fields
+- Customize for your specific use-case
 
 ### **🔒 Security** - Protects against:
 - Infinite redirect loops: `maxRedirects` option defaults to 10.
@@ -92,8 +98,19 @@ const options = {
   proxyParams: undefined,
 
   // Alternate use-case: pass `Response` object to be parsed
-  // See example usage below
+  // See example usage below.
   parseResponseObject: undefined,
+
+  // Request only what you need. Accepts atomic field names or named groups:
+  // ['network', 'meta', 'og', 'twitter']
+  // Also accepts specific meta tags with the "meta:<name>" syntax, ex:
+  // ['meta:description'] or ['meta:og:url']
+  // See "Performance Tuning" section below.
+  fields: undefined
+
+  // Drop empty fields (undefined, null, '', [], {}) from the returned
+  // object. Shallow: only top-level fields are removed.
+  omitEmpty: false
 
   // (Node.js v18.17+ only)
   // To prevent SSRF attacks, the default option blocks fetch
@@ -149,12 +166,6 @@ const options = {
 
   // Include raw response body as string
   includeResponseBody: false,
-
-  // Drop empty fields (undefined, null, '', [], {}) from the returned
-  // object for a smaller, more token-efficient response. Shallow: only
-  // top-level fields are removed. If you cast in Typescript, use:
-  // `Partial<urlMetadata.KnownFields>` (see below).
-  omitEmpty: false
 };
 
 // Options usage:
@@ -254,6 +265,8 @@ const metadata = await urlMetadata('https://hardto.get', {
 });
 ```
 
+### Performance Tuning
+
 ## Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
 
@@ -300,10 +313,12 @@ metadata.foobar;     // any (arbitrary meta tag found on page; mostly returns as
 const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
 ```
 
-Using the `omitEmpty` option? Empty fields are dropped from the result, so the "always present" guarantee no longer holds — cast to `Partial` instead:
+When you pass `fields` or `omitEmpty: true` options, the return type narrows to `Partial<urlMetadata.KnownFields>` automatically. Known fields become optional (any of them may be filtered out), and no cast is needed:
 
 ```ts
-const metadata = await urlMetadata(url, { omitEmpty: true }) as Partial<urlMetadata.KnownFields>;
+const partial = await urlMetadata(url, { fields: ['og', 'network'] });
+partial['og:title'];        // string | undefined
+partial.responseStatusCode; // number | undefined
 ```
 
 ### Troubleshooting
