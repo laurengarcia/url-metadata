@@ -107,6 +107,16 @@ test('fields og + omitEmpty (integration): only filled og keys', async () => {
   expect('og:url' in m).toBe(false) // empty stripped by omitEmpty
 })
 
+test('fields twitter (integration): only twitter keys, empties kept', async () => {
+  const m = await urlMetadata(null, { parseResponseObject: res(), fields: ['twitter'] })
+  expect(m['twitter:card']).toBe('summary')
+  expect(m['twitter:title']).toBe('') // empty whitelisted twitter key kept
+  expect('twitter:url' in m).toBe(true) // present-but-empty
+  expect('og:title' in m).toBe(false)
+  expect('description' in m).toBe(false)
+  expect('title' in m).toBe(false)
+})
+
 test('fields meta (integration): meta tags incl arbitrary + charset, no structural', async () => {
   const m = await urlMetadata(null, { parseResponseObject: res(), fields: ['meta'] })
   expect(m.description).toBe('A description')
