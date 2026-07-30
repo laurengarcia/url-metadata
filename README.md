@@ -106,11 +106,11 @@ const options = {
   // Also accepts specific meta tags with the "meta:<name>" syntax, ex:
   // ['meta:description'] or ['meta:og:url']
   // See "Performance Tuning" section below.
-  fields: undefined
+  fields: undefined,
 
   // Drop empty fields (undefined, null, '', [], {}) from the returned
   // object. Shallow: only top-level fields are removed.
-  omitEmpty: false
+  omitEmpty: false,
 
   // (Node.js v18.17+ only)
   // To prevent SSRF attacks, the default option blocks fetch
@@ -165,7 +165,7 @@ const options = {
   descriptionLength: 750,
 
   // Include raw response body as string
-  includeResponseBody: false,
+  includeResponseBody: false
 };
 
 // Options usage:
@@ -266,6 +266,43 @@ const metadata = await urlMetadata('https://hardto.get', {
 ```
 
 ### Performance Tuning
+
+By default every field is extracted and returned. Pass the `fields` option an array to narrow that down. The response only includes what you list, and the extractors for everything else never run.
+
+`fields` accepts atomic field names (any key from `lib/metadata-fields.js`) plus these named groups:
+- **`network`** — transport data only (status, headers, redirects, timing); see below, it's special
+- **`meta`** — every meta tag, including page-specific ones not on the built-in list
+- **`og`** — all [Open Graph](http://ogp.me/) (`og:`) tags
+- **`twitter`** — all [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) (`twitter:`) tags
+
+For a single page-specific meta tag, use the `meta:<name>` syntax — the part after `meta:` is the exact tag name, colons and all (`meta:og:url` is valid):
+
+```js
+const metadata = await urlMetadata(url, {
+  fields: ['title', 'og', 'meta:dc.creator']
+});
+```
+
+Selecting a group keeps its empty fields so the shape stays predictable; add `omitEmpty: true` to drop them. An unknown token or an empty `fields: []` throws.
+
+#### The `network` group: a fast, universal probe
+
+`network` resolves as soon as the response **headers** arrive and **never downloads the response body**. A cheap way to check status, redirect chain, and timing without fetching the whole page.
+
+Because it doesn't read the body, **`network` works on any URL regardless of content type** — HTML, PDFs, images, JSON, binaries where a normal fetch would otherwise throw `unsupported content type`:
+
+```js
+// Probe any URL — no body downloaded, any content type works:
+const probe = await urlMetadata('https://pdfobject.com/pdf/sample.pdf', {
+  fields: ['network']
+});
+probe.responseStatusCode; // 200
+probe.responseHeaders;    // { 'content-type': 'application/pdf', ... }
+probe.redirects;          // { count, chain }
+probe.performance;        // { ttfbMs, redirectTimeMs, ... }
+```
+
+Since the body is never read, `performance.responseTimeMs` is `undefined` in this mode; there's no body-read to measure.
 
 ## Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
