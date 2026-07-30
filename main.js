@@ -71,6 +71,16 @@ module.exports = function (url, options, _fetch, useAgent) {
     throw new Error("`fields: ['network']` is not supported in parseResponseObject mode")
   }
 
+  // Header-only selections (`network` or a subset of its transport fields)
+  // probe the *target* URL. In proxy mode the response is the proxy's
+  // envelope, so status/headers/redirects/timing would describe the proxy
+  // call, not the target — and the (billed) upstream fetch has already
+  // happened, so the body-skip saves nothing. Misleading with no upside;
+  // plus wastes a billed fetch. Refuse it eagerly.
+  if (opts.proxyUrl && isHeaderOnly(opts.fields)) {
+    throw new Error("header-only `fields` (ex: 'network') are not supported in proxy mode: transport data would reflect the proxy, not the target url")
+  }
+
   // Header-only selection (`network` or a subset of its atomic fields): the
   // body read can be skipped. Engages for live fetches only — filtering in
   // parseResponseObject mode is handled separately.

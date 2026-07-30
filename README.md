@@ -34,7 +34,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Optional mode 
 - img tags
 - the full response body as a string of html (optional)
 
-### Performance Tuning & Token-Efficiency
+### Performance & Token-Efficiency
 - Use `fields` option to request only what you need
 - Shrinks the response size *and* skips the extra extraction work
 - Use `omitEmpty: true` option to drop empty fields
@@ -88,8 +88,8 @@ const options = {
   },
 
   // Route the fetch through a proxy/ unblocking service.
-  // In proxy mode, other fetch-related options will be
-  // silently ignored. Details in  "Proxy Mode" section below.
+  // In proxy mode, other fetch-related options apply to the proxy
+  // fetch, not the target URL. See  "Proxy Mode" section below.
   // Presence of proxyUrl alone triggers proxy mode.
   proxyUrl: undefined,
   // Optional vendor-specific query params passed thru as-is,
@@ -215,7 +215,7 @@ console.log(metadata);
 ### Proxy mode for blocked web pages (403 errors)
 This package is vendor-neutral. Any proxy (unblocking) service works via `proxyUrl` + `proxyParams`. Two vendors are documented below, affiliate links support the author. Want another added? Ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
 
-`proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch, which takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds in instead of the usual 10, or you can customize.
+`proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch, which takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds instead of the usual 10, or you can customize.
 
 `proxyParams` is a flat passthru, sent verbatim as query params exactly as named in your vendor's docs - no allowlist, no translation on our side. Some vendors authenticate via a header instead of a query param (ex: an `x-api-key` header) — for those, pass it in `requestHeaders` instead and skip `proxyParams` entirely if the vendor needs no other params.
 
@@ -303,6 +303,8 @@ probe.performance;        // { ttfbMs, redirectTimeMs, ... }
 ```
 
 Since the body is never read, `performance.responseTimeMs` is `undefined` in this mode; there's no body-read to measure.
+
+**Note:** `fields: ['network']` (only) and `proxyUrl` throw an error when used together, since no fetch happens in `network` mode.
 
 ## Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.

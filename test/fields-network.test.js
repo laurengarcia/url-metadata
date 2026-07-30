@@ -104,6 +104,16 @@ test('fields: parseResponseObject + `network` group throws eagerly', () => {
     .toThrow('parseResponseObject mode')
 })
 
+test('fields: proxyUrl + `network` group throws eagerly', () => {
+  expect(() => urlMetadata('https://x.test', { proxyUrl: 'https://proxy.test/', fields: ['network'] }))
+    .toThrow('proxy mode')
+})
+
+test('fields: proxyUrl + an atomic header-only field also throws (any header-only selection)', () => {
+  expect(() => urlMetadata('https://x.test', { proxyUrl: 'https://proxy.test/', fields: ['responseStatusCode'] }))
+    .toThrow('proxy mode')
+})
+
 test('network mode (live): returns only transport fields, body never parsed', async () => {
   const metadata = await urlMetadata('https://example.com', { fields: ['network'] })
   expect(metadata.responseStatusCode).toBe(200)
