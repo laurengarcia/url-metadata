@@ -19,12 +19,7 @@ function res () {
   return new Response(html, { headers: { 'Content-Type': 'text/html' } })
 }
 
-beforeEach(() => {
-  extractJsonLd.mockClear()
-  extractHeadings.mockClear()
-  extractImgTags.mockClear()
-  extractMetaTags.mockClear()
-})
+// Mock call data is cleared before every test via jest config `clearMocks`.
 
 test('gating: skips all expensive extractors for a non-matching selection', async () => {
   await urlMetadata(null, { parseResponseObject: res(), fields: ['title'] })

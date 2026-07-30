@@ -65,7 +65,8 @@
   "standard": {
     "globals": [
       "expect",
-      "test"
+      "test",
+      "jest"
     ],
     "ignore": [
       "/example-typescript",
