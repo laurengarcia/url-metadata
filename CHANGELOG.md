@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.9.0
+- new option: `omitEmpty: true` purges empty fields from result
+- new option: `fields: []` accepts named groups or atomic field names
+
 5.8.2
 - README: add Feedback Form
 

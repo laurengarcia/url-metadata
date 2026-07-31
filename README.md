@@ -4,7 +4,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Optional mode 
 
 ---
 <div>
-  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is an extraction & SEO toolkit built on top of this package by the same author/ maintainer. Get started free:
+  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is a web page extraction & SEO toolkit built on top of this package by the same author. Get started free:
   <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
@@ -267,15 +267,15 @@ const metadata = await urlMetadata('https://hardto.get', {
 
 ### Performance Tuning
 
-This is a powerful lever for optimizing the amount of processing that takes place for each target URL. By default every field is extracted and returned. Pass the `fields` option an array to narrow that down. The response only includes what you list, and the extractors for everything else never run.
+This package has powerful levers for optimizing the amount of processing that takes place for each target URL *and* for reducing response sizes. By default every metadata field is extracted and returned. Pass the `fields` option an array to narrow that down. The response only includes what you list, and the extractors for everything else never run.
 
-`fields` accepts atomic field names (any key from `lib/metadata-fields.js`) plus these named groups:
+`fields` accepts atomic field names ([any key from `lib/metadata-fields.js`](https://github.com/laurengarcia/url-metadata/blob/master/lib/metadata-fields.js)) plus these named groups:
 - **`network`** — transport data only (status, headers, redirects, timing); see below, it's special
 - **`meta`** — every meta tag, including page-specific ones not on the built-in list
 - **`og`** — all [Open Graph](http://ogp.me/) (`og:`) tags
 - **`twitter`** — all [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) (`twitter:`) tags
 
-Selecting a group keeps its empty fields so the shape stays predictable; add `omitEmpty: true` to drop them. An unknown token or an empty `fields: []` throws.
+Selecting a group keeps its empty fields so the shape stays predictable; add `omitEmpty: true` to drop empty fields entirely for further streamlining. An unknown token or an empty `fields: []` throws.
 
 For a single page-specific meta tag, use the `meta:<name>` syntax — the part after `meta:` is the exact tag name, colons and all (`meta:og:url` is valid):
 
