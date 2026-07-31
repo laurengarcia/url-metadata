@@ -1,5 +1,27 @@
 export = urlMetadata
 
+// Definitions are loose by default so arbitrary scraped meta tags
+// never fight the compiler: default results are `Result` (≈ any).
+// Opt into `KnownFields` / `KnownFieldsStrict` for structure;
+// `fields` or `omitEmpty: true` options auto-narrow to Partial.
+// Types only — nothing here changes runtime behavior.
+
+// Definition overloads resolve top-to-bottom.
+// A sparse selection (`fields`, or `omitEmpty: true` options) drops
+// the default "always present" guarantee, so the Result is typed:
+// `Partial<KnownFields>`
+declare function urlMetadata(
+  url: string | null,
+  options: urlMetadata.Options & { fields: string[] },
+): Promise<Partial<urlMetadata.KnownFields>>
+
+declare function urlMetadata(
+  url: string | null,
+  options: urlMetadata.Options & { omitEmpty: true },
+): Promise<Partial<urlMetadata.KnownFields>>
+
+// The default (fallback — must stay last): all returned fields are present,
+// whether empty or not. `Result` is intentionally loose, by design. See below.
 declare function urlMetadata(
   url: string | null,
   options?: urlMetadata.Options,
@@ -11,6 +33,8 @@ declare namespace urlMetadata {
     proxyUrl?: string; // proxy/unblocking service endpoint (ex: https://api.scraperapi.com/); presence of this triggers proxy mode
     proxyParams?: ProxyParams;
     parseResponseObject?: globalThis.Response | import('node-fetch').Response;
+    fields?: string[]; // sparse fieldset: atomic keys, group names ('network'|'og'|'twitter'|'meta'), and/or 'meta:<name>' for page-specific tags; undefined returns full result
+    omitEmpty?: boolean; // drop top-level empty fields (undefined, null, '', [], {}) for token efficiency; when true, result is typed Partial<KnownFields>
     requestFilteringAgentOptions?: import('request-filtering-agent').RequestFilteringAgentOptions;
     agent?: any; // Suggest: Node.js http.Agent | https.Agent
     maxRedirects?: number;
@@ -49,6 +73,9 @@ declare namespace urlMetadata {
    * Known fields are fully typed; any additional meta tags found on the
    * page are appended as new fields, as strings — except tags starting
    * with `citation_`, which are string[] (per Google Scholar spec, see README).
+   *
+   * With `fields` or `omitEmpty: true`, presence guarantees no longer hold;
+   * the function returns `Partial<KnownFields>` automatically (no cast needed).
    */
   interface KnownFields extends KnownFieldsStrict {
     [metaTagName: string]: any;
@@ -70,9 +97,9 @@ declare namespace urlMetadata {
     responseStatusCode: number;
     responseHeaders: Record<string, string>; // whitelisted set, see lib/extract-headers.js
     performance: {
+      redirectTimeMs: number | undefined; // only set when redirects occurred
       ttfbMs: number | undefined; // cumulative: first request start -> final hop's headers arriving
       responseTimeMs: number | undefined; // cumulative: first request start -> body read complete
-      redirectTimeMs: number | undefined; // only set when redirects occurred
     };
     canonical: string; // first <link rel="canonical"> found, empty string if none
     canonicalUrls: string[]; // raw href of every canonical tag, in document order

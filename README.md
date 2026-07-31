@@ -1,10 +1,10 @@
 # url-metadata
 
-Fetch a URL and scrape its metadata using Node.js or the browser. Has optional mode to parse metadata from HTML strings or `Response` objects instead. First-class configurable security options available. Content is returned raw by design; sanitize your own output (so you control processing efficiency).
+Fetch a URL and scrape its metadata using Node.js or the browser. Optional mode to parse metadata from HTML strings or `Response` objects instead. You can also request just the fields you need for smaller responses and less extraction work, tuned for your use-case. First-class configurable security options available. Content is returned raw by design; sanitize your own output (so you control processing efficiency).
 
 ---
 <div>
-  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is an SEO toolkit built on top of this package by the same author/ maintainer. Get started free:
+  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is a web page extraction & SEO toolkit built on top of this package by the same author. Get started free:
   <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
@@ -17,7 +17,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - **parser mode** - pass in an html string or Response object (optional)
 - automatic charset detection & decoding (optional)
 - [x402](https://www.x402.org/) errors return payment requirements
-- 📬 [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) and [Discord](https://discord.gg/BqVBeeGsc5) support channel
+- 📫 Actively monitored [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) | [Discord](https://discord.gg/BqVBeeGsc5) | [GitHub](https://github.com/laurengarcia/url-metadata)
 
 ## **Extracts:**
 - redirects
@@ -33,6 +33,12 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Has optional m
 - h1-h6 tags
 - img tags
 - the full response body as a string of html (optional)
+
+### Performance & Token-Efficiency
+- Use `fields` option to request only what you need
+- Shrinks the response size *and* skips the extra extraction work
+- Use `omitEmpty: true` option to drop empty fields
+- Customize for your specific use-case
 
 ### **🔒 Security** - Protects against:
 - Infinite redirect loops: `maxRedirects` option defaults to 10.
@@ -82,8 +88,8 @@ const options = {
   },
 
   // Route the fetch through a proxy/ unblocking service.
-  // In proxy mode, other fetch-related options will be
-  // silently ignored. Details in  "Proxy Mode" section below.
+  // In proxy mode, other fetch-related options apply to the proxy
+  // fetch, not the target URL. See  "Proxy Mode" section below.
   // Presence of proxyUrl alone triggers proxy mode.
   proxyUrl: undefined,
   // Optional vendor-specific query params passed thru as-is,
@@ -92,8 +98,19 @@ const options = {
   proxyParams: undefined,
 
   // Alternate use-case: pass `Response` object to be parsed
-  // See example usage below
+  // See example usage below.
   parseResponseObject: undefined,
+
+  // Request only what you need. Accepts atomic field names or named groups:
+  // ['network', 'meta', 'og', 'twitter']
+  // Also accepts specific meta tags with the "meta:<name>" syntax, ex:
+  // ['meta:description'] or ['meta:og:url']
+  // See "Performance Tuning" section below.
+  fields: undefined,
+
+  // Drop empty fields (undefined, null, '', [], {}) from the returned
+  // object. Shallow: only top-level fields are removed.
+  omitEmpty: false,
 
   // (Node.js v18.17+ only)
   // To prevent SSRF attacks, the default option blocks fetch
@@ -198,7 +215,7 @@ console.log(metadata);
 ### Proxy mode for blocked web pages (403 errors)
 This package is vendor-neutral. Any proxy (unblocking) service works via `proxyUrl` + `proxyParams`. Two vendors are documented below, affiliate links support the author. Want another added? Ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
 
-`proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch, which takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds in instead of the usual 10, or you can customize.
+`proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch, which takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds instead of the usual 10, or you can customize.
 
 `proxyParams` is a flat passthru, sent verbatim as query params exactly as named in your vendor's docs - no allowlist, no translation on our side. Some vendors authenticate via a header instead of a query param (ex: an `x-api-key` header) — for those, pass it in `requestHeaders` instead and skip `proxyParams` entirely if the vendor needs no other params.
 
@@ -248,6 +265,47 @@ const metadata = await urlMetadata('https://hardto.get', {
 });
 ```
 
+### Performance Tuning
+
+This package has powerful levers for optimizing the amount of processing that takes place for each target URL *and* for reducing response sizes. By default every metadata field is extracted and returned. Pass the `fields` option an array to narrow that down. The response only includes what you list, and the extractors for everything else never run.
+
+`fields` accepts atomic field names ([any key from `lib/metadata-fields.js`](https://github.com/laurengarcia/url-metadata/blob/master/lib/metadata-fields.js)) plus these named groups:
+- **`network`** — transport data only (status, headers, redirects, timing); see below, it's special
+- **`meta`** — every meta tag, including page-specific ones not on the built-in list
+- **`og`** — all [Open Graph](http://ogp.me/) (`og:`) tags
+- **`twitter`** — all [Twitter Card](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup) (`twitter:`) tags
+
+Selecting a group keeps its empty fields so the shape stays predictable; add `omitEmpty: true` to drop empty fields entirely for further streamlining. An unknown token or an empty `fields: []` throws.
+
+For a single page-specific meta tag, use the `meta:<name>` syntax — the part after `meta:` is the exact tag name, colons and all (`meta:og:url` is valid):
+
+```js
+const metadata = await urlMetadata(url, {
+  fields: ['title', 'og', 'meta:dc.creator']
+});
+```
+
+#### The `network` group: a fast, universal probe
+
+`network` resolves as soon as the response **headers** arrive and **never downloads the response body**. A cheap way to check status, redirect chain, and timing without fetching the whole page.
+
+Because it doesn't read the body, **`network` works on any URL regardless of content type** — HTML, PDFs, images, JSON, binaries where a normal fetch would otherwise throw `unsupported content type`:
+
+```js
+// Probe any URL — no body downloaded, any content type works:
+const probe = await urlMetadata('https://pdfobject.com/pdf/sample.pdf', {
+  fields: ['network']
+});
+probe.responseStatusCode; // 200
+probe.responseHeaders;    // { 'content-type': 'application/pdf', ... }
+probe.redirects;          // { count, chain }
+probe.performance;        // { ttfbMs, redirectTimeMs, ... }
+```
+
+Since the body is never read, `performance.responseTimeMs` is `undefined` in this mode; there's no body-read to measure.
+
+**Note:** `fields: ['network']` (only) and `proxyUrl` throw an error when used together, since no body-read happens in `network`-only mode, and the proxy executes the fetch on your target URL and returns the result in the body.
+
 ## Returns
 Returns a promise resolved with a JSON object. Note that the returned `url` field will be the last hop in the request chain if there are redirects.
 
@@ -294,6 +352,14 @@ metadata.foobar;     // any (arbitrary meta tag found on page; mostly returns as
 const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
 ```
 
+When you pass `fields` or `omitEmpty: true` options, the return type narrows to `Partial<urlMetadata.KnownFields>` automatically. Known fields become optional (any of them may be filtered out), and no cast is needed:
+
+```ts
+const partial = await urlMetadata(url, { fields: ['og', 'network'] });
+partial['og:title'];        // string | undefined
+partial.responseStatusCode; // number | undefined
+```
+
 ### Troubleshooting
 
 **⛔ Issue: Returns `404`, `403` errors or a CAPTCHA form.** Your fetch request may have been blocked by the target server because it suspects you are a bot or scraper. This package has a built-in proxy mode you can use for hard-to-get pages, see "Proxy Mode" section above.
@@ -319,4 +385,4 @@ const strict = await urlMetadata(url) as urlMetadata.KnownFieldsStrict;
 👉 You may also want to try the hosted version of this package: [Minifetch](https://www.npmjs.com/package/minifetch-api).
 
 ---
-📬 Get in touch: [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) | [Discord](https://discord.gg/BqVBeeGsc5) | [Github Issues](https://github.com/laurengarcia/url-metadata/issues)
+📫 Get in touch: [Feedback Form](https://forms.gle/UyXmzp596ZYzWCEH8) | [Discord](https://discord.gg/BqVBeeGsc5) | [Github Issues](https://github.com/laurengarcia/url-metadata/issues)

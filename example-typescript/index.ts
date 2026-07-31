@@ -73,3 +73,34 @@ async function resultStaysPermissiveCanary (url: string) {
 
   return [s, mock, title, favs, hops, req, extra];
 }
+
+// --- COMPILE-ONLY canary: sparse return-type overloads. Never called. ---
+// Locks the guarantee that `fields` (any selection) and `omitEmpty: true`
+// narrow the result to Partial<KnownFields> (known fields optional & real-
+// typed), while `omitEmpty: false` and no selection stay the loose `Result`.
+// Relies on strictNullChecks (tsconfig `strict: true`). DO NOT CALL.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function sparseReturnTypeCanary (url: string) {
+  // `fields` present -> Partial<KnownFields>
+  const picked = await urlMetadata(url, { fields: ['title'] });
+  const okPicked: Partial<urlMetadata.KnownFields> = picked; // assignable
+  // @ts-expect-error Partial (optional fields) is NOT assignable to the all-present Strict shape
+  const strictPicked: urlMetadata.KnownFieldsStrict = picked;
+
+  // `omitEmpty: true` -> Partial<KnownFields>
+  const pruned = await urlMetadata(url, { omitEmpty: true });
+  const okPruned: Partial<urlMetadata.KnownFields> = pruned;
+  // @ts-expect-error Partial is NOT assignable to Strict
+  const strictPruned: urlMetadata.KnownFieldsStrict = pruned;
+
+  // `omitEmpty: false` -> loose `Result` (known keys resolve to `any`)
+  const full = await urlMetadata(url, { omitEmpty: false });
+  const okFull: urlMetadata.Result = full;
+  full.responseStatusCode.whatever; // any: compiles; would error under Partial
+
+  // no `fields`/`omitEmpty` -> `Result`
+  const plain = await urlMetadata(url, { descriptionLength: 500 });
+  const okPlain: urlMetadata.Result = plain;
+
+  return [okPicked, strictPicked, okPruned, strictPruned, okFull, okPlain];
+}
