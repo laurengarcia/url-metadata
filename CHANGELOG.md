@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.10.0
+- expose result-shaping helpers on the main entry: `resolveFields`, `selectFields`, `isEmpty` (filter an already-parsed result without re-fetching; used internally by the parser too)
+
 5.9.0
 - new option: `omitEmpty: true` purges empty fields from result
 - new option: `fields: []` accepts named groups or atomic field names

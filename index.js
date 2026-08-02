@@ -5,6 +5,7 @@
 const nodeFetch = require('node-fetch')
 const requestFilteringAgent = require('request-filtering-agent')
 const main = require('./main')
+const resolveFields = require('./lib/resolve-fields')
 
 module.exports = function (url, options) {
   // Handle Next.js bundler converting CommonJS `node-fetch` to ES module structure
@@ -18,3 +19,13 @@ module.exports = function (url, options) {
 
   return main(url, options, _fetch, useAgent)
 }
+
+// Result-shaping helpers, exposed on the public surface so consumers can
+// filter an already-parsed result without re-fetching (single source of
+// truth; used internally by the parser too):
+//   resolveFields(fields) -> validate a `fields` selection (throws on bad input)
+//   selectFields(metadata, fields) -> project a full result to the selection
+//   isEmpty(value) -> the `omitEmpty` predicate
+module.exports.resolveFields = resolveFields
+module.exports.selectFields = resolveFields.selectFields
+module.exports.isEmpty = resolveFields.isEmpty

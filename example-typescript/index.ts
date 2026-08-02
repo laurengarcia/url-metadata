@@ -104,3 +104,28 @@ async function sparseReturnTypeCanary (url: string) {
 
   return [okPicked, strictPicked, okPruned, strictPruned, okFull, okPlain];
 }
+
+// --- COMPILE-ONLY canary: result-shaping statics on the main entry. Never called. ---
+// Locks the namespace-merged signatures for resolveFields/selectFields/isEmpty
+// exposed in 5.10.0. If this stops compiling, index.d.ts has drifted from the
+// statics attached at runtime in index.js/browser.js. DO NOT CALL.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function shapingStaticsCanary (url: string) {
+  const full = await urlMetadata(url); // Result
+
+  // resolveFields: string[] | undefined -> string[] | null
+  const tokens: string[] | null = urlMetadata.resolveFields(['title', 'og']);
+  const none: string[] | null = urlMetadata.resolveFields(undefined);
+
+  // selectFields: (object, string[]) -> Partial<KnownFields>
+  const picked = urlMetadata.selectFields(full, ['title', 'og']);
+  const okPicked: Partial<urlMetadata.KnownFields> = picked; // assignable
+  const title: string | undefined = picked.title; // known key is optional & typed
+  // @ts-expect-error Partial (optional fields) is NOT assignable to the all-present Strict shape
+  const strictPicked: urlMetadata.KnownFieldsStrict = picked;
+
+  // isEmpty: unknown -> boolean
+  const empty: boolean = urlMetadata.isEmpty(picked.favicons);
+
+  return [tokens, none, okPicked, title, strictPicked, empty];
+}

@@ -28,6 +28,25 @@ declare function urlMetadata(
 ): Promise<urlMetadata.Result>
 
 declare namespace urlMetadata {
+
+  // Helper Functions ---
+  // Result-shaping helpers exposed on the main entry (index.js & browser.js).
+  // So consumers can filter an already-parsed result without re-fetching.
+
+  // Validate a `fields` selection eagerly. Returns the tokens, or null when
+  // `fields` is undefined (signal: no filtering). Throws on a non-array, empty
+  // array, non-string token, `meta:` with no name, or unknown bare token.
+  function resolveFields(fields: string[] | undefined): string[] | null;
+
+  // Project a full result down to a validated `fields` selection. Only keys
+  // present in `metadata` are returned; groups expand against its own keys.
+  function selectFields(metadata: Record<string, any>, fields: string[]): Partial<KnownFields>;
+
+  // The `omitEmpty` predicate: true for undefined, null, '', [], {} (shallow).
+  function isEmpty(value: unknown): boolean;
+
+  // end Helper Functions ---
+
   interface Options {
     requestHeaders?: Record<string, string>;
     proxyUrl?: string; // proxy/unblocking service endpoint (ex: https://api.scraperapi.com/); presence of this triggers proxy mode
