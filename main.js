@@ -28,8 +28,8 @@ function drainBody (response) {
 module.exports = function (url, options, _fetch, useAgent) {
   if (!options || typeof options !== 'object') options = {}
 
+  // Defaults
   const opts = Object.assign(
-    // defaults
     {
       requestHeaders: {
         'User-Agent': 'url-metadata (+https://www.npmjs.com/package/url-metadata)',
@@ -123,7 +123,9 @@ module.exports = function (url, options, _fetch, useAgent) {
 
   async function fetchData (_url, redirectCount = 0, requestHeaders = opts.requestHeaders) {
     if (redirectCount > opts.maxRedirects) {
-      throw createHttpError({ msg: 'too many redirects', redirects, requestUrl, url: _url })
+      // `notFollowedRedirect` flags this as a redirect we declined to follow
+      // (maxRedirects reached), not a transport error
+      throw createHttpError({ msg: 'too many redirects', redirects, requestUrl, url: _url, notFollowedRedirect: true })
     }
     if (!_url && !opts.parseResponseObject) {
       throw new Error('url parameter is missing')
@@ -171,16 +173,21 @@ module.exports = function (url, options, _fetch, useAgent) {
 
       // If response is 3xx redirect
       if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
-        // Collect redirects in object that is passed back to user
+        // Resolve the Location header against this hop's url (relative allowed).
+        const newUrl = new URL(response.headers.get('location'), _url).href
+        // Collect redirects in object that is passed back to user. `location`
+        // exposes each hop's resolved destination, so a caller can inspect a
+        // redirect without following it (ex: a maxRedirects: 0 hop-walk that
+        // robots-checks each destination before requesting it).
         redirects.count = redirectCount + 1
         redirects.chain.push({
           order: redirects.count,
           url: _url,
-          statusCode: response.status
+          statusCode: response.status,
+          location: newUrl
         })
         // Then, follow the redirect. Strip sensitive headers when the hop
         // crosses hosts; once stripped they stay stripped for later hops.
-        const newUrl = new URL(response.headers.get('location'), _url).href
         let nextHeaders = requestHeaders
         // Compare exact host - its what browsers, curl, unidici do
         if (new URL(newUrl).host !== new URL(_url).host) {
