@@ -124,10 +124,7 @@ module.exports = function (url, options, _fetch, useAgent) {
   async function fetchData (_url, redirectCount = 0, requestHeaders = opts.requestHeaders) {
     if (redirectCount > opts.maxRedirects) {
       // `notFollowedRedirect` flags this as a redirect we declined to follow
-      // (maxRedirects reached), not a transport error. The resolved next-hop
-      // url is `url` here and on the last redirects.chain entry's `location`,
-      // so a maxRedirects: 0 hop-walk (ex: robots-check-before-fetch) can
-      // disambiguate cleanly without matching the message string.
+      // (maxRedirects reached), not a transport error.
       throw createHttpError({ msg: 'too many redirects', redirects, requestUrl, url: _url, notFollowedRedirect: true })
     }
     if (!_url && !opts.parseResponseObject) {

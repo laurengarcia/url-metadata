@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.11.0
+- expose redirect `location` along w other redirect data
+
 5.10.0
 - expose result-shaping helpers on the main entry: `resolveFields`, `selectFields`, `isEmpty` (filter an already-parsed result without re-fetching; used internally by the parser too)
 
