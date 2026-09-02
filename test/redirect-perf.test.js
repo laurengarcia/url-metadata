@@ -140,7 +140,7 @@ test('strips sensitive headers on cross-host redirect hops only', async () => {
 })
 
 test('errors properly when redirect is blocked', async () => {
-  const url = 'https://bit.ly/4fjrqxy' // redirects to amazon profile (blocked)
+  const url = 'https://bit.ly/4fjrqxy' // redirects to amazon profile (blocked page)
   try {
     const metadata = await urlMetadata(url)
     console.log(metadata)
@@ -159,5 +159,6 @@ test('errors properly when redirect is blocked', async () => {
     expect(err.redirects.chain[0].statusCode).toBeGreaterThan(300)
     expect(err.redirects.chain[0].statusCode).toBeLessThan(400)
     expect(err.redirects.chain[0].url).toBe(url)
+    expect(err.redirects.chain[0].location).toContain('https://www.amazon.com/gp/profile')
   }
 })
