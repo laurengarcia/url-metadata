@@ -144,7 +144,6 @@ test('errors properly when redirect is blocked', async () => {
   const url = 'https://bit.ly/4fjrqxy' // redirects to amazon profile (blocked page)
   try {
     const metadata = await urlMetadata(url)
-    console.log(metadata)
     // the ^code above should throw an error
     // if the following line fails it means
     // the test did not throw the proper error:
