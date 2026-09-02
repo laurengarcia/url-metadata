@@ -177,8 +177,7 @@ module.exports = function (url, options, _fetch, useAgent) {
         const newUrl = new URL(response.headers.get('location'), _url).href
         // Collect redirects in object that is passed back to user. `location`
         // exposes each hop's resolved destination, so a caller can inspect a
-        // redirect without following it (ex: a maxRedirects: 0 hop-walk that
-        // robots-checks each destination before requesting it).
+        // redirect without following it (ex: when `maxRedirects: 0`).
         redirects.count = redirectCount + 1
         redirects.chain.push({
           order: redirects.count,
