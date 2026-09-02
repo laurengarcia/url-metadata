@@ -40,6 +40,7 @@ test('obey maxRedirects option; error returns redirects property w correct shape
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toBe('too many redirects')
+    expect(err.unfollowedRedirect).toBe(true)
     // Test error.redirects came back & in correct shape:
     expect(err.redirects).toBeDefined()
     expect(err.redirects.count).toBe(1)

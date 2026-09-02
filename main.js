@@ -123,9 +123,9 @@ module.exports = function (url, options, _fetch, useAgent) {
 
   async function fetchData (_url, redirectCount = 0, requestHeaders = opts.requestHeaders) {
     if (redirectCount > opts.maxRedirects) {
-      // `notFollowedRedirect` flags this as a redirect we declined to follow
+      // `unfollowedRedirect` flags this as a redirect we declined to follow
       // (maxRedirects reached), not a transport error.
-      throw createHttpError({ msg: 'too many redirects', redirects, requestUrl, url: _url, notFollowedRedirect: true })
+      throw createHttpError({ msg: 'too many redirects', redirects, requestUrl, url: _url, unfollowedRedirect: true })
     }
     if (!_url && !opts.parseResponseObject) {
       throw new Error('url parameter is missing')

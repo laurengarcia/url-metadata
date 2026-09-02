@@ -246,7 +246,7 @@ declare namespace urlMetadata {
       chain: RedirectHop[];
     };
     url?: string; // final destination url in request chain
-    notFollowedRedirect?: boolean; // true when this error is a redirect left unfollowed (maxRedirects reached), not a transport error; next-hop url is `url` / last redirects.chain[].location
+    unfollowedRedirect?: boolean; // true when error is a redirect left unfollowed (maxRedirects reached), not a transport error; next-hop url is `url` / last redirects.chain[].location
     statusCode?: number;
     paymentRequired?: boolean;
     x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
