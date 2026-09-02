@@ -40,6 +40,7 @@ test('obey maxRedirects option; error returns redirects property w correct shape
   } catch (err) {
     expect(err).toBeDefined()
     expect(err.message).toBe('too many redirects')
+    expect(err.unfollowedRedirect).toBe(true)
     // Test error.redirects came back & in correct shape:
     expect(err.redirects).toBeDefined()
     expect(err.redirects.count).toBe(1)
@@ -140,10 +141,9 @@ test('strips sensitive headers on cross-host redirect hops only', async () => {
 })
 
 test('errors properly when redirect is blocked', async () => {
-  const url = 'https://bit.ly/4fjrqxy' // redirects to amazon profile (blocked)
+  const url = 'https://bit.ly/4fjrqxy' // redirects to amazon profile (blocked page)
   try {
     const metadata = await urlMetadata(url)
-    console.log(metadata)
     // the ^code above should throw an error
     // if the following line fails it means
     // the test did not throw the proper error:
@@ -159,5 +159,6 @@ test('errors properly when redirect is blocked', async () => {
     expect(err.redirects.chain[0].statusCode).toBeGreaterThan(300)
     expect(err.redirects.chain[0].statusCode).toBeLessThan(400)
     expect(err.redirects.chain[0].url).toBe(url)
+    expect(err.redirects.chain[0].location).toContain('https://www.amazon.com/gp/profile')
   }
 })

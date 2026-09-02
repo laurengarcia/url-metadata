@@ -314,7 +314,7 @@ A basic template for the object can be found in `lib/metadata-fields.js`. Any ad
 Content is returned raw, by design, as found on the page without sanitizing it. Only you know its output context, so sanitization is your call (e.g. DOMPurify before rendering to a DOM; parameterized queries when storing to SQL). Treat all extracted values as untrusted.
 
 The object consists of key/value pairs as strings, with exceptions:
-- `redirects` is an object with `count` (number) and `chain` (array of `{ order, url, statusCode }`)
+- `redirects` is an object with `count` (number) and `chain` (array of `{ order, url, statusCode, location }`)
 - `canonical` is a string, and returns the first `<link rel="canonical">` found on the page (empty string if none). The raw href of every canonical tag found — including if there's only one, or none, or many — is also returned as `canonicalUrls`, an array of strings in the order encountered while parsing the page, so you can reason about this yourself (e.g. detect and fix multiples).
 - `hreflang`, `favicons`, and `responseHeaders` is an array of objects containing key/value pairs of strings
 - `jsonld` is an array of objects
