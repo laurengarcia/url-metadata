@@ -183,7 +183,8 @@ module.exports = function (url, options, _fetch, useAgent) {
           order: redirects.count,
           url: _url,
           statusCode: response.status,
-          location: newUrl
+          location: newUrl,
+          ttfbMs: Math.round(headersAt - hopStart) // Time-to-headers for THIS hop
         })
         // Then, follow the redirect. Strip sensitive headers when the hop
         // crosses hosts; once stripped they stay stripped for later hops.

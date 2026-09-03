@@ -232,6 +232,7 @@ declare namespace urlMetadata {
     url: string; // the url requested at this hop
     statusCode: number; // the 3xx status returned by this hop
     location: string; // resolved absolute url this hop redirects to (its Location header)
+    ttfbMs: number; // time-to-headers for this hop (ms)
   }
 
   /**

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+5.12.0
+- add `ttfbMs` to each `RedirectHop` object
+
 5.11.0
 - expose redirect `location` along w other redirect data
 
