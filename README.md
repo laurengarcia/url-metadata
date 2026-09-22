@@ -4,7 +4,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Optional mode 
 
 ---
 <div>
-  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is a web page extraction & SEO toolkit built on top of this package by the same author. Get started free:
+  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is a hosted toolkit for web devs and AI agents built on top of this package by the same author. Get started free:
   <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
@@ -42,7 +42,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Optional mode 
 
 ### **🔒 Security** - Protects against:
 - Infinite redirect loops: `maxRedirects` option defaults to 10.
-- SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js v18+ (custom options also available)
+- SSRF attacks via [request-filtering-agent](https://www.npmjs.com/package/request-filtering-agent) in Node.js (custom options also available)
 - Memory-exhaustion attacks (gzip bombs, oversized responses): set `size` option. Pair with `timeout` to prevent slow/ connection-holding responses.
 - Leaking sensitive headers (auth, cookies) if target URL redirects to a diff host.
 
@@ -50,7 +50,7 @@ More details below. To report a bug or request a feature please open an issue or
 
 
 ## Install
-Works with Node.js versions `>=18.17` or in the browser when bundled. Example build configs available in the [GitHub repo](https://github.com/laurengarcia/url-metadata) `/example-*` dirs: Next.js, Vite and Webpack (see `/example-typescript`).
+Works with Node.js versions `>=20.18` or `>=22.12.0`, or in the browser when bundled. Try version 5.12.0 if you need backward compatibility with Node.js `>=18.17`. Example build configs available in the [GitHub repo](https://github.com/laurengarcia/url-metadata) `/example-*` dirs: Next.js, Vite and Webpack (see `/example-typescript`).
 
 ```
 npm install url-metadata --save
