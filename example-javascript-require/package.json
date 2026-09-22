@@ -7,6 +7,6 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "url-metadata": "file:../url-metadata-5.9.0.tgz"
+    "url-metadata": "file:../url-metadata-6.0.0.tgz"
   }
 }
