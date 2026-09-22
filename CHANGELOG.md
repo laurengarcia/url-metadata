@@ -1,5 +1,9 @@
 # CHANGELOG
 
+6.0.0
+- requires Node ^20.19.0 || >=22.12.0; bumps request-filtering-agent to 3.2.1 (CVE-2026-62985).
+- update Jest to v30+; not user-facing just a dev-dependency.
+
 5.12.0
 - add `ttfbMs` to each `RedirectHop` object
 

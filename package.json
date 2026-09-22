@@ -31,7 +31,7 @@
     "x402 errors"
   ],
   "engines": {
-    "node": ">=18.17"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "main": "index.js",
   "browser": {
@@ -80,17 +80,19 @@
     "resetModules": true,
     "setupFiles": [
       "<rootDir>/test/setup-env.js"
-    ]
+    ],
+    "transformIgnorePatterns": ["/node_modules/(?!request-filtering-agent/)"]
   },
   "dependencies": {
     "cheerio": "^1.0.0",
     "node-fetch": "^2.7.0",
-    "request-filtering-agent": "2.0.1"
+    "request-filtering-agent": "3.2.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.29.7",
     "dotenv": "^17.4.2",
     "husky": "^8.0.3",
-    "jest": "^29.5.0",
+    "jest": "^30.5.2",
     "standard": "^17.0.0"
   },
   "repository": {
