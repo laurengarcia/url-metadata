@@ -40,7 +40,7 @@ module.exports = function (url, options, _fetch, useAgent) {
       parseResponseObject: undefined,
       fields: undefined, // sparse fieldset (array of atomic keys and/or group names); undefined returns full result
       omitEmpty: false, // drop empty fields (undefined, null, '', [], {}) from result for token efficiency
-      requestFilteringAgentOptions: undefined, // Node.js v18+ only, silently ignored by others
+      requestFilteringAgentOptions: undefined, // Node.js only, silently ignored by others
       agent: undefined, // Node.js only; silently ignored by others
       maxRedirects: 10,
       timeout: 10000, // auto-bumped to 60000 in proxy mode unless explicitly overridden, see below
