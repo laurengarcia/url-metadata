@@ -85,7 +85,7 @@
   "dependencies": {
     "cheerio": "^1.0.0",
     "node-fetch": "^2.7.0",
-    "request-filtering-agent": "2.0.1"
+    "request-filtering-agent": "3.2.1"
   },
   "devDependencies": {
     "dotenv": "^17.4.2",
