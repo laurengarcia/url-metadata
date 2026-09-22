@@ -4,7 +4,7 @@ Fetch a URL and scrape its metadata using Node.js or the browser. Optional mode 
 
 ---
 <div>
-  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is a hosted toolkit for web devs and AI agents built on top of this package by the same author. Get started free:
+  👉 <i><strong>Looking for a quick hosted solution?</i> <a href="https://minifetch.com">Minifetch</a></strong> is a toolkit for web devs and AI agents built on top of this package by the same author. Get started free:
   <a href="https://www.npmjs.com/package/minifetch-api">npm install minifetch-api</a>
 </div>
 
