@@ -86,7 +86,7 @@
   "dependencies": {
     "cheerio": "^1.0.0",
     "node-fetch": "^2.7.0",
-    "request-filtering-agent": "3.2.1"
+    "request-filtering-agent": "^3.2.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",

@@ -251,7 +251,7 @@ declare namespace urlMetadata {
     statusCode?: number;
     paymentRequired?: boolean;
     x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
-    // errors that *may* fall thru from `node-fetch` dependency in Node.js v18+:
+    // errors that *may* fall thru from `node-fetch` dependency in Node.js:
     type?: string;
     errno?: string;
     code?: string;
