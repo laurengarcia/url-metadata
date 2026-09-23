@@ -1,5 +1,8 @@
 # CHANGELOG
 
+6.1.0
+- response headers: always return headers that start with prefix "x-"
+
 6.0.0
 - requires Node ^20.19.0 || >=22.12.0; bumps request-filtering-agent to 3.2.1 (CVE-2026-62985).
 - no API changes; require('url-metadata') and import both work as before.

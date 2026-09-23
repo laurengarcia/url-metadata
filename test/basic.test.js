@@ -8,6 +8,7 @@ test('basic https:// fetch', async () => {
     expect(metadata.responseStatusCode).toBe(200)
     expect(typeof metadata.responseHeaders).toBe('object')
     expect(metadata.responseHeaders['content-type']).toContain('text/html')
+    expect(metadata.responseHeaders['x-frame-options']).toBe('DENY')
     expect(metadata.redirects).toBeDefined()
     expect(metadata.redirects.count).toBe(0)
     expect(metadata.redirects.chain.length).toBe(0)
