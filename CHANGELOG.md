@@ -1,5 +1,9 @@
 # CHANGELOG
 
+5.12.1
+- bugfix: ensure sensitive proxyUrl params aren't leaked in proxy mode errors
+- ensure `requestUrl` & `url` are attached to errors in .catch() block edge-cases (node-fetch `FetchError`)
+
 5.12.0
 - add `ttfbMs` to each `RedirectHop` object
 
