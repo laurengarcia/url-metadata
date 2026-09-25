@@ -25,6 +25,18 @@ function drainBody (response) {
   else if (typeof response.text === 'function') response.text().catch(() => {})
 }
 
+// Redact any url pointing at the proxy vendor from an error's message and
+// stack. node-fetch's FetchError embeds the full request url (proxy endpoint +
+// query params, i.e. the api key) in both.
+function redactProxyUrl (error, proxyUrl) {
+  let origin
+  try { origin = new URL(proxyUrl).origin } catch { return }
+  const pattern = new RegExp(origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\S*', 'g')
+  for (const key of ['message', 'stack']) {
+    if (typeof error[key] === 'string') error[key] = error[key].replace(pattern, `${origin}/[redacted]`)
+  }
+}
+
 module.exports = function (url, options, _fetch, useAgent) {
   if (!options || typeof options !== 'object') options = {}
 
@@ -107,6 +119,7 @@ module.exports = function (url, options, _fetch, useAgent) {
 
   const requestUrl = url
   let finalUrl = ''
+  let lastFetchUrl // outgoing request url; the vendor endpoint + params in proxy mode
   const redirects = {
     count: 0,
     chain: []
@@ -141,6 +154,7 @@ module.exports = function (url, options, _fetch, useAgent) {
       // working across ≥2 vendors (ScraperAPI, ScrapingAnt) with no branching
       // needed — both just take `url` + their own auth param in the query string.
       const fetchUrl = opts.proxyUrl ? buildProxyUrl(_url) : _url
+      lastFetchUrl = fetchUrl
 
       const requestOpts = {
         method: 'GET',
@@ -367,6 +381,11 @@ module.exports = function (url, options, _fetch, useAgent) {
         if (currentResponse && currentResponse.status && !error.statusCode) {
           error.statusCode = currentResponse.status
         }
+        // Redact sensitive params in proxyUrl
+        if (opts.proxyUrl) redactProxyUrl(error, opts.proxyUrl)
+        // Transport errors (FetchError) carry neither — give callers the target
+        if (!error.requestUrl && requestUrl) error.requestUrl = requestUrl
+        if (!error.url && finalUrl) error.url = finalUrl
         // Finally, reject
         return reject(error)
       })

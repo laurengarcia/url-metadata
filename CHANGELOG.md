@@ -13,6 +13,10 @@
 - 5.x callers weren't exposed to the crash described in the CVE, because the error surfaced as a promise rejection.
 - update Jest to v30+; not user-facing just a dev-dependency.
 
+5.12.1
+- bugfix: ensure sensitive proxyUrl params aren't leaked in proxy mode errors
+- ensure `requestUrl` & `url` are attached to errors in .catch() block edge-cases (node-fetch `FetchError`)
+
 5.12.0
 - add `ttfbMs` to each `RedirectHop` object
 
