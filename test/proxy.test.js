@@ -11,6 +11,9 @@ const apiKey1 = process.env.SCRAPERAPI_KEY
 // ScrapingAnt
 const proxyUrl2 = 'https://api.scrapingant.com/v2/general'
 const apiKey2 = process.env.SCRAPINGANT_API_KEY
+// WebScrapingAPI.com
+const proxyUrl3 = 'https://api.webscrapingapi.com/v2'
+const apiKey3 = process.env.WEBSCRAPINGAPI_KEY
 
 test('proxy: omitting proxyUrl with proxyParams errors out', async () => {
   if (!apiKey1) throw new Error('Set SCRAPERAPI_KEY env var to run this test')
@@ -87,7 +90,7 @@ test('proxy: ScrapingAnt basic call', async () => {
       proxyParams: {
         'x-api-key': apiKey2
         // browser: false, // works, turns off default rendering
-        // 'proxy_type': 'residential',
+        // 'proxy_type': 'residential' | 'datacenter',
         // 'proxy_country': 'fr', // works, country to make request from
         // 'wait_for_selector': 'h1' // speed up scraping time
         // 'block_resource': 'stylesheet' // speed up scraping time
@@ -114,6 +117,52 @@ test('proxy: ScrapingAnt api key in header', async () => {
     })
     expect(metadata.responseStatusCode).toBe(200)
     expect(metadata.title).toContain('API')
+  } catch (err) {
+    expect(err).toBe(undefined)
+  }
+}, 60000)
+
+test('proxy: ScrapingAnt api key in header', async () => {
+  if (!apiKey2) throw new Error('Set SCRAPINGANT_API_KEY env var to run this test')
+  const url = 'https://minifetch.com/docs/api'
+
+  try {
+    const metadata = await urlMetadata(url, {
+      requestHeaders: {
+        'x-api-key': apiKey2
+      },
+      proxyUrl: proxyUrl2,
+      proxyParams: {}
+    })
+    expect(metadata.responseStatusCode).toBe(200)
+    expect(metadata.title).toContain('API')
+  } catch (err) {
+    expect(err).toBe(undefined)
+  }
+}, 60000)
+
+test('proxy: WebScrapingAPI', async () => {
+  if (!apiKey3) throw new Error('Set WEBSCRAPINGAPI_KEY env var to run this test')
+  const url = 'https://minifetch.com/tutorials/seo-page-audit'
+
+  try {
+      const metadata = await urlMetadata(url, {
+        proxyUrl: proxyUrl3,
+        proxyParams: {
+          'api_key': apiKey3,
+          // 'render_js': 1, // default is 1 (on)
+          // 'proxy_type': 'residential', // default is residential
+          // 'stealth_mode': 1, // addt'l tools evade detection; incompat w render_js=0
+          // 'country': 'mx',
+          // 'timeout': 60000, // default is 10s, bump up to max 60s
+          // 'device': 'mobile', // options: `desktop`, `tablet`, `mobile`
+          // 'session': 1 // re-use the same proxy IP addess
+        }
+      })
+      expect(metadata.responseStatusCode).toBe(200)
+      expect(metadata.title).toContain('How to Run a Technical SEO Page Audit Using Minifetch')
+      expect(typeof metadata.responseHeaders['wsa-call-credit-usage']).toBeDefined()
+      expect(typeof metadata.responseHeaders['wsa-current-credit-usage']).toBeDefined()
   } catch (err) {
     expect(err).toBe(undefined)
   }

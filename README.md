@@ -215,6 +215,8 @@ console.log(metadata);
 ### Proxy mode for blocked web pages (403 errors)
 This package is vendor-neutral. Any proxy (unblocking) service works via `proxyUrl` + `proxyParams`. Two vendors are documented below, affiliate links support the author. Want another added? Ask in the [Discord support channel](https://discord.gg/BqVBeeGsc5).
 
+**More code examples** and notes available in our [Github test suite](https://github.com/laurengarcia/url-metadata/blob/master/test/proxy.test.js).
+
 `proxyUrl` triggers proxy mode. Proxy calls route through a third party doing its own upstream fetch, which takes longer than a direct fetch — so `options.timeout` defaults to 60 seconds instead of the usual 10, or you can customize.
 
 `proxyParams` is a flat passthru, sent verbatim as query params exactly as named in your vendor's docs - no allowlist, no translation on our side. Some vendors authenticate via a header instead of a query param (ex: an `x-api-key` header) — for those, pass it in `requestHeaders` instead and skip `proxyParams` entirely if the vendor needs no other params.
@@ -224,8 +226,6 @@ In proxy mode, `requestHeaders` are sent to the proxy vendor, not the target URL
 **Note: HTML-only.** Some vendors offer structured-data or merchant-specific endpoints that return JSON or CSV, not HTML — this package can't parse those and will throw `unsupported content type` if your proxy config is pointed at one. That's expected; those are a different kind of tool. Stick to each vendor's plain HTML-fetching endpoint (ex: ScraperAPI's https://api.scraperapi.com/, ScrapingAnt's https://api.scrapingant.com/v2/general).
 
 **Note:** `redirects`, `responseHeaders` and `performance` timing reflect the proxy call, not the target server's actual response.
-
-**More code examples** and notes available in our [Github test suite](https://github.com/laurengarcia/url-metadata/blob/master/test/proxy.test.js).
 
 #### 👉 ScraperAPI.com
 

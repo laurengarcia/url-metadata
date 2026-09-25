@@ -1,5 +1,9 @@
 # CHANGELOG
 
+6.2.0
+- add WebScrapingAPI response headers to lib/extract-headers.js whitelist
+- add WebScrapingAPI test to test/proxy.test.ts
+
 6.1.0
 - response headers: always return headers that start with prefix "x-"
 
