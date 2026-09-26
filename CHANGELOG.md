@@ -1,5 +1,10 @@
 # CHANGELOG
 
+6.2.1
+(cherry-picked in from 5.12.1)
+- bugfix: ensure sensitive proxyUrl params aren't leaked in proxy mode errors
+- ensure `requestUrl` & `url` are attached to errors in .catch() block edge-cases (node-fetch `FetchError`)
+
 6.2.0
 - add WebScrapingAPI response headers to lib/extract-headers.js whitelist
 - add WebScrapingAPI test to test/proxy.test.ts
