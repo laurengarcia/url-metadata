@@ -150,6 +150,15 @@ module.exports = function (url, options, _fetch, useAgent) {
       // proxying) so it's available once we reach a final, non-redirect response.
       finalUrl = _url
 
+      // Explicit scheme allowlist (defense-in-depth alongside `useAgent`'s
+      // SSRF/private-IP filtering): only ever fetch http(s) urls. Blocks
+      // attacker-supplied schemes (ex: file:, data:, gopher:) reaching `_fetch`
+      // via the `url` param, a redirect `location` header, or `proxyUrl`.
+      const scheme = new URL(_url).protocol
+      if (scheme !== 'http:' && scheme !== 'https:') {
+        throw createHttpError({ msg: `unsupported protocol: ${scheme}`, redirects, requestUrl, url: _url })
+      }
+
       // Generic query-param passthrough via `buildProxyUrl` above, confirmed
       // working across ≥2 vendors (ScraperAPI, ScrapingAnt) with no branching
       // needed — both just take `url` + their own auth param in the query string.
