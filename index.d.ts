@@ -249,6 +249,7 @@ declare namespace urlMetadata {
     url?: string; // final destination url in request chain
     unfollowedRedirect?: boolean; // true when error is a redirect left unfollowed (maxRedirects reached), not a transport error; next-hop url is `url` / last redirects.chain[].location
     statusCode?: number;
+    responseHeaders?: Record<string, string>; // whitelisted set (see lib/extract-headers.js); present whenever a response was received, absent on transport errors & 'too many redirects'. In proxy mode these are the proxy vendor's response headers
     paymentRequired?: boolean;
     x402?: Record<string, any>; // x402 payment requirements - https://www.x402.org/
     // errors that *may* fall thru from `node-fetch` dependency in Node.js:

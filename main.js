@@ -1,6 +1,7 @@
 const extractCharset = require('./lib/extract-charset')
 const parse = require('./lib/parse')
 const createHttpError = require('./lib/http-error')
+const extractHeaders = require('./lib/extract-headers')
 const resolveFields = require('./lib/resolve-fields')
 const { isHeaderOnly, expandHeaderSelection, hasNetworkGroup } = resolveFields
 
@@ -386,6 +387,12 @@ module.exports = function (url, options, _fetch, useAgent) {
         // Transport errors (FetchError) carry neither — give callers the target
         if (!error.requestUrl && requestUrl) error.requestUrl = requestUrl
         if (!error.url && finalUrl) error.url = finalUrl
+        // Attach the whitelisted response headers (same serializer as success path)
+        if (!error.responseHeaders && currentResponse && currentResponse.headers) {
+          try {
+            error.responseHeaders = extractHeaders(currentResponse.headers)
+          } catch {}
+        }
         // Finally, reject
         return reject(error)
       })

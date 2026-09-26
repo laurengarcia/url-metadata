@@ -1,5 +1,8 @@
 # CHANGELOG
 
+6.3.0
+- errors now carry `responseHeaders` (same whitelisted set as successful results) whenever a response was received; absent on transport errors. Lets proxy-mode callers tell target errors apart from proxy vendor errors.
+
 6.2.1
 (cherry-picked in from 5.12.1)
 - bugfix: ensure sensitive proxyUrl params aren't leaked in proxy mode errors

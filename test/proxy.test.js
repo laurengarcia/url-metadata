@@ -151,7 +151,6 @@ test('proxy: WebScrapingAPI', async () => {
         proxyParams: {
           'api_key': apiKey3,
           // 'render_js': 1, // default is 1 (on)
-          // 'proxy_type': 'residential', // default is residential
           // 'stealth_mode': 1, // addt'l tools evade detection; incompat w render_js=0
           // 'country': 'mx',
           // 'timeout': 60000, // default is 10s, bump up to max 60s
@@ -165,5 +164,26 @@ test('proxy: WebScrapingAPI', async () => {
       expect(typeof metadata.responseHeaders['wsa-current-credit-usage']).toBeDefined()
   } catch (err) {
     expect(err).toBe(undefined)
+  }
+}, 60000)
+
+test('proxy: proxy gets bad target url, returns error.responseHeaders', async () => {
+  if (!apiKey3) throw new Error('Set WEBSCRAPINGAPI_KEY env var to run this test')
+  const url = 'https://nopenotarealdomain.foo/bar'
+
+  try {
+      const metadata = await urlMetadata(url, {
+        proxyUrl: proxyUrl3,
+        proxyParams: {
+          'api_key': apiKey3,
+        }
+      })
+    // the ^code above should throw an error
+    // if the following line fails it means
+    // the test did not throw the proper error:
+    expect(metadata.url).toBe(undefined)
+  } catch (err) {
+    expect(err).toBeDefined()
+    expect(err.responseHeaders).toBeDefined()
   }
 }, 60000)

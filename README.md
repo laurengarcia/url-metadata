@@ -225,7 +225,7 @@ In proxy mode, `requestHeaders` are sent to the proxy vendor, not the target URL
 
 **Note: HTML-only.** Some vendors offer structured-data or merchant-specific endpoints that return JSON or CSV, not HTML — this package can't parse those and will throw `unsupported content type` if your proxy config is pointed at one. That's expected; those are a different kind of tool. Stick to each vendor's plain HTML-fetching endpoint (ex: ScraperAPI's https://api.scraperapi.com/, ScrapingAnt's https://api.scrapingant.com/v2/general).
 
-**Note:** `redirects`, `responseHeaders` and `performance` timing reflect the proxy call, not the target server's actual response.
+**Note:** `redirects`, `responseHeaders` and `performance` timing reflect the proxy call, not the target server's actual response. Errors carry `responseHeaders` too, whenever a response was received (absent on network/transport errors). In proxy mode they're the vendor's headers — useful for telling a blocked or failed *target* apart from an error with the proxy vendor itself (bad api key, out of credits, rate limits).
 
 #### 👉 ScraperAPI.com
 
