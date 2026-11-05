@@ -85,7 +85,7 @@
     "transformIgnorePatterns": ["/node_modules/(?!request-filtering-agent/)"]
   },
   "dependencies": {
-    "cheerio": "^1.0.0",
+    "cheerio": "^1.2.0",
     "node-fetch": "^2.7.0",
     "request-filtering-agent": "^3.2.1"
   },
