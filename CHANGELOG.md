@@ -1,5 +1,9 @@
 # CHANGELOG
 
+6.3.1
+- bump `cheerio` dependency to v1.2.0
+- bump /example-nextjs `next` dependency to 16.4.5
+
 6.3.0
 - errors now carry `responseHeaders` (same whitelisted set as successful results) whenever a response was received; absent on transport errors. Lets proxy-mode callers tell target errors apart from proxy vendor errors.
 
