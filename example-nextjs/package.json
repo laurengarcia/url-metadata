@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "dependencies": {
-    "next": "^15.3.5",
+    "next": "^16.4.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "url-metadata": "file:../url-metadata-6.0.0.tgz"
