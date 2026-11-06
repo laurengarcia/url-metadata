@@ -29,7 +29,8 @@ ___
 - [ ] update README (if applicable)
 - [ ] update CHANGELOG (if applicable)
 - [ ] update ROADMAP (if applicable)
-- [ ] package.json: bump semver version, push commit to master
+- [ ] package.json: check engines.node version(s)
+- [ ] package.json: bump version, push commit to master
 - [ ] git tag new version of master
         `$ git pull origin master`
         `$ npm run test`
