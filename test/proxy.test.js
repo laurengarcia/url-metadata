@@ -146,22 +146,22 @@ test('proxy: WebScrapingAPI', async () => {
   const url = 'https://minifetch.com/tutorials/seo-page-audit'
 
   try {
-      const metadata = await urlMetadata(url, {
-        proxyUrl: proxyUrl3,
-        proxyParams: {
-          'api_key': apiKey3,
-          // 'render_js': 1, // default is 1 (on)
-          // 'stealth_mode': 1, // addt'l tools evade detection; incompat w render_js=0
-          // 'country': 'mx',
-          // 'timeout': 60000, // default is 10s, bump up to max 60s
-          // 'device': 'mobile', // options: `desktop`, `tablet`, `mobile`
-          // 'session': 1 // re-use the same proxy IP addess
-        }
-      })
-      expect(metadata.responseStatusCode).toBe(200)
-      expect(metadata.title).toContain('How to Run a Technical SEO Page Audit Using Minifetch')
-      expect(typeof metadata.responseHeaders['wsa-call-credit-usage']).toBeDefined()
-      expect(typeof metadata.responseHeaders['wsa-current-credit-usage']).toBeDefined()
+    const metadata = await urlMetadata(url, {
+      proxyUrl: proxyUrl3,
+      proxyParams: {
+        api_key: apiKey3
+        // 'render_js': 1, // default is 1 (on)
+        // 'stealth_mode': 1, // addt'l tools evade detection; incompat w render_js=0
+        // 'country': 'mx',
+        // 'timeout': 60000, // default is 10s, bump up to max 60s
+        // 'device': 'mobile', // options: `desktop`, `tablet`, `mobile`
+        // 'session': 1 // re-use the same proxy IP addess
+      }
+    })
+    expect(metadata.responseStatusCode).toBe(200)
+    expect(metadata.title).toContain('How to Run a Technical SEO Page Audit Using Minifetch')
+    expect(typeof metadata.responseHeaders['wsa-call-credit-usage']).toBeDefined()
+    expect(typeof metadata.responseHeaders['wsa-current-credit-usage']).toBeDefined()
   } catch (err) {
     expect(err).toBe(undefined)
   }
@@ -172,12 +172,12 @@ test('proxy: proxy gets bad target url, returns error.responseHeaders', async ()
   const url = 'https://nopenotarealdomain.foo/bar'
 
   try {
-      const metadata = await urlMetadata(url, {
-        proxyUrl: proxyUrl3,
-        proxyParams: {
-          'api_key': apiKey3,
-        }
-      })
+    const metadata = await urlMetadata(url, {
+      proxyUrl: proxyUrl3,
+      proxyParams: {
+        api_key: apiKey3
+      }
+    })
     // the ^code above should throw an error
     // if the following line fails it means
     // the test did not throw the proper error:

@@ -1,4 +1,4 @@
-import urlMetadata from 'url-metadata';
+import urlMetadata from 'url-metadata'
 
 test('esm import works', async () => {
   const html = `
@@ -31,5 +31,5 @@ test('esm import works', async () => {
     expect(metadata.author).toBe('foobar')
   } catch (err) {
     expect(err).toBe(undefined)
-  }  
-});
+  }
+})

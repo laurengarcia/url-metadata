@@ -120,7 +120,6 @@ module.exports = function (url, options, _fetch, useAgent) {
 
   const requestUrl = url
   let finalUrl = ''
-  let lastFetchUrl // outgoing request url; the vendor endpoint + params in proxy mode
   const redirects = {
     count: 0,
     chain: []
@@ -155,7 +154,6 @@ module.exports = function (url, options, _fetch, useAgent) {
       // working across ≥2 vendors (ScraperAPI, ScrapingAnt) with no branching
       // needed — both just take `url` + their own auth param in the query string.
       const fetchUrl = opts.proxyUrl ? buildProxyUrl(_url) : _url
-      lastFetchUrl = fetchUrl
 
       const requestOpts = {
         method: 'GET',
