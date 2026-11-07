@@ -29,7 +29,9 @@ ___
 - [ ] update README (if applicable)
 - [ ] update CHANGELOG (if applicable)
 - [ ] update ROADMAP (if applicable)
-- [ ] package.json: check engines.node version(s)
+- [ ] package.json: ensure engines.node version(s) still correct
+    - [ ] test against older engine versions
+    - [ ] ensure any new deps work too: `$ npm view <new package> engines`
 - [ ] package.json: bump version, push commit to master
 - [ ] git tag new version of master
         `$ git pull origin master`
